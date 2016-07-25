@@ -1,0 +1,183 @@
+--======================================================================
+-- PREVAIL MIB 
+--======================================================================
+
+-- File Name   : PREVAIL-MIB.txt
+-- Date        : Tue Jul 27 10:55:00 CEST 2010
+-- Author      : frank 
+
+prevail-mib DEFINITIONS ::= BEGIN
+
+  IMPORTS
+    enterprises
+    	FROM RFC1155-SMI    
+		TimeTicks, IpAddress, Counter64, OBJECT-TYPE, MODULE-IDENTITY, OBJECT-IDENTITY, Integer32 
+			FROM SNMPv2-SMI			
+		MacAddress, DateAndTime, TruthValue, TimeInterval, RowStatus, DisplayString, TEXTUAL-CONVENTION
+			FROM SNMPv2-TC;
+	  	  
+  prevail OBJECT IDENTIFIER ::= { enterprises 36186 }
+  
+  modEoCMib       MODULE-IDENTITY
+		LAST-UPDATED    "200412171230Z"
+		ORGANIZATION    "Organization"
+    CONTACT-INFO    "Contact-info"
+    DESCRIPTION     "Description"
+		::= { prevail 8 }
+
+
+-- TEXTUAL-CONVENTIONS --
+
+DevModelValue ::= TEXTUAL-CONVENTION 
+		STATUS                  current
+		DESCRIPTION
+		        "Device model type of Prevail EoC products."
+		SYNTAX	INTEGER{	
+							X7		( 1 ) ,
+							E31		( 2 ) ,
+							Q31		( 3 ) ,
+							C22		( 4 ) ,							
+							S220	( 5 ) ,
+							S60		( 6 ) ,
+							L2		( 7 ) ,
+							L3		( 8 ) ,
+							C2		( 9 ) ,
+							C4		( 10) ,
+							CLT1	( 11) ,
+             	UNKNOWN		( 256) 
+            } 
+
+CltNodeActValue ::= TEXTUAL-CONVENTION 
+		STATUS                  current
+		DESCRIPTION
+		        "clt node action value."
+		SYNTAX	INTEGER{	
+							clt-no-action		 		( 0 ) ,
+							clt-reset 	 				( 1 ) ,
+							clt-reload-profile	( 2 ) ,							
+							clt-delete					( 3 )
+            }
+
+-- END TEXTUAL-CONVENTIONS --
+	
+cltTable OBJECT-TYPE
+    SYNTAX      SEQUENCE OF CltEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+            "the list of clt in database."
+    ::= { modEoCMib 9 }
+
+cltEntry OBJECT-TYPE
+    SYNTAX      CltEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+            "An entry containing all clt in the database."
+    INDEX   { cltTid }
+    ::= { cltTable 1 }
+
+CltEntry ::=
+    SEQUENCE {
+    		cltTid									INTEGER,    		
+        cltIndex                INTEGER,        
+        cltModel                DevModelValue,
+        cltMacAddress           MacAddress,
+        cltOnlineStatus         TruthValue,
+        cltMaxStats							INTEGER,
+        cltNumStats							INTEGER,
+        cltSoftwareVersion      DisplayString,        
+        cltSynchronized					TruthValue,   
+        cltAction              	CltNodeActValue,        
+        cltRowStatus            TruthValue     
+    }
+
+cltTid OBJECT-TYPE
+    SYNTAX      INTEGER (1..4)
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+            "the index of clt entry in snmp table."
+    ::= { cltEntry 1 }
+
+cltIndex OBJECT-TYPE
+    SYNTAX      INTEGER (1..4)
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+            "the index of clt entry in databases."
+    ::= { cltEntry 2 }
+
+cltModel OBJECT-TYPE
+    SYNTAX      DevModelValue
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+            "the model of EoC products in prevail."
+    ::= { cltEntry 3 }
+
+cltMacAddress OBJECT-TYPE
+    SYNTAX      MacAddress
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+            "the mac address of clt."
+    ::= { cltEntry 4 }
+
+cltOnlineStatus OBJECT-TYPE
+		SYNTAX TruthValue
+		MAX-ACCESS read-only
+		STATUS current
+		DESCRIPTION
+			"The online status of clt in EoC topology"
+		::= { cltEntry 5 }
+
+cltMaxStats OBJECT-TYPE
+    SYNTAX      INTEGER (1..256)
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+            "the max cnus supported by clt."
+    ::= { cltEntry 6 }
+
+cltNumStats OBJECT-TYPE
+    SYNTAX      INTEGER (1..256)
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+            "the current cnus managed by clt."
+    ::= { cltEntry 7 }
+    
+cltSoftwareVersion OBJECT-TYPE
+		SYNTAX DisplayString (SIZE (0..128))
+		MAX-ACCESS read-only
+		STATUS current
+		DESCRIPTION 
+		    "the software version of the CNU."
+		::= { cltEntry  8 }		    
+
+cltSynchronized OBJECT-TYPE
+		SYNTAX TruthValue
+		MAX-ACCESS read-only
+		STATUS current
+		DESCRIPTION
+			"The clt profile synchronization flag."
+		::= { cltEntry 9 }
+
+cltAction  OBJECT-TYPE
+		SYNTAX CltNodeActValue
+		MAX-ACCESS read-write
+		STATUS current
+		DESCRIPTION 
+		    "reset or force re-registation the clt in EoC topology"
+		::= { cltEntry 10 }
+				
+cltRowStatus OBJECT-TYPE
+		SYNTAX TruthValue
+		MAX-ACCESS read-only
+		STATUS current
+		DESCRIPTION
+			"The node entry status of clt."
+		::= { cltEntry 11 }
+
+END

@@ -1,0 +1,74 @@
+<html>
+<head>
+<title>EoC</title>
+<base target="_self">
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8;no-cache"/>
+<link rel="stylesheet" href="css/redmond/jquery-ui-1.10.3.custom.min.css"/>
+<link rel="stylesheet" href="css/redmond/demos.css"/>
+<link rel="stylesheet" href='stylemain.css' type='text/css'/>
+<link rel="stylesheet" href='colors.css' type='text/css'/>
+<script src="js/jquery-1.9.1.js"></script>
+<script src="js/jquery-ui-1.10.3.custom.min.js"></script>
+<script language="javascript">
+
+function reboot() {
+	var enblPopWin = '<%ejGet(enblPopWin)%>';
+	var loc = 'main.html';
+	var code = 'window.top.location="' + loc + '"';
+	eval(code);
+}
+
+function frmLoad() {
+	setTimeout("reboot()", 60000);
+}
+
+$(function()
+{
+	$("#accordion").accordion({
+		collapsible: true,
+		heightStyle: "content" 
+	});
+
+	frmLoad();
+});
+
+</script>
+</script>
+</head>
+<body>
+<blockquote>
+<br>
+<table border="0" cellpadding="5" cellspacing="0">
+	<tr><td class='maintitle'><b>系统消息</b></td></tr>                       
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%">            	
+	<tr><td class='mainline' width="100%"></td></tr>                           
+</table>
+<br>	
+<br>
+<div id="accordion">
+	<h3>系统重启</h3>
+	<div>
+           	<br>
+           	<table border="0" cellpadding="0" cellspacing="0">
+	  		<tr>
+	  			<td class='diagdata' width=300>操作状态</td>
+	  			<td class='diagdata' width=200><b><font color=green>成功</font></b></td>		  				  			
+	  		</tr>
+	  		<tr>
+	  			<td class='diagdata'>系统重启中</td>
+	  			<td class='diagdata'>[<IMG src='wait.gif'>]</td>
+	  		</tr>
+	  	</table>
+	  	<br>
+	  	<br>系统正在重新启动，该过程需要1分钟时间，请您耐心等待......</br>
+		<br><b>注意：</b></br>
+		1. 如果网络设置有变更，请相应配置您电脑的IP地址，并以新的IP地址和管理VLAN通道登录设备。</br>
+	  	2. 如果网络设置有变更，您的连接将被中断。</br>
+	  	<br>
+	</div>
+</div>	
+</blockquote>
+</body>
+</html>
+

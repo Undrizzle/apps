@@ -1,0 +1,381 @@
+--======================================================================
+-- PREVAIL MIB 
+--======================================================================
+
+-- File Name   : PREVAIL-MIB.txt
+-- Date        : Tue Jul 27 10:55:00 CEST 2010
+-- Author      : frank 
+
+prevail-mib DEFINITIONS ::= BEGIN
+
+  IMPORTS
+    enterprises
+    	FROM RFC1155-SMI    
+		TimeTicks, IpAddress, Counter64, OBJECT-TYPE, MODULE-IDENTITY, OBJECT-IDENTITY, Integer32 
+			FROM SNMPv2-SMI			
+		MacAddress, DateAndTime, TruthValue, TimeInterval, RowStatus, DisplayString, TEXTUAL-CONVENTION
+			FROM SNMPv2-TC;
+	  	  
+  prevail OBJECT IDENTIFIER ::= { enterprises 36186 }
+  
+  modEoCMib       MODULE-IDENTITY
+		LAST-UPDATED    "200412171230Z"
+		ORGANIZATION    "Organization"
+    CONTACT-INFO    "Contact-info"
+    DESCRIPTION     "Description"
+		::= { prevail 8 }
+
+
+-- TEXTUAL-CONVENTIONS --
+
+HostsLimitingValue ::= TEXTUAL-CONVENTION 
+		STATUS                  current
+		DESCRIPTION
+		        "Atheros EoC bridged hosts limiting settings."
+		SYNTAX	INTEGER{	
+							hosts-limiting-disabled		( 0 ) ,
+							one-host				( 1 ) ,
+							two-hosts				( 2 ) ,
+							three-hosts			( 3 ) ,
+							four-hosts			( 4 ) ,							
+							five-hosts			( 5 ) ,
+							six-hosts				( 6 ) ,
+							seven-hosts			( 7 ) ,
+							eight-hosts			( 8 ) ,
+             	null-hosts			( 65) 
+            } 
+
+PriQueueValue ::= TEXTUAL-CONVENTION 
+		STATUS                  current
+		DESCRIPTION
+		        "QoS priority queue value."
+		SYNTAX	INTEGER{	
+							cap0		( 0 ) ,
+							cap1		( 1 ) ,
+							cap2		( 2 ) ,
+							cap3		( 3 ) 
+            } 
+
+-- END TEXTUAL-CONVENTIONS --
+	
+cltproTable OBJECT-TYPE
+    SYNTAX      SEQUENCE OF CltproEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+            "the list of clt profile in database."
+    ::= { modEoCMib 10 }
+
+cltproEntry OBJECT-TYPE
+    SYNTAX      CltproEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+            "An entry containing all clt profile in the database."
+    INDEX   { cltproTid }
+    ::= { cltproTable 1 }
+
+CltproEntry ::=
+    SEQUENCE {
+    		cltproTid											INTEGER,
+        cltproIndex            				INTEGER,
+        cltproBase										INTEGER,
+        cltproMacLimit								HostsLimitingValue,
+        cltproCuRate									INTEGER,
+        cltproCdRate									INTEGER,
+        cltproLoagTime								INTEGER,
+        cltproReagTime								INTEGER,
+        cltproIgmpPri									PriQueueValue,
+        cltproUnicastPri							PriQueueValue,
+        cltproAvsPri									PriQueueValue,
+        cltproMcastPri								PriQueueValue,
+        cltproTbaPriSts								TruthValue,
+        cltproCosPriSts								TruthValue,
+        cltproCos0pri									PriQueueValue,
+        cltproCos1pri									PriQueueValue,
+        cltproCos2pri									PriQueueValue,
+        cltproCos3pri									PriQueueValue,
+        cltproCos4pri									PriQueueValue,
+        cltproCos5pri									PriQueueValue,
+        cltproCos6pri									PriQueueValue,
+        cltproCos7pri									PriQueueValue,
+        cltproTosPriSts								TruthValue,
+        cltproTos0pri									PriQueueValue,
+        cltproTos1pri									PriQueueValue,
+        cltproTos2pri									PriQueueValue,
+        cltproTos3pri									PriQueueValue,
+        cltproTos4pri									PriQueueValue,
+        cltproTos5pri									PriQueueValue,
+        cltproTos6pri									PriQueueValue,
+        cltproTos7pri									PriQueueValue,        
+        cltproCommit              		TruthValue,
+        cltproRowStatus               TruthValue     
+    }
+
+cltproTid OBJECT-TYPE
+    SYNTAX      INTEGER (1..4)
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+            "the index of clt profile entry in snmp table."
+    ::= { cltproEntry 1 }
+
+cltproIndex OBJECT-TYPE
+    SYNTAX      INTEGER (1..4)
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+            "the index of clt profile entry in databases."
+    ::= { cltproEntry 2 }
+
+cltproBase OBJECT-TYPE
+    SYNTAX      INTEGER (1..32)
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+            "atheros eoc pib index."
+    ::= { cltproEntry 3 }
+
+cltproMacLimit OBJECT-TYPE
+    SYNTAX      HostsLimitingValue
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+            "EoC bridged hosts limiting."
+    ::= { cltproEntry 4 }
+
+cltproCuRate OBJECT-TYPE
+    SYNTAX      INTEGER
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+            "Cable uplink rate limiting in kbps."
+    ::= { cltproEntry 5 }
+
+cltproCdRate OBJECT-TYPE
+    SYNTAX      INTEGER
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+            "Cable downlink rate limiting in kbps."
+    ::= { cltproEntry 6 }
+
+cltproLoagTime OBJECT-TYPE
+    SYNTAX      INTEGER
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+            "Local bridge aging time in minutes."
+    ::= { cltproEntry 7 }
+
+cltproReagTime OBJECT-TYPE
+    SYNTAX      INTEGER
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+            "Remote devie bridge table aging time in minutes."
+    ::= { cltproEntry 8 }
+
+cltproIgmpPri OBJECT-TYPE
+    SYNTAX      PriQueueValue
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+            "IGMP Priority CAP value."
+    ::= { cltproEntry 9 }
+
+cltproUnicastPri OBJECT-TYPE
+    SYNTAX      PriQueueValue
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+            "Unicast Priority CAP value."
+    ::= { cltproEntry 10 }
+
+cltproAvsPri OBJECT-TYPE
+    SYNTAX      PriQueueValue
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+            "AV Stream Priority CAP value."
+    ::= { cltproEntry 11 }
+
+
+cltproMcastPri OBJECT-TYPE
+    SYNTAX      PriQueueValue
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+            "Multicast Priority CAP value."
+    ::= { cltproEntry 12 }
+
+cltproTbaPriSts OBJECT-TYPE
+    SYNTAX      TruthValue
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+            "TX buffer based on priority status."
+    ::= { cltproEntry 13 }
+
+cltproCosPriSts OBJECT-TYPE
+    SYNTAX      TruthValue
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+            "Map VLAN to Priority CAP."
+    ::= { cltproEntry 14 }
+
+cltproCos0pri OBJECT-TYPE
+    SYNTAX      PriQueueValue
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+            "VLAN priority mappings."
+    ::= { cltproEntry 15 }
+
+cltproCos1pri OBJECT-TYPE
+    SYNTAX      PriQueueValue
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+            "VLAN priority mappings."
+    ::= { cltproEntry 16 }
+
+cltproCos2pri OBJECT-TYPE
+    SYNTAX      PriQueueValue
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+            "VLAN priority mappings."
+    ::= { cltproEntry 17 }
+
+cltproCos3pri OBJECT-TYPE
+    SYNTAX      PriQueueValue
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+            "VLAN priority mappings."
+    ::= { cltproEntry 18 }
+
+cltproCos4pri OBJECT-TYPE
+    SYNTAX      PriQueueValue
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+            "VLAN priority mappings."
+    ::= { cltproEntry 19 }
+
+cltproCos5pri OBJECT-TYPE
+    SYNTAX      PriQueueValue
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+            "VLAN priority mappings."
+    ::= { cltproEntry 20 }
+
+cltproCos6pri OBJECT-TYPE
+    SYNTAX      PriQueueValue
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+            "VLAN priority mappings."
+    ::= { cltproEntry 21 }
+
+cltproCos7pri OBJECT-TYPE
+    SYNTAX      PriQueueValue
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+            "VLAN priority mappings."
+    ::= { cltproEntry 22 }
+
+cltproTosPriSts OBJECT-TYPE
+    SYNTAX      TruthValue
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+            "Map TOS to Priority CAP."
+    ::= { cltproEntry 23 }
+
+cltproTos0pri OBJECT-TYPE
+    SYNTAX      PriQueueValue
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+            "TOS priority mappings."
+    ::= { cltproEntry 24 }
+
+cltproTos1pri OBJECT-TYPE
+    SYNTAX      PriQueueValue
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+            "TOS priority mappings."
+    ::= { cltproEntry 25 }
+
+cltproTos2pri OBJECT-TYPE
+    SYNTAX      PriQueueValue
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+            "TOS priority mappings."
+    ::= { cltproEntry 26 }
+
+cltproTos3pri OBJECT-TYPE
+    SYNTAX      PriQueueValue
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+            "TOS priority mappings."
+    ::= { cltproEntry 27 }
+
+cltproTos4pri OBJECT-TYPE
+    SYNTAX      PriQueueValue
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+            "TOS priority mappings."
+    ::= { cltproEntry 28 }
+
+cltproTos5pri OBJECT-TYPE
+    SYNTAX      PriQueueValue
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+            "TOS priority mappings."
+    ::= { cltproEntry 29 }
+
+cltproTos6pri OBJECT-TYPE
+    SYNTAX      PriQueueValue
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+            "TOS priority mappings."
+    ::= { cltproEntry 30 }
+
+cltproTos7pri OBJECT-TYPE
+    SYNTAX      PriQueueValue
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+            "TOS priority mappings."
+    ::= { cltproEntry 31 }
+
+cltproCommit OBJECT-TYPE
+    SYNTAX      TruthValue
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+            "Commit action node for saving current profile settings to databases."
+    ::= { cltproEntry 32 }
+
+cltproRowStatus OBJECT-TYPE
+    SYNTAX      TruthValue
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+            "Clt profile entry row status."
+    ::= { cltproEntry 33 }
+
+
+END

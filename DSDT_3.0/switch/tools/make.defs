@@ -1,0 +1,94 @@
+# make.defs - common variable definitions
+#
+# modification history
+# --------------------
+# 04-12-02,mj	created
+#
+
+DEPENDENCIES=makedeps
+
+TARGET_CPU = ARM
+ENDIAN = LE
+
+ifeq ($(TARGET_CPU),MIPS)
+
+# ARM CPU
+else
+
+CPU_TOOL=arm
+CPU		= ARMARCH5
+CC_ARCH_SPEC1 = -march=armv5te
+
+ifeq ($(ENDIAN),LE)
+CC_ARCH_SPEC = $(CC_ARCH_SPEC1) -mlittle-endian
+else
+CC_ARCH_SPEC = $(CC_ARCH_SPEC1)
+endif
+
+endif
+
+TOOL       = gnu
+
+SW_ROOT = $(subst \,/,$(DSDT_USER_BASE))
+SRC_BASE_PATH = $(SW_ROOT)/src
+QD_INCLUDE_PATH = $(SW_ROOT)/Include/h
+
+VX_ROOT = $(subst \,/,$(WIND_BASE))
+OS_INCLUDE_PATH = $(VX_ROOT)/target/h
+
+LIB_DIR = $(SW_ROOT)/Library
+OBJDIR = obj
+
+CC      =arm-linux-gcc
+LD      =arm-linux-ld
+MAKE    =make
+CD		=cd
+RM      =del
+ECHO	=echo
+
+CFLAGS = $(CFLAGS1) $(CFLAGS2) $(INCLUDE_PATH) $(CDEBUG_DEFINES)
+
+CFLAGS1 = -DCPU=$(CPU) -D_$(OS_RUN) $(CC_ARCH_SPEC) -g $(DEBUG_TYPE)
+CFLAGS2 = $(CC_OPTIM) $(CC_COMPILER) $(CC_WARNINGS_ALL)
+
+CC_OPTIM = $(CC_OPTIM_TARGET)
+
+ifeq ($(TARGET_CPU),MIPS)
+#CC_COMPILER	=  -ansi -nostdinc
+CC_COMPILER	=  -ansi
+else
+CC_COMPILER	=  -ansi -fdollars-in-identifiers -mno-sched-prolog
+endif
+
+CC_OPTIM_TARGET	= -O2 -funroll-loops -fno-builtin
+CC_WARNINGS_ALL	= -Wall
+
+ifeq ($(RELEASE),NO)
+CDEBUG_DEFINES=-DDEBUG=1 -DDEBUG_QD
+else
+CDEBUG_DEFINES=
+endif
+
+ifeq ($(TARGET_CPU),MIPS)
+LDFLAGS1 = -nostdlib -r -X -N
+ARFLAGS =  crus
+else
+#LDFLAGS	= -nostdlib -X -EL -r
+LDFLAGS1	= -nostdlib -X -N -r
+endif
+
+ifeq ($(ENDIAN),EL)
+LDFLAGS = $(LDFLAGS1) -EL
+else
+LDFLAGS = $(LDFLAGS1)
+endif
+
+
+INCLUDE_PATH = -I. \
+               -I$(QD_INCLUDE_PATH)/driver \
+               -I$(QD_INCLUDE_PATH)/msApi \
+               -I$(QD_INCLUDE_PATH)/platform \
+               -I$(SW_ROOT)/include \
+               -I$(OS_INCLUDE_PATH)
+
+

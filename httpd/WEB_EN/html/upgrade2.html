@@ -1,0 +1,105 @@
+<html>
+<head>
+<title>EoC</title>
+<base target="_self">
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8;no-cache"/>
+<link rel="stylesheet" href="css/redmond/jquery-ui-1.10.3.custom.min.css"/>
+<link rel="stylesheet" href="css/redmond/demos.css"/>
+<link rel="stylesheet" href='stylemain.css' type='text/css'/>
+<link rel="stylesheet" href='colors.css' type='text/css'/>
+<script src="js/jquery-1.9.1.js"></script>
+<script src="js/jquery-ui-1.10.3.custom.min.js"></script>
+<script language="javascript">
+			
+var progress = 0;
+			
+function isInProgress()
+{
+	if('<%ejGet(curUserName)%>' == 'user' )
+	{
+		alert("You do not have the proper privilege level to...");
+		return false;
+	}
+	else
+	{
+		if ( progress == 0 )
+		{
+			if (confirm("Warning: This process will take about 1 minutes. Do not perform other operations, or cut off the power supply before the end of the operation!"))
+			{	
+				progress = 1;				
+				return true;
+			}
+			else
+			{
+				return false;
+			}								      
+		}
+		else
+		{
+			alert("Warning: Upload firmware is in progress, please wait!");
+			return false;
+		}
+	}
+}
+
+$(function()
+{
+	$("#accordion").accordion({
+		collapsible: true,
+		heightStyle: "content" 
+	});	
+
+});
+
+</script>
+
+</head>
+<body>
+<blockquote>
+<form method='post' ENCTYPE='multipart/form-data' action='upgrade2.cgi' onSubmit='return isInProgress();'>
+	<br>
+	<table border="0" cellpadding="5" cellspacing="0">
+		<tr><td class='maintitle'><b>Upgrade Firmware</b></td></tr>                       
+	</table>
+	<table border="0" cellpadding="0" cellspacing="0" width="100%">            	
+		<tr><td class='mainline' width="100%"></td></tr>                           
+	</table>
+	<br>	
+	<br>
+	<div id="accordion">
+		<h3>Upgrade Firmware</h3>
+		<div>
+			<b>You can complete the upgrade of the firmware in accordance with the following steps.</b></br>
+			<br>
+			<br><b>Step 1: </b>Obtain an updated firmware image file from your ISP.<br>        
+			<br><b>Step 2: </b>Click the &quot;Browse&quot; button to select the image file.<br>
+			<br><b>Step 3: </b>Follow the prompts, click the button to start the firmware upgrade process.<br>
+			<br><b>Note:</b> The upgrade process takes about 4 minutes to complete, and your CBAT will reboot.<br>
+			<br><br>
+		<h3>Step 2</h3>
+			<p>Upload &quot;ubifs.bin&quot;, click &quot;Restart System&quot; button</p>
+               	<table border="0" cellpadding="0" cellspacing="0">
+				<tr>
+					<td width=200>Current firmware version:</td>
+					<td><%ejGet(wecAppVersion)%></td>
+				</tr>
+				<tr>
+					<td colspan=2>&nbsp;</td>
+				</tr>
+				<tr>
+					<td>Firmware File Name:</td>
+					<td><input type='file' name='filename' size='40' style='cursor:pointer'></td>
+				</tr>
+			</table>
+        		<br>
+        	<p>					
+			<input type='submit' class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" value='Restart System'>
+	      </p>
+		</div>
+	</div>
+	
+</form>
+</blockquote>
+</body>
+</html>
+

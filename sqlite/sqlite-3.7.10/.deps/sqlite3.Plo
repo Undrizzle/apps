@@ -1,0 +1,199 @@
+sqlite3.lo: sqlite3.c \
+ /opt/eldk-5.1/armv5te/sysroots/i686-eldk-linux/usr/lib/armv5te-linux-gnueabi/gcc/arm-linux-gnueabi/4.6.1/include/stdint.h \
+ /opt/eldk-5.1/armv5te/sysroots/armv5te-linux-gnueabi/usr/include/stdint.h \
+ /opt/eldk-5.1/armv5te/sysroots/armv5te-linux-gnueabi/usr/include/features.h \
+ /opt/eldk-5.1/armv5te/sysroots/armv5te-linux-gnueabi/usr/include/bits/predefs.h \
+ /opt/eldk-5.1/armv5te/sysroots/armv5te-linux-gnueabi/usr/include/sys/cdefs.h \
+ /opt/eldk-5.1/armv5te/sysroots/armv5te-linux-gnueabi/usr/include/bits/wordsize.h \
+ /opt/eldk-5.1/armv5te/sysroots/armv5te-linux-gnueabi/usr/include/gnu/stubs.h \
+ /opt/eldk-5.1/armv5te/sysroots/armv5te-linux-gnueabi/usr/include/bits/wchar.h \
+ /opt/eldk-5.1/armv5te/sysroots/armv5te-linux-gnueabi/usr/include/inttypes.h \
+ /opt/eldk-5.1/armv5te/sysroots/i686-eldk-linux/usr/lib/armv5te-linux-gnueabi/gcc/arm-linux-gnueabi/4.6.1/include/stdarg.h \
+ /opt/eldk-5.1/armv5te/sysroots/armv5te-linux-gnueabi/usr/include/stdio.h \
+ /opt/eldk-5.1/armv5te/sysroots/i686-eldk-linux/usr/lib/armv5te-linux-gnueabi/gcc/arm-linux-gnueabi/4.6.1/include/stddef.h \
+ /opt/eldk-5.1/armv5te/sysroots/armv5te-linux-gnueabi/usr/include/bits/types.h \
+ /opt/eldk-5.1/armv5te/sysroots/armv5te-linux-gnueabi/usr/include/bits/typesizes.h \
+ /opt/eldk-5.1/armv5te/sysroots/armv5te-linux-gnueabi/usr/include/libio.h \
+ /opt/eldk-5.1/armv5te/sysroots/armv5te-linux-gnueabi/usr/include/_G_config.h \
+ /opt/eldk-5.1/armv5te/sysroots/armv5te-linux-gnueabi/usr/include/wchar.h \
+ /opt/eldk-5.1/armv5te/sysroots/armv5te-linux-gnueabi/usr/include/bits/stdio_lim.h \
+ /opt/eldk-5.1/armv5te/sysroots/armv5te-linux-gnueabi/usr/include/bits/sys_errlist.h \
+ /opt/eldk-5.1/armv5te/sysroots/armv5te-linux-gnueabi/usr/include/bits/stdio.h \
+ /opt/eldk-5.1/armv5te/sysroots/armv5te-linux-gnueabi/usr/include/stdlib.h \
+ /opt/eldk-5.1/armv5te/sysroots/armv5te-linux-gnueabi/usr/include/bits/waitflags.h \
+ /opt/eldk-5.1/armv5te/sysroots/armv5te-linux-gnueabi/usr/include/bits/waitstatus.h \
+ /opt/eldk-5.1/armv5te/sysroots/armv5te-linux-gnueabi/usr/include/endian.h \
+ /opt/eldk-5.1/armv5te/sysroots/armv5te-linux-gnueabi/usr/include/bits/endian.h \
+ /opt/eldk-5.1/armv5te/sysroots/armv5te-linux-gnueabi/usr/include/bits/byteswap.h \
+ /opt/eldk-5.1/armv5te/sysroots/armv5te-linux-gnueabi/usr/include/xlocale.h \
+ /opt/eldk-5.1/armv5te/sysroots/armv5te-linux-gnueabi/usr/include/sys/types.h \
+ /opt/eldk-5.1/armv5te/sysroots/armv5te-linux-gnueabi/usr/include/time.h \
+ /opt/eldk-5.1/armv5te/sysroots/armv5te-linux-gnueabi/usr/include/sys/select.h \
+ /opt/eldk-5.1/armv5te/sysroots/armv5te-linux-gnueabi/usr/include/bits/select.h \
+ /opt/eldk-5.1/armv5te/sysroots/armv5te-linux-gnueabi/usr/include/bits/sigset.h \
+ /opt/eldk-5.1/armv5te/sysroots/armv5te-linux-gnueabi/usr/include/bits/time.h \
+ /opt/eldk-5.1/armv5te/sysroots/armv5te-linux-gnueabi/usr/include/sys/sysmacros.h \
+ /opt/eldk-5.1/armv5te/sysroots/armv5te-linux-gnueabi/usr/include/bits/pthreadtypes.h \
+ /opt/eldk-5.1/armv5te/sysroots/armv5te-linux-gnueabi/usr/include/alloca.h \
+ /opt/eldk-5.1/armv5te/sysroots/armv5te-linux-gnueabi/usr/include/string.h \
+ /opt/eldk-5.1/armv5te/sysroots/armv5te-linux-gnueabi/usr/include/bits/string.h \
+ /opt/eldk-5.1/armv5te/sysroots/armv5te-linux-gnueabi/usr/include/bits/string2.h \
+ /opt/eldk-5.1/armv5te/sysroots/armv5te-linux-gnueabi/usr/include/assert.h \
+ /opt/eldk-5.1/armv5te/sysroots/armv5te-linux-gnueabi/usr/include/ctype.h \
+ /opt/eldk-5.1/armv5te/sysroots/armv5te-linux-gnueabi/usr/include/pthread.h \
+ /opt/eldk-5.1/armv5te/sysroots/armv5te-linux-gnueabi/usr/include/sched.h \
+ /opt/eldk-5.1/armv5te/sysroots/armv5te-linux-gnueabi/usr/include/bits/sched.h \
+ /opt/eldk-5.1/armv5te/sysroots/armv5te-linux-gnueabi/usr/include/bits/setjmp.h \
+ /opt/eldk-5.1/armv5te/sysroots/armv5te-linux-gnueabi/usr/include/sys/stat.h \
+ /opt/eldk-5.1/armv5te/sysroots/armv5te-linux-gnueabi/usr/include/bits/stat.h \
+ /opt/eldk-5.1/armv5te/sysroots/armv5te-linux-gnueabi/usr/include/fcntl.h \
+ /opt/eldk-5.1/armv5te/sysroots/armv5te-linux-gnueabi/usr/include/bits/fcntl.h \
+ /opt/eldk-5.1/armv5te/sysroots/armv5te-linux-gnueabi/usr/include/bits/uio.h \
+ /opt/eldk-5.1/armv5te/sysroots/armv5te-linux-gnueabi/usr/include/unistd.h \
+ /opt/eldk-5.1/armv5te/sysroots/armv5te-linux-gnueabi/usr/include/bits/posix_opt.h \
+ /opt/eldk-5.1/armv5te/sysroots/armv5te-linux-gnueabi/usr/include/bits/environments.h \
+ /opt/eldk-5.1/armv5te/sysroots/armv5te-linux-gnueabi/usr/include/bits/confname.h \
+ /opt/eldk-5.1/armv5te/sysroots/armv5te-linux-gnueabi/usr/include/getopt.h \
+ /opt/eldk-5.1/armv5te/sysroots/armv5te-linux-gnueabi/usr/include/sys/time.h \
+ /opt/eldk-5.1/armv5te/sysroots/armv5te-linux-gnueabi/usr/include/errno.h \
+ /opt/eldk-5.1/armv5te/sysroots/armv5te-linux-gnueabi/usr/include/bits/errno.h \
+ /opt/eldk-5.1/armv5te/sysroots/armv5te-linux-gnueabi/usr/include/linux/errno.h \
+ /opt/eldk-5.1/armv5te/sysroots/armv5te-linux-gnueabi/usr/include/asm/errno.h \
+ /opt/eldk-5.1/armv5te/sysroots/armv5te-linux-gnueabi/usr/include/asm-generic/errno.h \
+ /opt/eldk-5.1/armv5te/sysroots/armv5te-linux-gnueabi/usr/include/asm-generic/errno-base.h \
+ /opt/eldk-5.1/armv5te/sysroots/armv5te-linux-gnueabi/usr/include/sys/mman.h \
+ /opt/eldk-5.1/armv5te/sysroots/armv5te-linux-gnueabi/usr/include/bits/mman.h \
+ /opt/eldk-5.1/armv5te/sysroots/armv5te-linux-gnueabi/usr/include/dlfcn.h \
+ /opt/eldk-5.1/armv5te/sysroots/armv5te-linux-gnueabi/usr/include/bits/dlfcn.h
+
+/opt/eldk-5.1/armv5te/sysroots/i686-eldk-linux/usr/lib/armv5te-linux-gnueabi/gcc/arm-linux-gnueabi/4.6.1/include/stdint.h:
+
+/opt/eldk-5.1/armv5te/sysroots/armv5te-linux-gnueabi/usr/include/stdint.h:
+
+/opt/eldk-5.1/armv5te/sysroots/armv5te-linux-gnueabi/usr/include/features.h:
+
+/opt/eldk-5.1/armv5te/sysroots/armv5te-linux-gnueabi/usr/include/bits/predefs.h:
+
+/opt/eldk-5.1/armv5te/sysroots/armv5te-linux-gnueabi/usr/include/sys/cdefs.h:
+
+/opt/eldk-5.1/armv5te/sysroots/armv5te-linux-gnueabi/usr/include/bits/wordsize.h:
+
+/opt/eldk-5.1/armv5te/sysroots/armv5te-linux-gnueabi/usr/include/gnu/stubs.h:
+
+/opt/eldk-5.1/armv5te/sysroots/armv5te-linux-gnueabi/usr/include/bits/wchar.h:
+
+/opt/eldk-5.1/armv5te/sysroots/armv5te-linux-gnueabi/usr/include/inttypes.h:
+
+/opt/eldk-5.1/armv5te/sysroots/i686-eldk-linux/usr/lib/armv5te-linux-gnueabi/gcc/arm-linux-gnueabi/4.6.1/include/stdarg.h:
+
+/opt/eldk-5.1/armv5te/sysroots/armv5te-linux-gnueabi/usr/include/stdio.h:
+
+/opt/eldk-5.1/armv5te/sysroots/i686-eldk-linux/usr/lib/armv5te-linux-gnueabi/gcc/arm-linux-gnueabi/4.6.1/include/stddef.h:
+
+/opt/eldk-5.1/armv5te/sysroots/armv5te-linux-gnueabi/usr/include/bits/types.h:
+
+/opt/eldk-5.1/armv5te/sysroots/armv5te-linux-gnueabi/usr/include/bits/typesizes.h:
+
+/opt/eldk-5.1/armv5te/sysroots/armv5te-linux-gnueabi/usr/include/libio.h:
+
+/opt/eldk-5.1/armv5te/sysroots/armv5te-linux-gnueabi/usr/include/_G_config.h:
+
+/opt/eldk-5.1/armv5te/sysroots/armv5te-linux-gnueabi/usr/include/wchar.h:
+
+/opt/eldk-5.1/armv5te/sysroots/armv5te-linux-gnueabi/usr/include/bits/stdio_lim.h:
+
+/opt/eldk-5.1/armv5te/sysroots/armv5te-linux-gnueabi/usr/include/bits/sys_errlist.h:
+
+/opt/eldk-5.1/armv5te/sysroots/armv5te-linux-gnueabi/usr/include/bits/stdio.h:
+
+/opt/eldk-5.1/armv5te/sysroots/armv5te-linux-gnueabi/usr/include/stdlib.h:
+
+/opt/eldk-5.1/armv5te/sysroots/armv5te-linux-gnueabi/usr/include/bits/waitflags.h:
+
+/opt/eldk-5.1/armv5te/sysroots/armv5te-linux-gnueabi/usr/include/bits/waitstatus.h:
+
+/opt/eldk-5.1/armv5te/sysroots/armv5te-linux-gnueabi/usr/include/endian.h:
+
+/opt/eldk-5.1/armv5te/sysroots/armv5te-linux-gnueabi/usr/include/bits/endian.h:
+
+/opt/eldk-5.1/armv5te/sysroots/armv5te-linux-gnueabi/usr/include/bits/byteswap.h:
+
+/opt/eldk-5.1/armv5te/sysroots/armv5te-linux-gnueabi/usr/include/xlocale.h:
+
+/opt/eldk-5.1/armv5te/sysroots/armv5te-linux-gnueabi/usr/include/sys/types.h:
+
+/opt/eldk-5.1/armv5te/sysroots/armv5te-linux-gnueabi/usr/include/time.h:
+
+/opt/eldk-5.1/armv5te/sysroots/armv5te-linux-gnueabi/usr/include/sys/select.h:
+
+/opt/eldk-5.1/armv5te/sysroots/armv5te-linux-gnueabi/usr/include/bits/select.h:
+
+/opt/eldk-5.1/armv5te/sysroots/armv5te-linux-gnueabi/usr/include/bits/sigset.h:
+
+/opt/eldk-5.1/armv5te/sysroots/armv5te-linux-gnueabi/usr/include/bits/time.h:
+
+/opt/eldk-5.1/armv5te/sysroots/armv5te-linux-gnueabi/usr/include/sys/sysmacros.h:
+
+/opt/eldk-5.1/armv5te/sysroots/armv5te-linux-gnueabi/usr/include/bits/pthreadtypes.h:
+
+/opt/eldk-5.1/armv5te/sysroots/armv5te-linux-gnueabi/usr/include/alloca.h:
+
+/opt/eldk-5.1/armv5te/sysroots/armv5te-linux-gnueabi/usr/include/string.h:
+
+/opt/eldk-5.1/armv5te/sysroots/armv5te-linux-gnueabi/usr/include/bits/string.h:
+
+/opt/eldk-5.1/armv5te/sysroots/armv5te-linux-gnueabi/usr/include/bits/string2.h:
+
+/opt/eldk-5.1/armv5te/sysroots/armv5te-linux-gnueabi/usr/include/assert.h:
+
+/opt/eldk-5.1/armv5te/sysroots/armv5te-linux-gnueabi/usr/include/ctype.h:
+
+/opt/eldk-5.1/armv5te/sysroots/armv5te-linux-gnueabi/usr/include/pthread.h:
+
+/opt/eldk-5.1/armv5te/sysroots/armv5te-linux-gnueabi/usr/include/sched.h:
+
+/opt/eldk-5.1/armv5te/sysroots/armv5te-linux-gnueabi/usr/include/bits/sched.h:
+
+/opt/eldk-5.1/armv5te/sysroots/armv5te-linux-gnueabi/usr/include/bits/setjmp.h:
+
+/opt/eldk-5.1/armv5te/sysroots/armv5te-linux-gnueabi/usr/include/sys/stat.h:
+
+/opt/eldk-5.1/armv5te/sysroots/armv5te-linux-gnueabi/usr/include/bits/stat.h:
+
+/opt/eldk-5.1/armv5te/sysroots/armv5te-linux-gnueabi/usr/include/fcntl.h:
+
+/opt/eldk-5.1/armv5te/sysroots/armv5te-linux-gnueabi/usr/include/bits/fcntl.h:
+
+/opt/eldk-5.1/armv5te/sysroots/armv5te-linux-gnueabi/usr/include/bits/uio.h:
+
+/opt/eldk-5.1/armv5te/sysroots/armv5te-linux-gnueabi/usr/include/unistd.h:
+
+/opt/eldk-5.1/armv5te/sysroots/armv5te-linux-gnueabi/usr/include/bits/posix_opt.h:
+
+/opt/eldk-5.1/armv5te/sysroots/armv5te-linux-gnueabi/usr/include/bits/environments.h:
+
+/opt/eldk-5.1/armv5te/sysroots/armv5te-linux-gnueabi/usr/include/bits/confname.h:
+
+/opt/eldk-5.1/armv5te/sysroots/armv5te-linux-gnueabi/usr/include/getopt.h:
+
+/opt/eldk-5.1/armv5te/sysroots/armv5te-linux-gnueabi/usr/include/sys/time.h:
+
+/opt/eldk-5.1/armv5te/sysroots/armv5te-linux-gnueabi/usr/include/errno.h:
+
+/opt/eldk-5.1/armv5te/sysroots/armv5te-linux-gnueabi/usr/include/bits/errno.h:
+
+/opt/eldk-5.1/armv5te/sysroots/armv5te-linux-gnueabi/usr/include/linux/errno.h:
+
+/opt/eldk-5.1/armv5te/sysroots/armv5te-linux-gnueabi/usr/include/asm/errno.h:
+
+/opt/eldk-5.1/armv5te/sysroots/armv5te-linux-gnueabi/usr/include/asm-generic/errno.h:
+
+/opt/eldk-5.1/armv5te/sysroots/armv5te-linux-gnueabi/usr/include/asm-generic/errno-base.h:
+
+/opt/eldk-5.1/armv5te/sysroots/armv5te-linux-gnueabi/usr/include/sys/mman.h:
+
+/opt/eldk-5.1/armv5te/sysroots/armv5te-linux-gnueabi/usr/include/bits/mman.h:
+
+/opt/eldk-5.1/armv5te/sysroots/armv5te-linux-gnueabi/usr/include/dlfcn.h:
+
+/opt/eldk-5.1/armv5te/sysroots/armv5te-linux-gnueabi/usr/include/bits/dlfcn.h:

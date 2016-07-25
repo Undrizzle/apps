@@ -1,0 +1,95 @@
+<html>
+<head>
+<title>EoC</title>
+<base target="_self">
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8;no-cache"/>
+<link rel="stylesheet" href="css/redmond/jquery-ui-1.10.3.custom.min.css"/>
+<link rel="stylesheet" href="css/redmond/demos.css"/>
+<link rel="stylesheet" href='stylemain.css' type='text/css'/>
+<link rel="stylesheet" href='colors.css' type='text/css'/>
+<script src="js/jquery-1.9.1.js"></script>
+<script src="js/jquery-ui-1.10.3.custom.min.js"></script>
+<script language="javascript" src="util.js"></script>
+<script language="javascript">	
+
+var msg = new Array();
+
+msg[0] = 'Uploading is in progress. This process will take about 2 minutes.';
+msg[1] = 'The system is out of memory.';
+msg[2] = 'No image file was selected.';
+msg[3] = 'The selected file contains an illegal image.';
+msg[4] = 'Fatal error during image uploading.';
+
+var idxStr = '<%ejGetOther(sysInfo, upldSts)%>';
+
+function getMsgIndex() {
+	var idxNum = parseInt(idxStr);
+	if ( isNaN(idxNum) || idxNum < 0 || idxNum > 4 )
+		idxNum = 4;				
+	return idxNum;
+}
+
+function btnReturn() {
+	var code = 'location="' + 'upload.cgi' + '"';
+	eval(code);
+}
+
+$(function()
+{	
+	$("#accordion").accordion({
+		collapsible: true,
+		heightStyle: "content" 
+	});
+
+	$('#retBtn').button({
+			icons: {
+				primary: 'ui-icon-carat-1-w'
+			},
+	});
+	$( "#retBtn" ).button().click(function(event){
+		event.preventDefault();
+		btnReturn();
+	});
+
+	var stringappend = msg[getMsgIndex()];
+	$('#msgInfo').text(stringappend);
+});
+
+</script>
+</head>
+<body>
+<blockquote>
+<br>
+<table border="0" cellpadding="5" cellspacing="0">
+	<tr><td class='maintitle'><b>System Message</b></td></tr>                       
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%">            	
+	<tr><td class='mainline' width="100%"></td></tr>                           
+</table>
+<br>	
+<br>
+<div id="accordion">
+	<h3>Operating Results</h3>
+	<div>
+		<br>
+           	<table border="0" cellpadding="0" cellspacing="0">
+			<tr>
+				<td class='diagdata' width=200>Operating state:</td>
+				<td class='diagdata' width=300><b><font color=red>Fail</font></b></td>  			
+			</tr>
+			<tr>
+				<td class='diagdata'>Message:</td>
+				<td class='diagdata' id='msgInfo'></td>	  			
+			</tr>
+		</table>
+	  	<br>
+	</div>
+</div>
+<p>
+	<button id="retBtn">Return</button>
+</p>
+</blockquote>
+</body>
+</html>
+
+

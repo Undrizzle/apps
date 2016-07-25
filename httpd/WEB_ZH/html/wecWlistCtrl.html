@@ -1,0 +1,133 @@
+<html>
+<head>
+<title>EoC</title>
+<base target="_self">
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8;no-cache"/>
+<link rel="stylesheet" href="css/redmond/jquery-ui-1.10.3.custom.min.css"/>
+<link rel="stylesheet" href="css/redmond/demos.css"/>
+<link rel="stylesheet" href='stylemain.css' type='text/css'/>
+<link rel="stylesheet" href='colors.css' type='text/css'/>
+<script src="js/jquery-1.9.1.js"></script>
+<script src="js/jquery-ui-1.10.3.custom.min.js"></script>
+<script language="javascript">	
+			
+function btnApply()
+{
+	var loc = 'doWlistCtl.cgi?';
+	loc += 'wecWlistStatus=' + $("#wlistctl").val();
+	var code = 'location=\"' + loc + '\"';
+	//alert(code);
+	eval(code);
+}
+
+$(function()
+{
+	var sts = '<%ejGet(wecWlistStatus)%>';
+	
+	if( sts == '0' )
+	{
+		$("#wlistctl")[0].selectedIndex = 0;
+	}
+	else
+	{
+		$("#wlistctl")[0].selectedIndex = 1;
+	}
+	
+	$("#accordion").accordion({
+		collapsible: true,
+		heightStyle: "content" 
+	});
+
+	$( "#dialog" ).dialog({
+		autoOpen: false,
+		width:400,
+		show:
+		{
+			effect: "blind",
+			duration: 1000
+		},
+		hide:
+		{
+			effect: "explode",
+			duration: 1000
+		}
+	});
+	$( "#opener" ).button(
+		{
+			icons:
+			{
+				primary: "ui-icon-help"
+			},
+			text: false
+		}
+	).click(function(){
+		$( "#dialog" ).dialog( "open" );
+	});
+
+	$('#comBtn').button({
+		icons: {
+			primary: 'ui-icon-arrowthickstop-1-s'
+		},
+	});
+	if('<%ejGet(curUserName)%>' == 'user' )
+	{
+		$("#comBtn").button().click(function(event){
+			alert("你没有足够的权限...");
+		});
+	}
+	else
+	{
+		$( "#comBtn" ).button().click(function(event){
+			event.preventDefault();
+			btnApply();
+		});
+	}
+
+});
+
+</script>
+</head>
+<body>
+<blockquote>
+<br>
+<table border="0" cellpadding="5" cellspacing="0">
+	<tr><td class='maintitle'><b>授权管理</b></td></tr>                       
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%">            	
+	<tr><td class='mainline' width="100%"></td></tr>                           
+</table>
+<br>	
+<br>
+<div id="accordion">
+	<h3>系统授权管理</h3>
+	<div>
+		<table border="0" cellpadding="3" cellspacing="0">
+			<tr>
+				<td width=180>白名单功能</td>
+				<td align="center" width=200>
+					<select id='wlistctl'>
+						<option value=0>禁用</option>
+						<option value=1>启用</option>
+					</select>
+				</td>
+			</tr>
+		</table>
+		<br>
+	</div>
+</div>
+<p>
+	<button id="comBtn">确 定</button>
+	<button id="opener">帮助</button>
+</p>
+<div id="dialog" title="帮助信息">
+	通过该页面，您可以打开或者关闭系统白名单授权功能。
+	当“授权管理状态”为“开启”时，系统默认新发现的用户为未授权用户，需要通过您手动开通业务；
+	反之，当“授权管理状态”为“关闭”时，系统将为新发现的用户自动开通业务。</br>
+	<br>
+	提示：无论系统授权管理状态为“开启”或者“关闭”，您都可以手动更改用户业务授权状态。</br></br>
+</div>
+</blockquote>
+</body>
+</html>
+
+

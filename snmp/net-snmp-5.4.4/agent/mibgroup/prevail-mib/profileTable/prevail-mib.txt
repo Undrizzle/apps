@@ -1,0 +1,688 @@
+--======================================================================
+-- PREVAIL MIB 
+--======================================================================
+
+-- File Name   : PREVAIL-MIB.txt
+-- Date        : Tue Jul 27 10:55:00 CEST 2010
+-- Author      : frank 
+
+prevail-mib DEFINITIONS ::= BEGIN
+
+  IMPORTS
+    enterprises
+    	FROM RFC1155-SMI    
+		TimeTicks, IpAddress, Counter64, OBJECT-TYPE, MODULE-IDENTITY, OBJECT-IDENTITY, Integer32 
+			FROM SNMPv2-SMI			
+		MacAddress, DateAndTime, TruthValue, TimeInterval, RowStatus, DisplayString, TEXTUAL-CONVENTION
+			FROM SNMPv2-TC;
+	  	  
+  prevail OBJECT IDENTIFIER ::= { enterprises 36186 }
+  
+  modEoCMib       MODULE-IDENTITY
+		LAST-UPDATED    "200412171230Z"
+		ORGANIZATION    "Organization"
+    CONTACT-INFO    "Contact-info"
+    DESCRIPTION     "Description"
+		::= { prevail 8 }
+
+
+-- TEXTUAL-CONVENTIONS --
+
+HostsLimitingValue ::= TEXTUAL-CONVENTION 
+		STATUS                  current
+		DESCRIPTION
+		        "Atheros EoC bridged hosts limiting settings."
+		SYNTAX	INTEGER{	
+							hosts-limiting-disabled		( 0 ) ,
+							one-host				( 1 ) ,
+							two-hosts				( 2 ) ,
+							three-hosts			( 3 ) ,
+							four-hosts			( 4 ) ,							
+							five-hosts			( 5 ) ,
+							six-hosts				( 6 ) ,
+							seven-hosts			( 7 ) ,
+							eight-hosts			( 8 ) ,
+             	null-hosts			( 65) 
+            } 
+
+PriQueueValue ::= TEXTUAL-CONVENTION 
+		STATUS                  current
+		DESCRIPTION
+		        "QoS priority queue value."
+		SYNTAX	INTEGER{	
+							cap0		( 0 ) ,
+							cap1		( 1 ) ,
+							cap2		( 2 ) ,
+							cap3		( 3 ) 
+            } 
+
+StromFilterValue ::= TEXTUAL-CONVENTION 
+		STATUS                  current
+		DESCRIPTION
+		        "Storm filter rate value."
+		SYNTAX	INTEGER{	
+							sfl-disabled	( 0 ) ,
+							sfl-1kpps			( 1 ) ,
+							sfl-2kpps			( 2 ) ,
+							sfl-4kpps			( 3 ) ,
+							sfl-8kpps			( 4 ) ,
+							sfl-16kpps		( 5 ) ,
+							sfl-32kpps		( 6 ) ,
+							sfl-64kpps		( 7 ) ,
+							sfl-128kpps		( 8 ) ,
+							sfl-256kpps		( 9 ) ,
+							sfl-512kpps		( 10 ) ,
+							sfl-1024kpps	( 11 ) 
+            } 
+
+-- END TEXTUAL-CONVENTIONS --
+	
+profileTable OBJECT-TYPE
+    SYNTAX      SEQUENCE OF ProfileEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+            "the list of cnu profile in database."
+    ::= { modEoCMib 8 }
+
+profileEntry OBJECT-TYPE
+    SYNTAX      ProfileEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+            "An entry containing all cnu profile in the database."
+    INDEX   { proTid }
+    ::= { profileTable 1 }
+
+ProfileEntry ::=
+    SEQUENCE {
+    		proTid										INTEGER,
+        proIndex            INTEGER,
+        proBase										INTEGER,
+        proMacLimit								HostsLimitingValue,
+        proCableUplinkRate					INTEGER,
+        proCableDownlinkRate				INTEGER,
+        proLocalAgingTime					INTEGER,
+        proRemoteAgingTime					INTEGER,
+        proIgmpPri									PriQueueValue,
+        proUnicastPri							PriQueueValue,
+        proAvsPri									PriQueueValue,
+        proMcastPri								PriQueueValue,
+        proTbaPriSts								TruthValue,
+        proCosPriSts								TruthValue,
+        proCos0pri									PriQueueValue,
+        proCos1pri									PriQueueValue,
+        proCos2pri									PriQueueValue,
+        proCos3pri									PriQueueValue,
+        proCos4pri									PriQueueValue,
+        proCos5pri									PriQueueValue,
+        proCos6pri									PriQueueValue,
+        proCos7pri									PriQueueValue,
+        proTosPriSts								TruthValue,
+        proTos0pri									PriQueueValue,
+        proTos1pri									PriQueueValue,
+        proTos2pri									PriQueueValue,
+        proTos3pri									PriQueueValue,
+        proTos4pri									PriQueueValue,
+        proTos5pri									PriQueueValue,
+        proTos6pri									PriQueueValue,
+        proTos7pri									PriQueueValue,
+        proSfbSts									TruthValue,
+        proSfuSts									TruthValue,
+        proSfmSts									TruthValue,
+        proSfRate									StromFilterValue,
+        proVlanStatus							TruthValue,
+        proEth1vid									INTEGER,
+        proEth2vid									INTEGER,
+        proEth3vid									INTEGER,
+        proEth4vid									INTEGER,
+        proPortPriSts							TruthValue,
+        proEth1pri									INTEGER,
+        proEth2pri									INTEGER,
+        proEth3pri									INTEGER,
+        proEth4pri									INTEGER,
+        proRxLimitSts							TruthValue,
+        proCpuPortRxRate						INTEGER,
+        proEth1rx									INTEGER,
+        proEth2rx									INTEGER,
+        proEth3rx									INTEGER,
+        proEth4rx									INTEGER,
+        proTxLimitSts							TruthValue,
+        proCpuPortTxRate						INTEGER,
+        proEth1tx									INTEGER,
+        proEth2tx									INTEGER,
+        proEth3tx									INTEGER,
+        proEth4tx									INTEGER,
+        proPsctlSts								TruthValue,
+        proCpuPortSts							TruthValue,
+        proEth1sts									TruthValue,
+        proEth2sts									TruthValue,
+        proEth3sts									TruthValue,
+        proEth4sts   						  TruthValue,
+        proCommit              	TruthValue,
+        proRowStatus               TruthValue     
+    }
+
+proTid OBJECT-TYPE
+    SYNTAX      INTEGER (1..64)
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+            "the index of profile entry in snmp table."
+    ::= { profileEntry 1 }
+
+proIndex OBJECT-TYPE
+    SYNTAX      INTEGER (1..64)
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+            "the index of profile entry in databases."
+    ::= { profileEntry 2 }
+
+proBase OBJECT-TYPE
+    SYNTAX      INTEGER (1..32)
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+            "atheros eoc pib index."
+    ::= { profileEntry 3 }
+
+proMacLimit OBJECT-TYPE
+    SYNTAX      HostsLimitingValue
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+            "EoC bridged hosts limiting."
+    ::= { profileEntry 4 }
+
+proCableUplinkRate OBJECT-TYPE
+    SYNTAX      INTEGER
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+            "Cable uplink rate limiting in kbps."
+    ::= { profileEntry 5 }
+
+proCableDownlinkRate OBJECT-TYPE
+    SYNTAX      INTEGER
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+            "Cable downlink rate limiting in kbps."
+    ::= { profileEntry 6 }
+
+proLocalAgingTime OBJECT-TYPE
+    SYNTAX      INTEGER
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+            "Local bridge aging time in minutes."
+    ::= { profileEntry 7 }
+
+proRemoteAgingTime OBJECT-TYPE
+    SYNTAX      INTEGER
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+            "Remote devie bridge table aging time in minutes."
+    ::= { profileEntry 8 }
+
+proIgmpPri OBJECT-TYPE
+    SYNTAX      PriQueueValue
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+            "IGMP Priority CAP value."
+    ::= { profileEntry 9 }
+
+proUnicastPri OBJECT-TYPE
+    SYNTAX      PriQueueValue
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+            "Unicast Priority CAP value."
+    ::= { profileEntry 10 }
+
+proAvsPri OBJECT-TYPE
+    SYNTAX      PriQueueValue
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+            "AV Stream Priority CAP value."
+    ::= { profileEntry 11 }
+
+
+proMcastPri OBJECT-TYPE
+    SYNTAX      PriQueueValue
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+            "Multicast Priority CAP value."
+    ::= { profileEntry 12 }
+
+proTbaPriSts OBJECT-TYPE
+    SYNTAX      TruthValue
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+            "TX buffer based on priority status."
+    ::= { profileEntry 13 }
+
+proCosPriSts OBJECT-TYPE
+    SYNTAX      TruthValue
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+            "Map VLAN to Priority CAP."
+    ::= { profileEntry 14 }
+
+proCos0pri OBJECT-TYPE
+    SYNTAX      PriQueueValue
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+            "VLAN priority mappings."
+    ::= { profileEntry 15 }
+
+proCos1pri OBJECT-TYPE
+    SYNTAX      PriQueueValue
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+            "VLAN priority mappings."
+    ::= { profileEntry 16 }
+
+proCos2pri OBJECT-TYPE
+    SYNTAX      PriQueueValue
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+            "VLAN priority mappings."
+    ::= { profileEntry 17 }
+
+proCos3pri OBJECT-TYPE
+    SYNTAX      PriQueueValue
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+            "VLAN priority mappings."
+    ::= { profileEntry 18 }
+
+proCos4pri OBJECT-TYPE
+    SYNTAX      PriQueueValue
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+            "VLAN priority mappings."
+    ::= { profileEntry 19 }
+
+proCos5pri OBJECT-TYPE
+    SYNTAX      PriQueueValue
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+            "VLAN priority mappings."
+    ::= { profileEntry 20 }
+
+proCos6pri OBJECT-TYPE
+    SYNTAX      PriQueueValue
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+            "VLAN priority mappings."
+    ::= { profileEntry 21 }
+
+proCos7pri OBJECT-TYPE
+    SYNTAX      PriQueueValue
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+            "VLAN priority mappings."
+    ::= { profileEntry 22 }
+
+proTosPriSts OBJECT-TYPE
+    SYNTAX      TruthValue
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+            "Map TOS to Priority CAP."
+    ::= { profileEntry 23 }
+
+proTos0pri OBJECT-TYPE
+    SYNTAX      PriQueueValue
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+            "TOS priority mappings."
+    ::= { profileEntry 24 }
+
+proTos1pri OBJECT-TYPE
+    SYNTAX      PriQueueValue
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+            "TOS priority mappings."
+    ::= { profileEntry 25 }
+
+proTos2pri OBJECT-TYPE
+    SYNTAX      PriQueueValue
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+            "TOS priority mappings."
+    ::= { profileEntry 26 }
+
+proTos3pri OBJECT-TYPE
+    SYNTAX      PriQueueValue
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+            "TOS priority mappings."
+    ::= { profileEntry 27 }
+
+proTos4pri OBJECT-TYPE
+    SYNTAX      PriQueueValue
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+            "TOS priority mappings."
+    ::= { profileEntry 28 }
+
+proTos5pri OBJECT-TYPE
+    SYNTAX      PriQueueValue
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+            "TOS priority mappings."
+    ::= { profileEntry 29 }
+
+proTos6pri OBJECT-TYPE
+    SYNTAX      PriQueueValue
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+            "TOS priority mappings."
+    ::= { profileEntry 30 }
+
+proTos7pri OBJECT-TYPE
+    SYNTAX      PriQueueValue
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+            "TOS priority mappings."
+    ::= { profileEntry 31 }
+
+proSfbSts OBJECT-TYPE
+    SYNTAX      TruthValue
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+            "Broadcast storm filter status."
+    ::= { profileEntry 32 }
+
+proSfuSts OBJECT-TYPE
+    SYNTAX      TruthValue
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+            "Unknown unicast storm filter status."
+    ::= { profileEntry 33 }
+
+proSfmSts OBJECT-TYPE
+    SYNTAX      TruthValue
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+            "Unknown multicast storm filter status."
+    ::= { profileEntry 34 }
+
+proSfRate OBJECT-TYPE
+    SYNTAX      StromFilterValue
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+            "Storm control rate level from 0 to 11."
+    ::= { profileEntry 35 }
+
+proVlanStatus OBJECT-TYPE
+    SYNTAX      TruthValue
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+            "CNU vlan status."
+    ::= { profileEntry 36 }
+
+proEth1vid OBJECT-TYPE
+    SYNTAX      INTEGER (1..4094)
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+            "CNU eth1 vlan id."
+    ::= { profileEntry 37 }
+
+proEth2vid OBJECT-TYPE
+    SYNTAX      INTEGER (1..4094)
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+            "CNU eth2 vlan id."
+    ::= { profileEntry 38 }
+
+proEth3vid OBJECT-TYPE
+    SYNTAX      INTEGER (1..4094)
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+            "CNU eth3 vlan id."
+    ::= { profileEntry 39 }
+
+proEth4vid OBJECT-TYPE
+    SYNTAX      INTEGER (1..4094)
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+            "CNU eth4 vlan id."
+    ::= { profileEntry 40 }
+
+proPortPriSts OBJECT-TYPE
+    SYNTAX      TruthValue
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+            "CNU port priority config status."
+    ::= { profileEntry 41 }
+									
+proEth1pri OBJECT-TYPE
+    SYNTAX      INTEGER
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+            "cnu port pri value."
+    ::= { profileEntry 42 }
+
+proEth2pri OBJECT-TYPE
+    SYNTAX      INTEGER
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+            "cnu port pri value."
+    ::= { profileEntry 43 }
+
+proEth3pri OBJECT-TYPE
+    SYNTAX      INTEGER
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+            "cnu port pri value."
+    ::= { profileEntry 44 }
+
+proEth4pri OBJECT-TYPE
+    SYNTAX      INTEGER
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+            "cnu port pri value."
+    ::= { profileEntry 45 }
+
+proRxLimitSts OBJECT-TYPE
+    SYNTAX      TruthValue
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+            "CNU port RX rate limiting status."
+    ::= { profileEntry 46 }
+
+proCpuPortRxRate OBJECT-TYPE
+    SYNTAX      INTEGER
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+            "CNU cpu port rx rate limiting."
+    ::= { profileEntry 47 }
+
+proEth1rx OBJECT-TYPE
+    SYNTAX      INTEGER
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+            "eth1 port rx rate limiting."
+    ::= { profileEntry 48 }
+
+proEth2rx OBJECT-TYPE
+    SYNTAX      INTEGER
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+            "eth2 port rx rate limiting."
+    ::= { profileEntry 49 }
+
+proEth3rx OBJECT-TYPE
+    SYNTAX      INTEGER
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+            "eth3 port rx rate limiting."
+    ::= { profileEntry 50 }
+
+proEth4rx OBJECT-TYPE
+    SYNTAX      INTEGER
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+            "eth4 port rx rate limiting."
+    ::= { profileEntry 51 }
+
+proTxLimitSts OBJECT-TYPE
+    SYNTAX      TruthValue
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+            "CNU port TX rate limiting status."
+    ::= { profileEntry 52 }
+
+proCpuPortTxRate OBJECT-TYPE
+    SYNTAX      INTEGER
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+            "CNU cpu port tx rate limiting."
+    ::= { profileEntry 53 }
+
+proEth1tx OBJECT-TYPE
+    SYNTAX      INTEGER
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+            "eth1 port tx rate limiting."
+    ::= { profileEntry 54 }
+
+proEth2tx OBJECT-TYPE
+    SYNTAX      INTEGER
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+            "eth2 port tx rate limiting."
+    ::= { profileEntry 55 }
+
+proEth3tx OBJECT-TYPE
+    SYNTAX      INTEGER
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+            "eth3 port tx rate limiting."
+    ::= { profileEntry 56 }
+
+proEth4tx OBJECT-TYPE
+    SYNTAX      INTEGER
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+            "eth4 port tx rate limiting."
+    ::= { profileEntry 57 }
+
+proPsctlSts OBJECT-TYPE
+    SYNTAX      TruthValue
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+            "CNU port link status control status."
+    ::= { profileEntry 58 }
+
+proCpuPortSts OBJECT-TYPE
+    SYNTAX      TruthValue
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+            "CNU cpu port link status."
+    ::= { profileEntry 59 }
+
+proEth1sts OBJECT-TYPE
+    SYNTAX      TruthValue
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+            "CNU eth1 port link status."
+    ::= { profileEntry 60 }
+
+proEth2sts OBJECT-TYPE
+    SYNTAX      TruthValue
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+            "CNU eth2 port link status."
+    ::= { profileEntry 61 }
+
+proEth3sts OBJECT-TYPE
+    SYNTAX      TruthValue
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+            "CNU eth3 port link status."
+    ::= { profileEntry 62 }
+
+proEth4sts OBJECT-TYPE
+    SYNTAX      TruthValue
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+            "CNU eth4 port link status."
+    ::= { profileEntry 63 }
+
+proCommit OBJECT-TYPE
+    SYNTAX      TruthValue
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+            "Commit action node for saving current profile settings to databases."
+    ::= { profileEntry 64 }
+
+proRowStatus OBJECT-TYPE
+    SYNTAX      TruthValue
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+            "Profile entry row status."
+    ::= { profileEntry 65 }
+
+
+END

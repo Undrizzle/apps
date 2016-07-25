@@ -1,0 +1,227 @@
+1. 拷贝MIB文件至："/usr/local/share/snmp/mibs"
+		cp /home/frank/opt/work/EoC/project/temp/prevail-mib.txt /usr/local/share/snmp/mibs/
+		
+2. 创建临时目录用来存储mib2c需要的配置文件以及生成的文件：
+		cp /usr/local/share/snmp/*.conf /home/frank/opt/work/EoC/project/temp/
+		
+3. 生成代码：
+		env MIBS="+prevail-mib" mib2c -c mib2c.mfd.conf -I /usr/local/share/snmp/mib2c-data/ cnuTable
+		
+Defaults for cnuTable...
+writing to -
+There are no defaults for cnuTable. Would you like to
+
+  1) Accept hard-coded defaults
+  2) Set defaults now [DEFAULT]
+
+Select your choice : 2
+
+
+This table has writable columns. Do you want to generate
+code for writeable columns, or restrict the table to read-only?
+
+  1) generate code with writeable columns [DEFAULT]
+  2) generate code with read-only columns
+
+Select your choice : 1
+
+
+Since your table is writable, do you want to generate code to save and
+restore rows in the Net-SNMP persistent store? You should only use this
+option if the agent 'owns' the data, and doesn't get the data from an
+external source.
+
+  1) do not generate persistent store code [DEFAULT]
+  2) generate persistent store code
+
+Select your choice : 1
+
+
+Writable tables sometimes have dependencies beteen columns
+or with other tables. If there are no dependencies in this table, you
+probably do not want the extra code.
+
+  1) do not generate dependency code [DEFAULT]
+  2) generate dependency code
+
+Select your choice : 2
+
+
+Do you want to use an existing data structure for the USER context?
+This would be a structure used to track data for the entire table,
+(similar to a global variable) not individual rows.
+
+  1) No, use netsnmp_data_list [DEFAULT]
+  2) Yes, use my own structure
+
+Select your choice : 1
+
+
+Do you want to use an existing data structure for the DATA context?
+The DATA context holds the data for each MIB column. By default, a new
+data structure will be created with an element for each column.
+
+  1) No, use generated [DEFAULT]
+  2) Yes, use my own structure
+
+Select your choice : 1
+
+
+Do you need to initialize elements in the 'generated' DATA
+context when a new instance is created (eg default values, or other structures
+you are going to add that might need initialization to the row request context?
+(The most common reasons you might need to do this is are if you want to keep
+some non-MIB data for every row, or some columns have default values.)
+
+  1) no, no initialization needed
+  2) yes, initilization is needed [DEFAULT]
+
+Select your choice : 2
+
+
+Do you plan on keeping all data in the format defined by the MIB? If so,
+no functions will be generated to map values. If some data will be
+stored in a different format, the mapping functions will be generated.
+If your MIB has integers with enumerations, mapping functions are more
+likely to be needed. (e.g. A TruthValue object will hold the value
+1 or 2, but a C boolean would be 1 or 0.)
+
+  1) All values will be stored as defined by the MIB [DEFAULT]
+  2) I need to map values to the format defined by the MIB.
+
+Select your choice : 1
+
+
+Which method would you like to use to gather data about available rows?
+
+  1) container : [DEFAULT]  This access method uses a netsnmp_container
+     to store all row data in memory. This method is best for:
+         - Internal data (maintained by the agent)
+         - Access speed is important
+         - Sufficient memory exists to contain all rows
+
+  2) container-cached : This access method uses a netsnmp_container
+     to keep track of the indexes (and data, usually) for each
+     row. This method is best for:
+         - External data (maintained by another process/the kernel)
+         - Access speed is important
+         - Sufficient memory exists to contain all indexes
+
+  3) unsorted-external : This access method iterates over all of your data
+     to find the row with the appropriate index. This method is good for
+         - External data (maintained by another process/the kernel)
+         - Using less memory is much more important than access speed
+
+Select your choice : 2
+
+
+When accessing your data, is your data TRANSIENT?
+
+  1) Yes. My data is TRANSIENT (e.g. a pointer to a static buffer that
+     my be overwritten during a request) and needs to be copied during
+     processing.
+
+  2) Yes. My data is SEMI-TRANSIENT (e.g. an allocated pointer to a
+     copy of the data).
+
+  3) No, my data is PERSISTENT (e.g. an allocated pointer to the actual
+     data, which is under the agent's control)
+
+Select your choice [DEFAULT=1] : 1
+
+
+Do you want example code to be generated? This will generate example code
+for reading data from a text file.
+
+  1) generate example code [DEFAULT]
+  2) do not generate example code
+
+Select your choice : 1
+
+Is your table sparse? A sparse table is a table where some
+columns might not exist for all rows. Note that if your table
+contains a RowStaus column and it supports createAndWait, you
+will need sparse table support.
+
+  1) No, all columns always exist for every row [DEFAULT]
+  2) Yes, my table is sparse
+
+Select your choice : 1
+
+Do you want a makefile and AgentX subagent source file generated?
+This will let you test your table without having to link it into
+snmpd. (You can still link it in later.)
+
+  1) do not generate makefile/AgentX code [DEFAULT]
+  2) generate makefile/AgentX code
+
+Select your choice : 1
+
+writing to defaults/table-cnuTable.m2d
+Starting MFD code generation...
+writing to cnuTable.h
+| +-> Processing table cnuTable
+writing to defaults/node-devType.m2d
+writing to defaults/node-macAddr.m2d
+writing to defaults/node-cnuOnlineStatus.m2d
+writing to defaults/node-rxRate.m2d
+writing to defaults/node-txRate.m2d
+writing to defaults/node-attenuation.m2d
+writing to defaults/node-downStreamQuality.m2d
+writing to defaults/node-upStreamQuality.m2d
+writing to defaults/node-userType.m2d
+writing to defaults/node-profileId.m2d
+writing to defaults/node-accessEnable.m2d
+writing to defaults/node-autoUpgradeEnable.m2d
+writing to defaults/node-softwareVersion.m2d
+writing to defaults/node-onUsed.m2d
+writing to defaults/node-cnuReset.m2d
+writing to defaults/node-cnuIndex.m2d
+writing to cnuTable.c
+writing to cnuTable_data_get.h
+writing to cnuTable_data_get.c
+| |   +-> Processing nonindex devType
+| |   +-> Processing nonindex macAddr
+| |   +-> Processing nonindex cnuOnlineStatus
+| |   +-> Processing nonindex rxRate
+| |   +-> Processing nonindex txRate
+| |   +-> Processing nonindex attenuation
+| |   +-> Processing nonindex downStreamQuality
+| |   +-> Processing nonindex upStreamQuality
+| |   +-> Processing nonindex userType
+| |   +-> Processing nonindex profileId
+| |   +-> Processing nonindex accessEnable
+| |   +-> Processing nonindex autoUpgradeEnable
+| |   +-> Processing nonindex softwareVersion
+| |   +-> Processing nonindex onUsed
+| |   +-> Processing nonindex cnuReset
+writing to cnuTable_data_set.h
+writing to cnuTable_data_set.c
+Use of uninitialized value $key in hash element at /usr/local/lib/perl/5.10.1/SNMP.pm line 1325, <GEN311> line 672.
+Use of uninitialized value $key in hash element at /usr/local/lib/perl/5.10.1/SNMP.pm line 1326, <GEN311> line 672.
+Use of uninitialized value in null operation at /usr/local/lib/perl/5.10.1/SNMP.pm line 1325, <GEN311> line 672.
+| |   +-> Processing nonindex userType
+| |   +-> Processing nonindex profileId
+| |   +-> Processing nonindex accessEnable
+| |   +-> Processing nonindex cnuReset
+writing to cnuTable_oids.h
+writing to cnuTable_enums.h
+writing to cnuTable_interface.h
+writing to cnuTable_interface.c
+writing to cnuTable_data_access.h
+writing to cnuTable_data_access.c
+writing to cnuTable-README-FIRST.txt
+writing to cnuTable-README-cnuTable.txt
+running indent on cnuTable_data_access.c
+running indent on cnuTable.c
+running indent on cnuTable_data_access.h
+running indent on cnuTable_data_set.c
+running indent on cnuTable_data_set.h
+running indent on cnuTable_data_get.h
+running indent on cnuTable_data_get.c
+running indent on cnuTable.h
+running indent on cnuTable_interface.h
+running indent on cnuTable_interface.c
+running indent on cnuTable_oids.h
+running indent on cnuTable_enums.h
+frank@eoc-server:~/opt/work/EoC/project/temp$

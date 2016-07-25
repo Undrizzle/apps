@@ -1,0 +1,135 @@
+<html>
+<head>
+<title>EoC</title>
+<base target="_self">
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8;no-cache"/>
+<link rel="stylesheet" href="css/redmond/jquery-ui-1.10.3.custom.min.css"/>
+<link rel="stylesheet" href="css/redmond/demos.css"/>
+<link rel="stylesheet" href='stylemain.css' type='text/css'/>
+<link rel="stylesheet" href='colors.css' type='text/css'/>
+<script src="js/jquery-1.9.1.js"></script>
+<script src="js/jquery-ui-1.10.3.custom.min.js"></script>
+<script language="javascript">	
+			
+function btnApply()
+{
+	var loc = 'doWlistCtl.cgi?';
+	loc += 'wecWlistStatus=' + $("#wlistctl").val();
+	var code = 'location=\"' + loc + '\"';
+	//alert(code);
+	eval(code);
+}
+
+$(function()
+{
+	var sts = '<%ejGet(wecWlistStatus)%>';
+	
+	if( sts == '0' )
+	{
+		$("#wlistctl")[0].selectedIndex = 0;
+	}
+	else
+	{
+		$("#wlistctl")[0].selectedIndex = 1;
+	}
+	
+	$("#accordion").accordion({
+		collapsible: true,
+		heightStyle: "content" 
+	});
+
+	$( "#dialog" ).dialog({
+		autoOpen: false,
+		width:400,
+		show:
+		{
+			effect: "blind",
+			duration: 1000
+		},
+		hide:
+		{
+			effect: "explode",
+			duration: 1000
+		}
+	});
+	$( "#opener" ).button(
+		{
+			icons:
+			{
+				primary: "ui-icon-help"
+			},
+			text: false
+		}
+	).click(function(){
+		$( "#dialog" ).dialog( "open" );
+	});
+
+	$('#comBtn').button({
+		icons: {
+			primary: 'ui-icon-arrowthickstop-1-s'
+		},
+	});
+	
+	if('<%ejGet(curUserName)%>' == 'user' )
+	{
+		$("#comBtn").button().click(function(event){
+			alert("You do not have the proper privilege level to...");
+		});
+	}
+	else
+	{
+		$( "#comBtn" ).button().click(function(event){
+			event.preventDefault();
+			btnApply();
+		});
+	}
+
+
+});
+
+</script>
+</head>
+<body>
+<blockquote>
+<br>
+<table border="0" cellpadding="5" cellspacing="0">
+	<tr><td class='maintitle'><b>Authorization</b></td></tr>                       
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%">            	
+	<tr><td class='mainline' width="100%"></td></tr>                           
+</table>
+<br>	
+<br>
+<div id="accordion">
+	<h3>System Authorization Control</h3>
+	<div>
+		<table border="0" cellpadding="3" cellspacing="0">
+			<tr>
+				<td width=180>Sysrem authorized status:</td>
+				<td align="center" width=200>
+					<select id='wlistctl'>
+						<option value=0>Disable</option>
+						<option value=1>Enable</option>
+					</select>
+				</td>
+			</tr>
+		</table>
+		<br>
+	</div>
+</div>
+<p>
+	<button id="comBtn">Commit</button>
+	<button id="opener">Help</button>
+</p>
+<div id="dialog" title="Help Information">
+	Through this page, you can configure the system authorization management status.
+	When the "system authorized state" is "Enable", users need open business manually;
+	On the contrary, when the "system authorized state" is "Disable", users are opened business automatically.</br>
+	<br>
+	Note: Regardless of the system authorization management status is "Enable" or "Disable", you can change each user's business license status manually.</br></br>
+</div>
+</blockquote>
+</body>
+</html>
+
+

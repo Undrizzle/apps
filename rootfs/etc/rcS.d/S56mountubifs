@@ -1,0 +1,4 @@
+#!/bin/sh
+
+#ubiattach /dev/ubi_ctrl -m 4
+mount -t ubifs ubi0:userfs /usr/mnt

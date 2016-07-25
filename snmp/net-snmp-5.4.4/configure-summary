@@ -1,0 +1,11 @@
+  SNMP Versions Supported:    1 2c 3
+  Net-SNMP Version:           5.4.4
+  Building for:               linux
+  Network transport support:  Callback Unix TCP UDP
+  SNMPv3 Security Modules:     usm
+  Agent MIB code:             ucd-snmp/dlmod if-mib host mibII/system_mib mibII/sysORTable mibII/at mibII/ifTable mibII/ip mibII/snmp_mib mibII/tcp mibII/icmp mibII/udp prevail-mib/cbatAction/cbatAction prevail-mib/softwareMgmt/softwareMgmt prevail-mib/networkInfo/networkInfo prevail-mib/snmpGroup/snmpGroup prevail-mib/systemDesc/systemDesc prevail-mib/systemInfo/systemInfo prevail-mib/cnuTable/cnuTable prevail-mib/profileTable/profileTable prevail-mib/cltTable/cltTable prevail-mib/cltproTable/cltproTable default_modules =>  if-mib/ifTable if-mib/ifXTable host/hr_system host/hr_storage host/hr_device host/hr_other host/hr_proc host/hr_network host/hr_print host/hr_disk host/hr_partition host/hr_filesys host/hr_swrun host/hr_swinst util_funcs util_funcs mibII/system_mib if-mib/ifTable mibII/kernel_linux mibII/ifTable mibII/ipAddr mibII/at mibII/var_route mibII/route_write mibII/ip util_funcs mibII/ip mibII/kernel_linux mibII/tcpTable util_funcs mibII/kernel_linux mibII/kernel_linux mibII/udpTable util_funcs util_funcs util_funcs util_funcs util_funcs util_funcs util_funcs prevail-mib/cnuTable/cnuTable_interface prevail-mib/cnuTable/cnuTable_data_access prevail-mib/cnuTable/cnuTable_data_get prevail-mib/cnuTable/cnuTable_data_set prevail-mib/profileTable/profileTable_interface prevail-mib/profileTable/profileTable_data_access prevail-mib/profileTable/profileTable_data_get prevail-mib/profileTable/profileTable_data_set prevail-mib/cltTable/cltTable_interface prevail-mib/cltTable/cltTable_data_access prevail-mib/cltTable/cltTable_data_get prevail-mib/cltTable/cltTable_data_set prevail-mib/cltproTable/cltproTable_interface prevail-mib/cltproTable/cltproTable_data_access prevail-mib/cltproTable/cltproTable_data_get prevail-mib/cltproTable/cltproTable_data_set mibII/snmp_mib mibII/system_mib mibII/sysORTable mibII/vacm_vars mibII/vacm_conf utilities/execute
+  Embedded Perl support:      disabled
+  SNMP Perl modules:          disabled
+  SNMP Python modules:        disabled
+  Authentication support:     
+  Encryption support:         

@@ -1,0 +1,91 @@
+<html>
+<head>
+<title>EoC</title>
+<base target="_self">
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8;no-cache"/>
+<link rel="stylesheet" href="css/redmond/jquery-ui-1.10.3.custom.min.css"/>
+<link rel="stylesheet" href="css/redmond/demos.css"/>
+<link rel="stylesheet" href='stylemain.css' type='text/css'/>
+<link rel="stylesheet" href='colors.css' type='text/css'/>
+<script src="js/jquery-1.9.1.js"></script>
+<script src="js/jquery-ui-1.10.3.custom.min.js"></script>
+<script language="javascript">
+	var progress = 0;
+	function isInProgress()
+	{
+		if('<%ejGet(curUserName)%>' == 'user' )
+		{
+			alert("你没有足够的权限...");
+			return false;
+		}
+		else
+		{
+			if ( progress == 0 )
+			{
+				if (confirm("警告：升级过程中请不要执行其它操作或切断电源！"))
+				{
+					progress = 1;
+					return true;
+				}
+				else
+				{
+					return false;
+				}
+			}
+			else
+			{
+				alert("警告：升级处理中，请稍候！ ");
+				return false;
+			}
+		}
+	}		
+		
+	$(function() {
+		$("#accordion").accordion({
+			collapsible: true,
+			heightStyle: "content"
+		});
+	});
+</script>
+</head>
+<body>
+<blockquote>
+<form name='form1' method='post' ENCTYPE='multipart/form-data' action='upgrade3.cgi' onSubmit='return isInProgress();'>
+	<br>
+	<table border="0" cellpadding="5" cellspacing="0">
+		<tr><td class='maintitle'><b>固件升级</b></td></tr>
+	</table>
+	<table border="0" cellpadding="0" cellspacing="0" width="100%">
+		<tr><td class='mainline' width="100%"></td></tr>
+	</table>
+	<br>
+	<br>
+	<div id="accordion">
+		<h3>固件升级</h3>
+		<div>
+			通过本页面您可以完成对设备软件的升级，请按照下面的提示信息进行操作。</br>
+			<br><br>
+			步骤一：从服务提供商或者官方网站下载最新的软件包；<br><br>
+			步骤二：将软件包拷贝至本地电脑，点击下面的"浏览"按钮选择您的软件包；<br><br>
+			步骤三：按照提示流程，点击按钮启动软件升级流程。<br><br>
+			<b>注意：</b>升级操作分为三部分，总共大约需要5分钟的时间，升级过程中请千万不要进行其他操作！<br>
+			<br><br>
+		<h3>第三步</h3>
+			<p>上传env.bin文件，点击"重新启动系统"按钮</p>
+		<table border="0" cellpadding="0" cellspacing="0">
+			<tr>
+				<td width=200>升级文件路径(env.bin)</td>
+				<td><input type='file' name='filename' size='40' style='cursor:pointer'></td>
+			</tr>
+		</table>
+		<p>
+			<input type='submit' class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" value='重新启动系统'>
+		</p>
+		<br>
+		</div>			
+	</div>
+</form>
+</blockquote>
+</body>
+</html>
+

@@ -1,0 +1,151 @@
+<html>
+<head>
+<title>EoC</title>
+<base target="_self">
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8;no-cache"/>
+<link rel="stylesheet" href="css/redmond/jquery-ui-1.10.3.custom.min.css"/>
+<link rel="stylesheet" href="css/redmond/demos.css"/>
+<link rel="stylesheet" href='stylemain.css' type='text/css'/>
+<link rel="stylesheet" href='colors.css' type='text/css'/>
+<script src="js/jquery-1.9.1.js"></script>
+<script src="js/jquery-ui-1.10.3.custom.min.js"></script>
+<script language="javascript" src="util.js"></script>
+<script language="javascript">
+			
+function btnApply()
+{
+	var loc = 'wecWebUsersInfo.cgi?';
+
+	if ( $("#webAdminPwd").val() != $("#webAdminPwdConfirm").val() )
+	{
+		alert("The passwords do not match.");
+		return;
+	}
+	if ( $("#webAdminPwd").val().length == 0 )
+	{
+		alert('Password should not be null.');
+		return;
+	}
+	if ( $("#webAdminPwd").val().length >= 16 )
+	{
+		alert('Password should not be longer than 15 characters.');
+		return;
+	}	
+	if ( isValidName($("#webAdminPwd").val()) == false )
+	{
+		alert('Password is invalid.');
+		return;
+	}
+		
+	loc += 'sysPassword=' + encodeUrl($("#webAdminPwd").val());					
+
+	var code = 'location="' + loc + '"';
+	//alert(code);
+	eval(code);				
+}
+
+$(function()
+{
+	$("#accordion").accordion({
+		collapsible: true,
+		heightStyle: "content" 
+	});
+
+	$( "#dialog" ).dialog({
+		autoOpen: false,
+		width:350,
+		show:
+		{
+			effect: "blind",
+			duration: 1000
+		},
+		hide:
+		{
+			effect: "explode",
+			duration: 1000
+		}
+	});
+
+	$('#comBtn').button({
+		icons: {
+			primary: 'ui-icon-arrowthickstop-1-s'
+		},
+	});
+	if('<%ejGet(curUserName)%>' == 'user' )
+	{
+		$("#comBtn").button().click(function(event){
+			alert("You do not have the proper privilege level to...");
+		});
+	}
+	else
+	{
+		$( "#comBtn" ).button().click(function(event){
+			event.preventDefault();
+			btnApply();
+		});
+	}
+
+	$( "#opener" ).button(
+		{
+			icons:
+			{
+				primary: "ui-icon-help"
+			},
+			text: false
+		}
+	).click(function(){
+		$( "#dialog" ).dialog( "open" );
+	});
+
+});
+</script>
+</head>
+<body>
+<blockquote>
+<br>
+<table border="0" cellpadding="5" cellspacing="0">
+	<tr><td class='maintitle'><b>Password</b></td></tr>                       
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%">            	
+	<tr><td class='mainline' width="100%"></td></tr>                           
+</table>
+<br>	
+<br>
+<div id="accordion">
+	<h3>Modify WEB User Password</h3>
+	<div>
+		Through this page, you can modify the WEB Administrator user password.</br>
+		<br>
+		<table border="0" cellpadding="0" cellspacing="0">               
+			<tr>
+				<td class='diagdata' width=300>Username:</td>
+				<td class='diagdata' width=260><%ejGet(sysUserName)%></td>
+			</tr>               
+			<tr>
+				<td class='diagdata'>User type:</td>
+				<td class='diagdata'>Administrator</td>
+			</tr>
+			<tr>
+				<td class='diagdata'>New password:</td>
+				<td class='diagdata'><input type='password' id='webAdminPwd' size="20"></td>
+			</tr>
+			<tr>
+				<td class='diagdata'>Confirm password:</td>
+				<td class='diagdata'><input type='password' id='webAdminPwdConfirm' size="20"></td>
+			</tr>             
+		</table>
+		<br>
+	</div>
+</div>
+<p>
+	<button id="comBtn">Commit</button>
+	<button id="opener">Help</button>
+</p>
+<div id="dialog" title="Help Information">
+	<br>1. The length of password is 1~15 characters. Allow only numbers and letters.</br>
+	<br>2. The password is care to case, please be careful.</br>
+</div>
+</blockquote>
+</body>
+</html>
+

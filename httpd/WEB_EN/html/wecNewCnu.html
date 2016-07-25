@@ -1,0 +1,154 @@
+<html>
+<head>
+<title>EoC</title>
+<base target='_self'>
+<meta http-equiv='Content-Type' content='text/html;charset=utf-8;no-cache'/>
+<link rel='stylesheet' href='css/redmond/jquery-ui-1.10.3.custom.min.css'/>
+<link rel='stylesheet' href='css/redmond/demos.css'/>
+<link rel='stylesheet' href='stylemain.css' type='text/css'/>
+<link rel='stylesheet' href='colors.css' type='text/css'/>
+<script src='js/jquery-1.9.1.js'></script>
+<script src='js/jquery-ui-1.10.3.custom.min.js'></script>
+<script language='javascript' src='util.js'></script>
+<script language='javascript'>
+	
+function btnReturn()
+{
+	window.location = 'previewTopology.cgi';
+}
+			
+function btnApply()
+{				
+	var loc = 'cnuCreate.cgi?';
+	
+
+	if( isValidMacAddress($('#cnuMac').val()) == false )
+	{
+		alert('MAC address "' + $('#cnuMac').val() + '" is invalid.');
+		return;
+	}
+	loc += 'newCnuMac=' + $('#cnuMac').val();
+	loc += '&newCnuModel=' + $('#devModel').val();
+	loc += '&newCnuPro=' + $('#devPro').val();
+
+	var code = 'location="' + loc + '"';
+	//alert(code);
+	eval(code);
+}
+
+$(function()
+{
+	$('#devModel').val(0);
+	$('#devPro').val(0);
+	$('#accordion').accordion({
+		collapsible: true,
+		heightStyle: 'content' 
+	});
+
+	$('#dialog').dialog({
+		autoOpen: false,
+		width:370,
+		show:
+		{
+			effect: 'blind',
+			duration: 1000
+		},
+		hide:
+		{
+			effect: 'explode',
+			duration: 1000
+		}
+	});
+	
+	$('#opener').button(
+		{
+			icons:
+			{
+				primary: 'ui-icon-help'
+			},
+			text: false
+		}
+	).click(function(){
+		$('#dialog').dialog('open');
+	});
+
+	$('#comBtn').button({
+			icons: {
+				primary: 'ui-icon-arrowthickstop-1-s'
+			},
+	});
+	$('#comBtn').button().click(function(event){
+		event.preventDefault();
+		btnApply();
+	});
+
+	$('#retBtn').button({
+			icons: {
+				primary: 'ui-icon-carat-1-w'
+			},
+	});
+	$('#retBtn').button().click(function(event){
+		event.preventDefault();
+		btnReturn();
+	});
+
+});
+
+</script>
+</head>
+<body>
+<blockquote>
+<br>
+<table border=0 cellpadding=5 cellspacing=0>
+	<tr><td class='maintitle'><b>Create New CNU</b></td></tr>                       
+</table>
+<table border=0 cellpadding=0 cellspacing=0 width='100%'>            	
+	<tr><td class='mainline' width='100%'></td></tr>                           
+</table>
+<br>	
+<br>
+<div id='accordion'>
+	<h3>Create New CNU</h3>
+	<div>
+		<table border=0 cellpadding=0 cellspacing=0>		  		
+			<tr>
+				<td class='diagdata' width=160>MAC Address:</td>
+				<td class='diagdata' width=180><input type='text' id='cnuMac' size=20></td>
+				<td class='diagdata' width=240>Such as: 30:71:B2:20:12:00</td>
+			</tr>
+			<tr>
+	      <td class='diagdata'>Device model</td>
+	      <td class='diagdata'>
+	      	<select id='devModel' size=1>
+	      		<option value=0>Auto Scane</option>
+	      		<option value=1>WEC701 C4</option>
+	        </select>
+	      </td>
+	      <td class='diagdata'>&nbsp;</td>
+			</tr> 
+			<tr>
+				<td class='diagdata'>Profile:</td>
+				<td class='diagdata'>
+					<select id='devPro' size=1>
+					<option value=0>Default Profile</option>
+					</select>
+				</td>
+				<td class='diagdata'>&nbsp;</td>
+			</tr> 
+		</table>  		
+	</div>
+</div>
+<p>
+	<button id='retBtn'>Return</button>
+	<button id='comBtn'>Commit</button>
+	<button id='opener'>Help</button>
+</p>
+<div id='dialog' title='Help Information'>
+	Through this page, you can create a new CNU. After the CNU is created, you can do offline configuration for it.</br>
+	<br>Note:</br>
+	If you are not sure about the device model, please select "Auto Scane".</br>
+</div>
+</blockquote>
+</body>
+</html>
+

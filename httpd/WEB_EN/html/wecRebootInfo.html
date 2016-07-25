@@ -1,0 +1,74 @@
+<html>
+<head>
+<title>EoC</title>
+<base target="_self">
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8;no-cache"/>
+<link rel="stylesheet" href="css/redmond/jquery-ui-1.10.3.custom.min.css"/>
+<link rel="stylesheet" href="css/redmond/demos.css"/>
+<link rel="stylesheet" href='stylemain.css' type='text/css'/>
+<link rel="stylesheet" href='colors.css' type='text/css'/>
+<script src="js/jquery-1.9.1.js"></script>
+<script src="js/jquery-ui-1.10.3.custom.min.js"></script>
+<script language="javascript">
+
+function reboot() {
+	var enblPopWin = '<%ejGet(enblPopWin)%>';
+	var loc = 'main.html';
+	var code = 'window.top.location="' + loc + '"';
+	eval(code);
+}
+
+function frmLoad() {
+	setTimeout("reboot()", 60000);
+}
+
+$(function()
+{
+	$("#accordion").accordion({
+		collapsible: true,
+		heightStyle: "content" 
+	});
+
+	frmLoad();
+});
+
+</script>
+</script>
+</head>
+<body>
+<blockquote>
+<br>
+<table border="0" cellpadding="5" cellspacing="0">
+	<tr><td class='maintitle'><b>System message</b></td></tr>                       
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%">            	
+	<tr><td class='mainline' width="100%"></td></tr>                           
+</table>
+<br>	
+<br>
+<div id="accordion">
+	<h3>Restart System</h3>
+	<div>
+           	<br>
+           	<table border="0" cellpadding="0" cellspacing="0">
+	  		<tr>
+	  			<td class='diagdata' width=300>Operating state:</td>
+	  			<td class='diagdata' width=200><b><font color=green>Success</font></b></td>		  				  			
+	  		</tr>
+	  		<tr>
+	  			<td class='diagdata'>Wait for the device to restart:</td>
+	  			<td class='diagdata'>[<IMG src='wait.gif'>]</td>
+	  		</tr>
+	  	</table>
+	  	<br>
+	  	<br>The system is restarted, the process takes one minute, please wait ......</br>
+		<br><b>Note:</b></br>
+		1. Please login by the new IP address and management VLAN again if network settings changed.</br>
+	  	2. The connection will be interrupted if network settings changed.</br>
+	  	<br>
+	</div>
+</div>	
+</blockquote>
+</body>
+</html>
+

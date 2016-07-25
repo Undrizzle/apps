@@ -1,0 +1,186 @@
+<html>
+<head>
+<title>EoC</title>
+<base target="_self">
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8;no-cache"/>
+<link rel="stylesheet" href="css/redmond/jquery-ui-1.10.3.custom.min.css"/>
+<link rel="stylesheet" href="css/redmond/demos.css"/>
+<link rel="stylesheet" href='stylemain.css' type='text/css'/>
+<link rel="stylesheet" href='colors.css' type='text/css'/>
+<script src="js/jquery-1.9.1.js"></script>
+<script src="js/jquery-ui-1.10.3.custom.min.js"></script>
+<script language="javascript">
+	function btnRefresh()
+	{
+		location.href = "info.html";
+	}
+	
+	$(function()
+	{
+		if ('<%ejGet(wecWlistStatus)%>' == '1')
+          	{
+          		$("#wlist").append("开启");
+          	}                  	
+          	else
+          	{
+          		$("#wlist").append("禁用");
+          	}
+			
+		if ('<%ejGet(wecWDTStatus)%>' == '1')
+          	{
+          		$("#wdtimer").append("开启");
+          	}                  	
+          	else
+          	{
+          		$("#wdtimer").append("关闭");
+          	}
+		
+		$("#accordion").accordion({
+			collapsible: true,
+			heightStyle: "content" 
+		});
+
+		$( "#dialog" ).dialog({
+			autoOpen: false,
+			width:350,
+			show:
+			{
+				effect: "blind",
+				duration: 1000
+			},
+			hide:
+			{
+				effect: "explode",
+				duration: 1000
+			}
+		});
+
+		$('#refreshBtn').button({
+			icons: {
+				primary: 'ui-icon-refresh'
+			},
+		});
+		$( "#refreshBtn" ).button().click(function(event){
+			event.preventDefault();
+			btnRefresh();
+		});
+
+		$( "#opener" ).button(
+			{
+				icons:
+				{
+					primary: "ui-icon-help"
+				},
+				text: false
+			}
+		).click(function(){
+			$( "#dialog" ).dialog( "open" );
+		});
+
+	});
+</SCRIPT>
+</head>
+<body>
+<blockquote>
+	<br>
+	<table border="0" cellpadding="5" cellspacing="0">
+		<tr><td class='maintitle'><b>基本信息</b></td></tr>                       
+	</table>
+	<table border="0" cellpadding="0" cellspacing="0" width="100%">            	
+		<tr><td class='mainline' width="100%"></td></tr>                           
+	</table>
+	<br>	
+	<br>
+	<div id="accordion">
+		<h3>设备基本信息</h3>
+		<div>
+			<table border="0" cellpadding="0" cellspacing="0">
+				<tr>
+					<td class='diagdata' width=260>设备型号</td>
+					<td class='diagdata' width=300><%ejGet(wecDevModel)%></td>
+				</tr>
+				<tr>
+					<td class='diagdata'>EoC调制芯片型号</td>
+					<td class='diagdata'><%ejGet(wecEoCType)%></td>                  
+				</tr>
+				<tr>
+					<td class='diagdata'>EoC调制通道数量</td>
+					<td class='diagdata'><%ejGet(wecCltNumber)%></td>
+				</tr>
+				<tr>
+					<td class='diagdata'>最大用户数</td>
+					<td class='diagdata'><%ejGet(wecCltNumber)%>*<%ejGet(wecCnuStation)%></td>
+				</tr>
+				<tr>
+					<td class='diagdata'>白名单功能</td>
+					<td id='wlist' class='diagdata'></td>
+				</tr>
+				<tr>
+					<td class='diagdata'>看门狗检测系统</td>
+					<td id='wdtimer' class='diagdata'></td>
+				</tr>
+				<tr>
+					<td class='diagdata'>硬件版本号</td>
+					<td class='diagdata'><%ejGet(wecHwVersion)%></td>
+				</tr>
+				<tr>
+					<td class='diagdata'>系统引导程序版本号</td>
+					<td class='diagdata'><%ejGet(wecBootVersion)%></td>
+				</tr>
+				<tr>
+					<td class='diagdata'>内核版本号</td>
+					<td class='diagdata'><%ejGet(wecKernelVersion)%></td>
+				</tr>
+				<tr>
+					<td class='diagdata'>应用程序版本号</td>
+					<td class='diagdata'><%ejGet(wecAppVersion)%></td>
+				</tr>   
+				<tr>
+					<td class='diagdata'>应用程序版本哈希值</td>
+					<td class='diagdata'><%ejGet(wecAppHash)%></td>
+				</tr> 
+				<tr>
+					<td class='diagdata'>闪存信息</td>
+					<td class='diagdata'><%ejGet(wecFlashSize)%> MB</td>
+				</tr>
+				<tr>
+					<td class='diagdata'>内存信息</td>
+					<td class='diagdata'><%ejGet(wecSdramSize)%> MB</td>
+				</tr>
+				<tr>
+					<td class='diagdata'>制造商</td>
+					<td class='diagdata'><%ejGet(wecManufactory)%></td>
+				</tr>
+				<tr>
+					<td class='diagdata'>系统运行时间</td>
+					<td class='diagdata'><%ejGet(wecSysupHours)%>:<%ejGet(wecSysupMins)%>:<%ejGet(wecSysupSecs)%></td>
+				</tr>
+				<tr>
+					<td class='diagdata'>CPU平均负载</td>
+					<td class='diagdata'><%ejGet(wecSys0loads)%> <%ejGet(wecSys1loads)%> <%ejGet(wecSys2loads)%></td>
+				</tr>
+				<tr>
+					<td class='diagdata'>系统总内存</td>
+					<td class='diagdata'><%ejGet(wecTotalram)%> kB</td>
+				</tr>
+				<tr>
+					<td class='diagdata'>系统当前可用内存</td>
+					<td class='diagdata'><%ejGet(wecFreeram)%> kB</td>
+				</tr>
+				<tr>
+					<td class='diagdata'>当前环境温度</td>
+					<td class='diagdata'><%ejGet(wecTemprature)%> 摄氏度</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+	<p>
+		<button id="refreshBtn">刷 新</button>
+		<button id="opener">帮助</button>
+	</p>
+	<div id="dialog" title="帮助信息">
+		<br>描述设备的基本信息：包括硬件平台，软件版本，厂商信息等。</br>
+	</div>
+</blockquote>
+</body>
+</html>

@@ -1,0 +1,13 @@
+declare -x MAD_USER_BASE=/work/marvell/mvl_drivers/DSDT_3.0/phy
+declare -x MAD_PROJ_NAME=madDrv
+declare -x MAD_TOOL_DIR=$MAD_USER_BASE/tools
+declare -x USER_API_NAME=
+declare -x USER_NAME=
+declare -x RELEASE=YES
+declare -x OS_RUN=LINUX
+declare -x DSP_VCT=FALSE
+declare -x VCT_PENDING=TRUE
+declare -x DSDT_USER_BASE=$MAD_USER_BASE/..
+declare -x DSDT_PROJ_NAME=qdDrv
+declare -x DSDT_TOOL_DIR=$DSDT_USER_BASE/tools
+declare -x DSDT_USE_MAD=FALSE

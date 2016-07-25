@@ -1,0 +1,81 @@
+<html>
+<head>
+<title>EoC</title>
+<base target="_self">
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8;no-cache"/>
+<link rel="stylesheet" href="css/redmond/jquery-ui-1.10.3.custom.min.css"/>
+<link rel="stylesheet" href="css/redmond/demos.css"/>
+<link rel="stylesheet" href='stylemain.css' type='text/css'/>
+<link rel="stylesheet" href='colors.css' type='text/css'/>
+<script src="js/jquery-1.9.1.js"></script>
+<script src="js/jquery-ui-1.10.3.custom.min.js"></script>
+<script language="javascript">			
+function btnSave()
+{
+	var loc = 'wecSaveDbInfo.cgi';
+	var code = 'location="' + loc + '"';
+	$('#saveBtn').attr('disabled',"true");
+	//alert(code);
+	eval(code);
+}
+
+$(function()
+{
+	$("#accordion").accordion({
+		collapsible: true,
+		heightStyle: "content" 
+	});
+	$('#saveBtn').button({
+		icons: {
+			primary: 'ui-icon-disk'
+		},
+	});
+	if('<%ejGet(curUserName)%>' == 'user' )
+	{
+		$("#saveBtn").button().click(function(event){
+			alert("You do not have the proper privilege level to...");
+		});
+	}
+	else
+	{
+		$( "#saveBtn" ).button().click(function(event){
+			event.preventDefault();
+			btnSave();
+		});
+	}
+});
+
+</script>
+</head>
+<body>
+<blockquote>
+<br>
+<table border="0" cellpadding="5" cellspacing="0">
+	<tr><td class='maintitle'><b>Save</b></td></tr>                       
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%">            	
+	<tr><td class='mainline' width="100%"></td></tr>                           
+</table>
+<br>	
+<br>
+<div id="accordion">
+	<h3>Save Configuration To Flash</h3>
+	<div>
+		Save configuration to the nonvolatile memory, so that the system configuration can be loaded correctly after reboot.</br>			
+    		Note: All configuration modified through WEB need to save to nonvolatile memory, Otherwise it will be lost after system reboot.</br>
+           	<br><br>
+           	<table border="0" cellpadding="3" cellspacing="0">
+           		<tr>
+              		<td width=200>Save to Flash:</td>                  
+            			<td align="center" width=180>
+            				<button id="saveBtn">Save</button>
+            			</td>
+           		</tr>               
+    		</table>
+    		<br>
+	</div>
+</div>	
+</blockquote>
+</body>
+</html>
+

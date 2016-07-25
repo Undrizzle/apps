@@ -1,0 +1,185 @@
+<html>
+<head>
+<title>EoC</title>
+<base target="_self">
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8;no-cache"/>
+<link rel="stylesheet" href="css/redmond/jquery-ui-1.10.3.custom.min.css"/>
+<link rel="stylesheet" href="css/redmond/demos.css"/>
+<link rel="stylesheet" href='stylemain.css' type='text/css'/>
+<link rel="stylesheet" href='colors.css' type='text/css'/>
+<script src="js/jquery-1.9.1.js"></script>
+<script src="js/jquery-ui-1.10.3.custom.min.js"></script>
+<script language="javascript" src="util.js"></script>
+<script language="javascript">
+function frmLoad() {
+	with ( document.forms[0] )
+	{      
+		rocommunity.value = '<%ejGet(snmpRoCommunity)%>';			      
+		rwcommunity.value = '<%ejGet(snmpRwCommunity)%>'; 			      
+		trapIp.value = '<%ejGet(snmpTrapIpaddr)%>';			      
+		trapPort.value = '<%ejGet(snmpTrapDport)%>';
+	}
+}
+
+function btnSave()
+{
+	var loc = 'wecSnmpCfgInfo.cgi?';
+
+	with ( document.forms[0] )
+	{
+		if (rocommunity.value == '')
+		{
+			alert('Read community is required.');
+			return;
+		}
+		if (rwcommunity.value == '')
+		{
+			alert('Set community is required.');
+			return;
+		}
+		if( isValidName(rocommunity.value) == false )
+		{
+			alert('Read community is invalid.');
+			return;
+		}
+		if (rocommunity.value.length > 32)
+		{
+			alert('The length of read community (' + rocommunity.value.length + ') is too long [0-32].');
+			return;
+		}
+		if( isValidName(rwcommunity.value) == false )
+		{
+			alert('Set community is invalid.');
+			return;
+		}
+		if (rwcommunity.value.length > 32)
+		{
+			alert('The length of set community (' + rwcommunity.value.length + ') is too long [0-32].');
+			return;
+		}
+		if ( isValidIpAddress(trapIp.value) == false )
+		{
+			alert('Trap server IP address "' + trapIp.value + '" is invalid.');
+			return;
+		}
+		if( isValidUDPPort(trapPort.value) == false )
+		{
+			return;	
+		}						
+		loc += 'snmpRoCommunity=' + rocommunity.value;
+		loc += '&snmpRwCommunity=' + rwcommunity.value;
+		loc += '&snmpTrapIpaddr=' + trapIp.value;
+		loc += '&snmpTrapDport=' + trapPort.value;
+	}
+
+	var code = 'location="' + loc + '"';			   
+	eval(code);	   
+}
+
+$(function()
+{
+	$("#accordion").accordion({
+		collapsible: true,
+		heightStyle: "content" 
+	});
+
+	$( "#dialog" ).dialog({
+		autoOpen: false,
+		width:390,
+		show:
+		{
+			effect: "blind",
+			duration: 1000
+		},
+		hide:
+		{
+			effect: "explode",
+			duration: 1000
+		}
+	});
+	$('#opener').button(
+		{
+			icons:
+			{
+				primary: 'ui-icon-help'
+			},
+			text: false
+		}
+	).click(function(){
+		$('#dialog').dialog('open');
+	});
+
+	$('#comBtn').button({
+		icons: {
+			primary: 'ui-icon-arrowthickstop-1-s'
+		},
+	});
+	if('<%ejGet(curUserName)%>' == 'user' )
+	{
+		$("#comBtn").button().click(function(event){
+			alert("You do not have the proper privilege level to...");
+		});
+	}
+	else
+	{
+		$('#comBtn').button().click(function(event){
+			event.preventDefault();
+			btnSave();
+		});	
+	}
+});
+</script>
+</head>
+	
+<body onLoad='frmLoad()'>
+<blockquote>
+<br>
+<table border="0" cellpadding="5" cellspacing="0">
+	<tr><td class='maintitle'><b>SNMP Settings</b></td></tr>                       
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%">            	
+	<tr><td class='mainline' width="100%"></td></tr>                           
+</table>
+<br>	
+<br>
+<form>
+<div id="accordion">
+	<h3>SNMP configuration parameters</h3>
+	<div>
+		<table border="0" cellpadding="0" cellspacing="0">					
+			<tr>
+				<td class='diagdata' width=260>Read Community</td>
+				<td class='diagdata' width=300><input type='text' name='rocommunity' size="20"></td>
+			</tr>
+			<tr>
+				<td class='diagdata'>Write Community</td>
+				<td class='diagdata'><input type='text' name='rwcommunity' size="20"></td>
+			</tr>
+			<tr>
+				<td class='diagdata'>Trap server IP address</td>
+				<td class='diagdata'><input type='text' name='trapIp' size="20"></td>
+			</tr>
+			<tr>
+				<td class='diagdata'>Trap port number</td>
+				<td class='diagdata'><input type='text' name='trapPort' size="20"></td>
+			</tr>
+		</table>
+		<br>
+	</div>
+</div>
+</form>
+
+<p>
+	<button id='comBtn'>Commit</button>
+	<button id="opener">Help</button>
+</p>
+<div id="dialog" title="Help Information">
+	Remote management can be done via SNMP, such as device configuration and alarm collection.</br>
+	<br>Note:</br>
+	1. Make sure to save the modified configuration to nonvolatile memory.</br>
+	2. SNMP settings will take effect after the system restart.</br>	
+</div>
+</blockquote>
+</body>
+</html>
+

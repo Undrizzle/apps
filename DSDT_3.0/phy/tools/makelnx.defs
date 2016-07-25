@@ -1,0 +1,54 @@
+# make.defs - common variable definitions
+#
+# modification history
+# --------------------
+# 06-03-05,mj	created
+#
+SHELL=/bin/sh -e
+
+# CC_ARCH_SPEC=  -march=i386 -mcpu=i686  
+#CC_ARCH_SPEC=  -march=i686 
+
+SW_ROOT = $(MAD_USER_BASE)
+SRC_BASE_PATH = $(SW_ROOT)/src
+MAD_INCLUDE_PATH = $(SW_ROOT)/Include/h
+
+LIB_DIR = $(SW_ROOT)/Library
+OBJDIR = $(MAD_PROJ_NAME)_obj
+
+#CC      =cc
+#LD      =ld
+MAKE    =make
+CD      =pwd
+RM      =rm -f
+ECHO    =echo
+
+DEPENDENCIES= makedeps
+
+CFLAGS = -DLINUX $(CFLAGS1) $(CFLAGS2) $(INCLUDE_PATH) $(CDEBUG_DEFINES)
+
+CFLAGS1 = $(CC_ARCH_SPEC) $(DEBUG_TYPE)
+CFLAGS2 = $(CC_OPTIM) $(CC_COMPILER) $(CC_WARNINGS_ALL)
+
+CC_OPTIM = $(CC_OPTIM_TARGET)
+CC_OPTIM_DRIVER	= -O
+CC_OPTIM_TARGET	= -O2
+CC_COMPILER = -ansi -nostdinc
+CC_WARNINGS_ALL	= -Wall
+
+ifeq ($(RELEASE),NO)
+CDEBUG_DEFINES=-DDEBUG=1 -DDEBUG_MAD
+else
+CDEBUG_DEFINES=
+endif
+
+LDFLAGS = -nostdlib -r -X -N
+ARFLAGS = crus
+
+INCLUDE_PATH = -I. \
+               -I$(MAD_INCLUDE_PATH)/driver \
+               -I$(MAD_INCLUDE_PATH)/macsec \
+               -I$(MAD_INCLUDE_PATH)/madApi \
+               -I$(MAD_INCLUDE_PATH)/platform \
+               -I$(SW_ROOT)/user/$(USER_NAME)/include \
+               -I$(SW_ROOT)/Include 

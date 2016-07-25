@@ -1,0 +1,16 @@
+#!/bin/sh
+#opkg-cl configure
+
+if test -f /etc/hostname
+then
+	hostname -F /etc/hostname
+fi
+
+ifconfig lo up
+#initialize network config in cmm
+ifconfig eth0 192.168.223.1 up
+
+mkdir -p /var/tmp
+mkdir -p /var/log
+mkdir -p /var/run
+

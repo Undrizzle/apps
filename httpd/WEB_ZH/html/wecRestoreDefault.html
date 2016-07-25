@@ -1,0 +1,84 @@
+<html>
+<head>
+<title>EoC</title>
+<base target="_self">
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8;no-cache"/>
+<link rel="stylesheet" href="css/redmond/jquery-ui-1.10.3.custom.min.css"/>
+<link rel="stylesheet" href="css/redmond/demos.css"/>
+<link rel="stylesheet" href='stylemain.css' type='text/css'/>
+<link rel="stylesheet" href='colors.css' type='text/css'/>
+<script src="js/jquery-1.9.1.js"></script>
+<script src="js/jquery-ui-1.10.3.custom.min.js"></script>
+<script language="javascript">
+				
+function btnApply()
+{
+	var code = 'location="wecRestoreInfo.cgi"';
+	if (confirm("警告：您确定需要立即执行恢复出厂设置操作吗？"))
+	{
+		$('#comBtn').attr('disabled',"true");
+		eval(code);
+	}
+}
+
+$(function()
+{
+	$("#accordion").accordion({
+		collapsible: true,
+		heightStyle: "content" 
+	});
+	$('#comBtn').button({
+		icons: {
+			primary: 'ui-icon-refresh'
+		},
+	});
+	if('<%ejGet(curUserName)%>' == 'user' )
+	{
+		$("#comBtn").button().click(function(event){
+			alert("你没有足够的权限...");
+		});
+	}
+	else
+	{
+		$( "#comBtn" ).button().click(function(event){
+			event.preventDefault();
+			btnApply();
+		});
+	}
+});
+
+</script>
+</head>
+<body>
+<blockquote>
+<br>
+<table border="0" cellpadding="5" cellspacing="0">
+	<tr><td class='maintitle'><b>恢复出厂设置</b></td></tr>                       
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%">            	
+	<tr><td class='mainline' width="100%"></td></tr>                           
+</table>
+<br>	
+<br>
+<div id="accordion">
+	<h3>恢复出厂设置</h3>
+	<div>
+		通过本页面，您可以将本机配置恢复为出厂时的配置。</br>
+		注意：恢复出厂设置之后系统将会自动重启，请关闭浏览器后以出厂时的IP地址登录系统。</br>
+		<br>            	
+           	<br>
+           	<table border="0" cellpadding="3" cellspacing="0">
+           		<tr>
+              		<td width=200>恢复出厂默认配置</td>                  
+            			<td align="center" width=180>
+            				<button id="comBtn">恢复出厂设置</button>
+            			</td>
+           		</tr>               
+    		</table>
+    		<br>
+	</div>
+</div>	
+</blockquote>
+</body>
+</html>
+

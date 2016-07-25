@@ -1,0 +1,108 @@
+#!/bin/sh
+#opkg-cl configure
+
+echo "@@ Starting apps @@"
+echo "===================================================================="
+
+if [ ! -f "/dev/at91btns" ];then
+	mknod /dev/at91btns c 253 0
+fi
+
+if [ ! -d "/usr/mnt/config/" ] ;then
+	echo "Copy config from default"
+	cp /etc/config/ /usr/mnt/config/ -rf
+fi
+
+if [ ! -f "/usr/mnt/config/databases/system.db" ];then
+	echo "Copy system.db from default"
+	cp /etc/config/databases/system.db /usr/mnt/config/databases/system.db
+fi
+
+if [ ! -f "/usr/mnt/config/databases/log.db" ];then
+	echo "Copy log.db from default"
+	cp /etc/config/databases/log.db /usr/mnt/config/databases/log.db
+fi
+
+if [ -f "/usr/mnt/config/databases/system.db" ] && [ -f "/usr/mnt/config/databases/log.db" ];then
+	cp /usr/mnt/config/databases/system.db /var/tmp/
+	cp /usr/mnt/config/databases/log.db /var/tmp/
+else
+	echo "ERROR: Can not read databases"
+fi
+
+if [ -x "/usr/sbin/dbs" ];then
+	/usr/sbin/dbs &
+else
+	echo "ERROR: Can not find /usr/sbin/dbs"
+fi
+
+if [ -x "/usr/sbin/alarm" ];then
+	/usr/sbin/alarm &
+else
+	echo "ERROR: Can not find /usr/sbin/alarm"
+fi
+
+if [ -x "/usr/sbin/mmead" ];then
+	/usr/sbin/mmead &
+else
+	echo "ERROR: Can not find /usr/sbin/mmead"
+fi
+
+if [ -x "/usr/sbin/tmcore" ];then
+	/usr/sbin/tmcore &
+else
+	echo "ERROR: Can not find /usr/sbin/tmcore"
+fi
+
+if [ -x "/usr/sbin/cmm" ];then
+	/usr/sbin/cmm &
+else
+	echo "ERROR: Can not find /usr/sbin/cmm"
+fi
+
+if [ -x "/usr/sbin/register" ];then
+	/usr/sbin/register &
+else
+	echo "ERROR: Can not find /usr/sbin/register"
+fi
+
+
+if [ -x "/usr/sbin/autoconfig" ];then
+	/usr/sbin/autoconfig &
+else
+	echo "ERROR: Can not find /usr/sbin/autoconfig"
+fi
+
+
+if [ -x "/usr/sbin/httpd" ];then
+	/usr/sbin/httpd &
+else
+	echo "ERROR: Can not find /usr/sbin/httpd"
+fi
+
+if [ -x "/usr/sbin/snmpd" ];then
+	/usr/sbin/snmpd -c /etc/config/snmpd.conf -f -Lf /dev/null -V &
+else
+	echo "ERROR: Can not find /usr/sbin/snmpd"
+fi
+
+if [ -x "/usr/sbin/sysMonitor" ];then
+	/usr/sbin/sysMonitor &
+else
+	echo "ERROR: Can not find /usr/sbin/sysMonitor"
+fi
+
+if [ -x "/sbin/telnetd" ];then
+	/sbin/telnetd &
+else
+	echo "ERROR: Can not find /sbin/telnetd"
+fi
+
+sleep 6
+
+echo "===================================================================="
+echo "				SUCCESS"
+echo "===================================================================="
+
+sleep 1
+

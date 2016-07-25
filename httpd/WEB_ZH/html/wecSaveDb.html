@@ -1,0 +1,79 @@
+<html>
+<head>
+<title>EoC</title>
+<base target="_self">
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8;no-cache"/>
+<link rel="stylesheet" href="css/redmond/jquery-ui-1.10.3.custom.min.css"/>
+<link rel="stylesheet" href="css/redmond/demos.css"/>
+<link rel="stylesheet" href='stylemain.css' type='text/css'/>
+<link rel="stylesheet" href='colors.css' type='text/css'/>
+<script src="js/jquery-1.9.1.js"></script>
+<script src="js/jquery-ui-1.10.3.custom.min.js"></script>
+<script language="javascript">			
+function btnSave()
+{
+	var loc = 'wecSaveDbInfo.cgi';
+	var code = 'location="' + loc + '"';
+	$('#saveBtn').attr('disabled',"true");
+	//alert(code);
+	eval(code);
+}
+
+$(function()
+{
+	$("#accordion").accordion({
+		collapsible: true,
+		heightStyle: "content" 
+	});
+	$('#saveBtn').button({
+		icons: {
+			primary: 'ui-icon-disk'
+		},
+	});
+	if('<%ejGet(curUserName)%>' == 'user' )
+	{
+		$("#saveBtn").button().click(function(event){
+			alert("你没有足够的权限...");
+		});
+	}
+	else
+	{
+		$( "#saveBtn" ).button().click(function(event){
+			event.preventDefault();
+			btnSave();
+		});
+	}
+});
+
+</script>
+</head>
+<body>
+<blockquote>
+<br>
+<table border="0" cellpadding="5" cellspacing="0">
+	<tr><td class='maintitle'><b>配置保存</b></td></tr>                       
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%">            	
+	<tr><td class='mainline' width="100%"></td></tr>                           
+</table>
+<br>	
+<br>
+<div id="accordion">
+	<h3>配置保存</h3>
+	<div>
+		将配置信息保存至非易失性存储器，以便系统重启时可以正确加载您变更的配置。</br>		
+    	注意：您通过网页变更的配置如果未保存至非易失性存储器，该配置在系统重启后将会丢失。</br>
+        <br><br>
+        <table border="0" cellpadding="3" cellspacing="0">
+        	<tr>
+        		<td width=200>将配置保存至非易失性存储器</td>                  
+            	<td align="center" width=180><button id="saveBtn">保 存</button></td>
+           	</tr>               
+    	</table>
+    	<br>
+	</div>
+</div>	
+</blockquote>
+</body>
+</html>
+

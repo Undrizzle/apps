@@ -1,0 +1,221 @@
+--======================================================================
+-- PREVAIL MIB 
+--======================================================================
+
+-- File Name   : PREVAIL-MIB.txt
+-- Date        : Tue Jul 27 10:55:00 CEST 2010
+-- Author      : frank 
+
+prevail-mib DEFINITIONS ::= BEGIN
+
+  IMPORTS
+    enterprises
+    	FROM RFC1155-SMI    
+		TimeTicks, IpAddress, Counter64, OBJECT-TYPE, MODULE-IDENTITY, OBJECT-IDENTITY, Integer32 
+			FROM SNMPv2-SMI			
+		MacAddress, DateAndTime, TruthValue, TimeInterval, RowStatus, DisplayString, TEXTUAL-CONVENTION
+			FROM SNMPv2-TC;
+	  	  
+  prevail OBJECT IDENTIFIER ::= { enterprises 36186 }
+  
+  modEoCMib       MODULE-IDENTITY
+		LAST-UPDATED    "200412171230Z"
+		ORGANIZATION    "Organization"
+    CONTACT-INFO    "Contact-info"
+    DESCRIPTION     "Description"
+		::= { prevail 8 }
+
+
+-- TEXTUAL-CONVENTIONS --
+
+DevModelValue ::= TEXTUAL-CONVENTION 
+		STATUS                  current
+		DESCRIPTION
+		        "Device model type of Prevail EoC products."
+		SYNTAX	INTEGER{	
+							X7		( 1 ) ,
+							E31	( 2 ) ,
+							Q31	( 3 ) ,
+							C22	( 4 ) ,							
+							S220	( 5 ) ,
+							S60	( 6 ) ,
+							L2		( 7 ) ,
+							L3		( 8 ) ,
+							C2		( 9 ) ,
+							C4		( 10) ,
+             	UNKNOWN		( 256) 
+            } 
+
+CnuRstActValue ::= TEXTUAL-CONVENTION 
+		STATUS                  current
+		DESCRIPTION
+		        "CNU reset action value."
+		SYNTAX	INTEGER{	
+							cnu-no-action		 		( 0 ) ,
+							cnu-reset 	 				( 1 ) ,
+							cnu-reload-profile	( 2 ) ,
+							cnu-permit					( 3 ) ,
+							cnu-undo-permit			( 4 ) ,
+							cnu-diagnose				( 5 ) ,
+							cnu-delete					( 6 )
+            }
+
+-- END TEXTUAL-CONVENTIONS --
+	
+cnuTable OBJECT-TYPE
+    SYNTAX      SEQUENCE OF CnuEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+            "the list of cnu in database."
+    ::= { modEoCMib 1 }
+
+cnuEntry OBJECT-TYPE
+    SYNTAX      CnuEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+            "An entry containing all cnu in the database."
+    INDEX   { cnuTid }
+    ::= { cnuTable 1 }
+
+CnuEntry ::=
+    SEQUENCE {
+    		cnuTid									INTEGER,
+        cnuIndex                INTEGER,
+        cnuModel                DevModelValue,
+        cnuMacAddress           MacAddress,
+        cnuOnlineStatus         TruthValue,
+        cnuAuthorized						TruthValue,
+        cnuSoftwareVersion      DisplayString,        
+        cnuRxRate               INTEGER,
+        cnuTxRate               INTEGER,
+        cnuSnr									DisplayString,
+        cnuBpc									DisplayString,
+        cnuAttenuation					DisplayString,       
+        cnuAction              	CnuRstActValue,
+        cnuSynchronized					TruthValue,
+        cnuRowStatus            TruthValue     
+    }
+
+cnuTid OBJECT-TYPE
+    SYNTAX      INTEGER (1..64)
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+            "the index of cnu entry in snmp table."
+    ::= { cnuEntry 1 }
+
+cnuIndex OBJECT-TYPE
+    SYNTAX      INTEGER (1..64)
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+            "the index of cnu entry in databases."
+    ::= { cnuEntry 2 }
+
+cnuModel OBJECT-TYPE
+    SYNTAX      DevModelValue
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+            "the model of EoC products in prevail."
+    ::= { cnuEntry 3 }
+
+cnuMacAddress OBJECT-TYPE
+    SYNTAX      MacAddress
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+            "the mac address of CNU."
+    ::= { cnuEntry 4 }
+
+cnuOnlineStatus OBJECT-TYPE
+		SYNTAX TruthValue
+		MAX-ACCESS read-only
+		STATUS current
+		DESCRIPTION
+			"The online status of CNU in EoC topology"
+		::= { cnuEntry 5 }
+
+cnuAuthorized OBJECT-TYPE
+    SYNTAX      TruthValue
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+            "the CNU authorization status in EoC network."
+    ::= { cnuEntry 6 }
+
+cnuSoftwareVersion OBJECT-TYPE
+		SYNTAX DisplayString (SIZE (0..128))
+		MAX-ACCESS read-only
+		STATUS current
+		DESCRIPTION 
+		    "the software version of the CNU."
+		::= { cnuEntry  7 }
+		    
+cnuRxRate OBJECT-TYPE
+    SYNTAX      INTEGER
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+            "the rxRate of CNU."
+    ::= { cnuEntry 8 }
+
+cnuTxRate OBJECT-TYPE
+    SYNTAX      INTEGER
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+            "the txRate of CNU."
+    ::= { cnuEntry 9 }
+
+cnuSnr OBJECT-TYPE
+		SYNTAX DisplayString (SIZE (0..16))
+		MAX-ACCESS read-only
+		STATUS current
+		DESCRIPTION 
+		    "the snr between clt and cnu."
+		::= { cnuEntry  10 }
+
+cnuBpc OBJECT-TYPE
+		SYNTAX DisplayString (SIZE (0..16))
+		MAX-ACCESS read-only
+		STATUS current
+		DESCRIPTION 
+		    "the bpc between clt and cnu."
+		::= { cnuEntry  11 }
+
+cnuAttenuation OBJECT-TYPE
+		SYNTAX DisplayString (SIZE (0..16))
+		MAX-ACCESS read-only
+		STATUS current
+		DESCRIPTION 
+		    "the attenuation between clt and cnu."
+		::= { cnuEntry  12 }
+
+cnuAction  OBJECT-TYPE
+		SYNTAX CnuRstActValue
+		MAX-ACCESS read-write
+		STATUS current
+		DESCRIPTION 
+		    "reset or force re-registation the CNU in EoC topology"
+		::= { cnuEntry 13 }
+
+cnuSynchronized OBJECT-TYPE
+		SYNTAX TruthValue
+		MAX-ACCESS read-only
+		STATUS current
+		DESCRIPTION
+			"The CNU profile synchronization flag."
+		::= { cnuEntry 14 }
+				
+cnuRowStatus OBJECT-TYPE
+		SYNTAX TruthValue
+		MAX-ACCESS read-only
+		STATUS current
+		DESCRIPTION
+			"The CNU node entry status of CNU."
+		::= { cnuEntry 15 }
+
+END

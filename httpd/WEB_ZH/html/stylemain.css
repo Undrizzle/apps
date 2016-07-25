@@ -1,0 +1,253 @@
+body {
+    font-size: x-small;
+    font-family: "tahoma", "sans-serif", "arial", "helvetica";
+}
+td {
+    font-size: x-small;
+    font-family: "tahoma", "sans-serif", "arial", "helvetica";
+}
+td.hd {
+    font-weight: bold;
+    font-size: x-small;
+    font-family: "tahoma", "sans-serif", "arial", "helvetica";
+}
+
+td.maintitle {
+    background-color: #2e6e9e;
+    font-weight: bold;
+    font-size: x-small;
+    font-family: "tahoma", "sans-serif", "arial", "helvetica";
+    height:25px;
+    color:white;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    padding: .2em 1em .1em 1em;
+}
+td.mainline {
+    background-color: #2e6e9e;
+    height:2px;
+}
+
+td.diagret {
+    background-color: #C5CBC7;
+    font-weight: bold;
+    font-size: x-small;
+    font-family: "tahoma", "sans-serif", "arial", "helvetica";
+    height:20px;
+}
+
+td.listend {
+    background-color: #C5CBC7;    
+    height:2px;
+}
+td.diagdata {
+    font-size: x-small;
+    font-family: "tahoma", "sans-serif", "arial", "helvetica";
+    height:20px;
+}
+td.logfailed {
+		background-color: yellow;
+    font-size: x-small;
+    font-family: "tahoma", "sans-serif", "arial", "helvetica";
+    height:20px;
+}
+td.logdbg {
+		background-color: #F4F4F4;
+    font-size: x-small;
+    font-family: "tahoma", "sans-serif", "arial", "helvetica";
+    height:20px;
+}
+td.loginfo {
+		background-color: #FAEBD7;
+    font-size: x-small;
+    font-family: "tahoma", "sans-serif", "arial", "helvetica";
+    height:20px;
+}
+td.lognotice {
+		background-color: #96CDCD;
+    font-size: x-small;
+    font-family: "tahoma", "sans-serif", "arial", "helvetica";
+    height:20px;
+}
+td.logwarn {
+		background-color: #EEE685;
+    font-size: x-small;
+    font-family: "tahoma", "sans-serif", "arial", "helvetica";
+    height:20px;
+}
+td.logerr {
+		background-color: #FFFF00;
+    font-size: x-small;
+    font-family: "tahoma", "sans-serif", "arial", "helvetica";
+    height:20px;
+}
+td.logcrt {
+		background-color: #C67171;
+    font-size: x-small;
+    font-family: "tahoma", "sans-serif", "arial", "helvetica";
+    color:white;
+    height:20px;
+}
+td.logalert {
+		background-color: #EE4000;
+    font-size: x-small;
+    font-family: "tahoma", "sans-serif", "arial", "helvetica";
+    color:white;
+    height:20px;
+}
+td.logemg {
+		background-color: #CD0000;
+    font-size: x-small;
+    font-family: "tahoma", "sans-serif", "arial", "helvetica";
+    color:white;
+    height:20px;
+}
+td.clt {
+		background-color: #E6E6FA;
+    font-size: x-small;
+    font-family: "tahoma", "sans-serif", "arial", "helvetica";
+    color: #205A7F;
+    height:20px;
+}
+td.cnua {
+		background-color: #FFFFE0;
+    font-size: x-small;
+    font-family: "tahoma", "sans-serif", "arial", "helvetica";
+    height:20px;
+}
+td.cnub {
+		background-color: #F5FFFA;
+    font-size: x-small;
+    font-family: "tahoma", "sans-serif", "arial", "helvetica";
+    height:20px;
+}
+tr.hide {
+display:none
+}
+input {
+    font-size:x-small;
+    font-family: "tahoma", "sans-serif", "arial", "helvetica";
+}
+input.btn2L {
+    background-color:#E6E6FA;
+    font-size: 12px;
+    font-family: "tahoma", "sans-serif", "arial", "helvetica";
+    height:20px;
+    width:60px;
+    cursor:pointer;
+}
+input.btn4L {
+		background-color:#E6E6FA;
+    font-size: 12px;
+    font-family: "tahoma", "sans-serif", "arial", "helvetica";
+    height:20px;
+    width:75px;
+    cursor:pointer;
+}
+input.btn5L {
+		background-color:#E6E6FA;
+    font-size: 12px;
+    font-family: "tahoma", "sans-serif", "arial", "helvetica";
+    height:20px;
+    width:85px;
+    cursor:pointer;
+}
+input.btn8L {
+		background-color:#E6E6FA;
+    font-size: 12px;
+    font-family: "tahoma", "sans-serif", "arial", "helvetica";
+    height:20px;
+    width:120px;
+    cursor:pointer;
+}
+input.btn8Ldis {
+    font-size: 12px;
+    font-family: "tahoma", "sans-serif", "arial", "helvetica";
+    height:20px;
+    width:120px;
+}
+input.btn1Tbd {
+		background-color:#B0C4DE;
+    font-size: 12px;
+    font-family: "tahoma", "sans-serif", "arial", "helvetica";
+    height:20px;
+}
+input.btn2Tbd {
+		background-color:#ADD8E6;
+    font-size: 12px;
+    font-family: "tahoma", "sans-serif", "arial", "helvetica";
+    height:20px;
+}
+input.btn3Tbd {
+		background-color:#E6E6FA;
+    font-size: 12px;
+    font-family: "tahoma", "sans-serif", "arial", "helvetica";
+    height:20px;
+}
+.menuLink {
+    font-weight: bold;
+    font-size: x-small;
+    font-family: "tahoma", "sans-serif", "arial", "helvetica";
+    width: 100%;
+    cursor: hand;
+    text-decoration: none;
+    text-align: left;
+}
+
+td.thead{
+	background-color: #C5CBC7;
+	font-weight: bold;
+	font-size: x-small;
+	font-family: "tahoma", "sans-serif", "arial", "helvetica";
+	height:20px;
+	text-align:center;
+}
+
+td.cola {
+	background-color: #FFFFE0;
+	font-size: x-small;
+	font-family: "tahoma", "sans-serif", "arial", "helvetica";
+	height:20px;	
+	text-align:center;	
+}
+
+td.colb {
+	background-color: #F5FFFA;
+	font-size: x-small;
+	font-family: "tahoma", "sans-serif", "arial", "helvetica";
+	height:20px;	
+	text-align:center;	
+}
+
+ul
+{
+	margin-left:0px;
+	padding:0;
+	list-style: none;
+}
+
+div.dwall{
+	position:relative; 
+}
+
+div.dwcontent{
+	width:500px;
+	border:1px solid #c5dbec;
+	border-radius: 5px;
+}
+
+table.dwcontent
+{
+	border:0;
+	cellpadding:0;
+	cellspacing:0;
+	margin: 10 auto 10 10;
+}
+
+div.dwbtn{
+	position:absolute; 
+	text-align:right;
+	left:520px; 
+	bottom:0;
+}
+

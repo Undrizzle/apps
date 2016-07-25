@@ -1,0 +1,61 @@
+<html>
+<head>
+<title>EoC</title>
+<base target="_self">
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8;no-cache"/>
+<link rel="stylesheet" href="css/redmond/jquery-ui-1.10.3.custom.min.css"/>
+<link rel="stylesheet" href="css/redmond/demos.css"/>
+<link rel="stylesheet" href='stylemain.css' type='text/css'/>
+<link rel="stylesheet" href='colors.css' type='text/css'/>
+<script src="js/jquery-1.9.1.js"></script>
+<script src="js/jquery-ui-1.10.3.custom.min.js"></script>
+<script language="javascript" src="util.js"></script>
+<script language="javascript">
+
+	function jumpAction()
+	{
+		var loc = '<%ejGet(frmloadUrl)%>';
+		var code = 'location=\"' + loc + '\"';
+		eval(code);
+	}
+	
+	function frmLoad()
+	{
+		setTimeout('jumpAction()', 1000);	
+	}
+
+	$(function()
+	{
+		$("#accordion").accordion({
+			collapsible: true,
+			heightStyle: "content" 
+		});
+	});
+</script>
+
+</head>	
+<body onLoad='frmLoad()'>
+<blockquote>
+<br>
+<table border="0" cellpadding="5" cellspacing="0">
+	<tr><td class='maintitle'><b>System Message</b></td></tr>                       
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%">            	
+	<tr><td class='mainline' width="100%"></td></tr>                           
+</table>
+<br>	
+<br>
+<form>
+<div id="accordion">
+	<h3>Page loading prompt</h3>
+	<div>
+		<p align='center'>The loading of this page related to the background database retrieval operation, please be patient to wait for a moment.</p>
+		<p align='center'><IMG src='frmload.gif'></p>
+		<p align='center'><b>Background processing, please wait......</b></p>			
+	</div>
+</div>
+</form>
+</blockquote>
+</body>
+</html>
+

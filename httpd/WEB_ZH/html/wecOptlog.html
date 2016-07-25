@@ -1,0 +1,113 @@
+<html>
+<head>
+<title>EoC</title>
+<base target="_self">
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8;no-cache"/>
+<link rel="stylesheet" href="css/redmond/jquery-ui-1.10.3.custom.min.css"/>
+<link rel="stylesheet" href="css/redmond/demos.css"/>
+<link rel="stylesheet" href='stylemain.css' type='text/css'/>
+<link rel="stylesheet" href='colors.css' type='text/css'/>
+<script src="js/jquery-1.9.1.js"></script>
+<script src="js/jquery-ui-1.10.3.custom.min.js"></script>
+<script language="javascript">	
+    	
+function btnApply()
+{
+	var loc = 'wecOptlog.cmd?action=';			
+	loc += $("#condition").val();
+	var code = 'location="' + loc + '"';
+	//alert(code);
+	eval(code);
+}
+
+$(function()
+{
+	$("#accordion").accordion({
+		collapsible: true,
+		heightStyle: "content" 
+	});
+
+	$( "#dialog" ).dialog({
+		autoOpen: false,
+		width:350,
+		show:
+		{
+			effect: "blind",
+			duration: 1000
+		},
+		hide:
+		{
+			effect: "explode",
+			duration: 1000
+		}
+	});
+
+	$('#searchBtn').button({
+		icons: {
+			primary: 'ui-icon-search'
+		},
+	});
+	$( "#searchBtn" ).button().click(function(event){
+		event.preventDefault();
+		btnApply();
+	});
+
+	$( "#opener" ).button(
+		{
+			icons:
+			{
+				primary: "ui-icon-help"
+			},
+			text: false
+		}
+	).click(function(){
+		$( "#dialog" ).dialog( "open" );
+	});
+
+});
+
+</script>
+</head>
+<body>
+<blockquote>
+<br>
+<table border="0" cellpadding="5" cellspacing="0">
+	<tr><td class='maintitle'><b>操作日志</b></td></tr>                       
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%">            	
+	<tr><td class='mainline' width="100%"></td></tr>                           
+</table>
+<br>	
+<br>
+<div id="accordion">
+	<h3>操作日志检索</h3>
+	<div>
+		<table border="0" cellpadding="3" cellspacing="0">
+    			<tr>
+    				<td width=280>请选择查询条件</td>
+    				<td align="center" width=200>
+        					<select id=condition>
+						<option value=0>WEB</option>
+						<option value=1>CLI</option>
+						<option value=2>SNMP</option>
+						<option value=3>Success</option>
+						<option value=4>Failed</option>
+						<option value=5 selected='selected'>All</option>
+        					</select>
+      				</td>
+    			</tr>
+		</table>
+		<br>
+	</div>
+</div>
+<p>
+	<button id="searchBtn">查 询</button>
+	<button id="opener">帮助</button>
+</p>
+<div id="dialog" title="Help Information">
+	<br>您可以按照操作者或者操作状态等条件来查询操作日志。与您选择条件相符的信息将被塞选出来。</br></br>
+</div>
+</blockquote>
+</body>
+</html>
+

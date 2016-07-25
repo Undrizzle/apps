@@ -1,0 +1,185 @@
+<html>
+<head>
+<title>EoC</title>
+<base target="_self">
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8;no-cache"/>
+<link rel="stylesheet" href="css/redmond/jquery-ui-1.10.3.custom.min.css"/>
+<link rel="stylesheet" href="css/redmond/demos.css"/>
+<link rel="stylesheet" href='stylemain.css' type='text/css'/>
+<link rel="stylesheet" href='colors.css' type='text/css'/>
+<script src="js/jquery-1.9.1.js"></script>
+<script src="js/jquery-ui-1.10.3.custom.min.js"></script>
+<script language="javascript" src="util.js"></script>
+<script language="javascript">
+function frmLoad() {
+	with ( document.forms[0] )
+	{      
+		rocommunity.value = '<%ejGet(snmpRoCommunity)%>';			      
+		rwcommunity.value = '<%ejGet(snmpRwCommunity)%>'; 			      
+		trapIp.value = '<%ejGet(snmpTrapIpaddr)%>';			      
+		trapPort.value = '<%ejGet(snmpTrapDport)%>';
+	}
+}
+
+function btnSave()
+{
+	var loc = 'wecSnmpCfgInfo.cgi?';
+
+	with ( document.forms[0] )
+	{
+		if (rocommunity.value == '')
+		{
+			alert('读团体名不能为空！');
+			return;
+		}
+		if (rwcommunity.value == '')
+		{
+			alert('写团体名不能为空！');
+			return;
+		}
+		if( isValidName(rocommunity.value) == false )
+		{
+			alert('读团体名输入不正确！');
+			return;
+		}
+		if (rocommunity.value.length > 32)
+		{
+			alert('读团体名长度 (' + rocommunity.value.length + ') 超出范围 [0-32]！');
+			return;
+		}
+		if( isValidName(rwcommunity.value) == false )
+		{
+			alert('写团体名输入不正确');
+			return;
+		}
+		if (rwcommunity.value.length > 32)
+		{
+			alert('写团体名长度 (' + rwcommunity.value.length + ') 超出范围 [0-32]！');
+			return;
+		}
+		if ( isValidIpAddress(trapIp.value) == false )
+		{
+			alert('告警服务器地址 "' + trapIp.value + '" 输入错误！');
+			return;
+		}
+		if( isValidUDPPort(trapPort.value) == false )
+		{
+			return;	
+		}						
+		loc += 'snmpRoCommunity=' + rocommunity.value;
+		loc += '&snmpRwCommunity=' + rwcommunity.value;
+		loc += '&snmpTrapIpaddr=' + trapIp.value;
+		loc += '&snmpTrapDport=' + trapPort.value;
+	}
+
+	var code = 'location="' + loc + '"';			   
+	eval(code);	   
+}
+
+$(function()
+{
+	$("#accordion").accordion({
+		collapsible: true,
+		heightStyle: "content" 
+	});
+
+	$( "#dialog" ).dialog({
+		autoOpen: false,
+		width:480,
+		show:
+		{
+			effect: "blind",
+			duration: 1000
+		},
+		hide:
+		{
+			effect: "explode",
+			duration: 1000
+		}
+	});
+	$('#opener').button(
+		{
+			icons:
+			{
+				primary: 'ui-icon-help'
+			},
+			text: false
+		}
+	).click(function(){
+		$('#dialog').dialog('open');
+	});
+
+	$('#comBtn').button({
+		icons: {
+			primary: 'ui-icon-arrowthickstop-1-s'
+		},
+	});
+	if('<%ejGet(curUserName)%>' == 'user' )
+	{
+		$("#comBtn").button().click(function(event){
+			alert("你没有足够的权限...");
+		});
+	}
+	else
+	{
+		$('#comBtn').button().click(function(event){
+			event.preventDefault();
+			btnSave();
+		});
+	}	
+});
+</script>
+</head>
+	
+<body onLoad='frmLoad()'>
+<blockquote>
+<br>
+<table border="0" cellpadding="5" cellspacing="0">
+	<tr><td class='maintitle'><b>SNMP设置</b></td></tr>                       
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%">            	
+	<tr><td class='mainline' width="100%"></td></tr>                           
+</table>
+<br>	
+<br>
+<form>
+<div id="accordion">
+	<h3>设置网管服务器连接参数</h3>
+	<div>
+		<table border="0" cellpadding="0" cellspacing="0">					
+			<tr>
+				<td class='diagdata' width=260>读团体名</td>
+				<td class='diagdata' width=300><input type='text' name='rocommunity' size="20"></td>
+			</tr>
+			<tr>
+				<td class='diagdata'>写团体名</td>
+				<td class='diagdata'><input type='text' name='rwcommunity' size="20"></td>
+			</tr>
+			<tr>
+				<td class='diagdata'>告警服务器地址</td>
+				<td class='diagdata'><input type='text' name='trapIp' size="20"></td>
+			</tr>
+			<tr>
+				<td class='diagdata'>告警服务器端口</td>
+				<td class='diagdata'><input type='text' name='trapPort' size="20"></td>
+			</tr>
+		</table>
+		<br>
+	</div>
+</div>
+</form>
+
+<p>
+	<button id='comBtn'>确 定</button>
+	<button id="opener">帮助</button>
+</p>
+<div id="dialog" title="帮助信息">
+	通过SNMP协议可以完成来自远程服务器的管理，如设备配置的读写以及告警收集等。</br>
+	<br>注意：</br>
+	1. 请确保修改后的配置保存至非易失性存储器；</br>
+	2. SNMP配置参数需要在系统重启之后才能生效。</br>	
+</div>
+</blockquote>
+</body>
+</html>
+
