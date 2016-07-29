@@ -381,6 +381,14 @@ void MME_Atheros_ProcessRebootHg(MMEAD_BBLOCK_QUEUE *this, T_MME_SK_HANDLE *MME_
 	MMEAD_ProcessAck(MME_Atheros_MsgRebootHg(MME_SK, h->ODA), this, NULL, 0);
 }
 
+void MME_Atheros_ProcessResetHg(MMEAD_BBLOCK_QUEUE *this, T_MME_SK_HANDLE *MME_SK)
+{
+	T_Msg_Header_MMEAD *h = (T_Msg_Header_MMEAD *)(this->b);
+
+	MMEAD_ProcessAck(MME_Atheros_MsgResetHg(MME_SK, h->ODA), this, NULL, 0);
+}
+
+
 /*
 void MME_Atheros_ProcessSetUserHFID(MMEAD_BBLOCK_QUEUE *this, T_MME_SK_HANDLE *MME_SK)
 {
@@ -664,6 +672,13 @@ void MME_ProcessRebootHg(MMEAD_BBLOCK_QUEUE *this, T_MME_SK_HANDLE *MME_SK)
 	T_Msg_Header_MMEAD *h = (T_Msg_Header_MMEAD *)(this->b);
 
 	MME_Atheros_ProcessRebootHg(this, MME_SK);
+}
+
+void MME_ProcessResetHg(MMEAD_BBLOCK_QUEUE *this, T_MME_SK_HANDLE *MME_SK)
+{
+	T_Msg_Header_MMEAD *h = (T_Msg_Header_MMEAD *)(this->b);
+
+	MME_Atheros_ProcessResetHg(this, MME_SK);
 }
 
 
@@ -1951,6 +1966,9 @@ void ComReqManager(T_MME_SK_HANDLE *MME_SK)
 			break;
 		case MMEAD_REBOOT_HG:
 			MME_ProcessRebootHg(this, MME_SK);
+			break;
+		case MMEAD_RESET_HG:
+			MME_ProcessResetHg(this, MME_SK);
 			break;
 		case MMEAD_SET_TX_GAIN:
 			MME_ProcessSetTxGain(this, MME_SK);

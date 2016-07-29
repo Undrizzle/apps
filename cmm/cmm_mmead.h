@@ -19,6 +19,7 @@ int mmead_set_Hg_Manage(uint8_t ODA[], T_szHgManageConfig *manageInfo);
 int mmead_get_Hg_Business(uint8_t ODA[], T_szHgBusiness *businessInfo);
 int mmead_set_Hg_Business(uint8_t ODA[], T_szSetHgBusinessConfig *businessInfo);
 int mmead_reboot_Hg(uint8_t ODA[]);
+int mmead_reset_Hg(uint8_t ODA[]);
 
 
 int mmead_do_link_diag

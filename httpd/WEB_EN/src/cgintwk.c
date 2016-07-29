@@ -3707,6 +3707,13 @@ void cgiCnuWifi(char *query, FILE *fs)
 	fprintf(fs, "	eval(code);\n");
 	fprintf(fs, "}\n");
 
+	fprintf(fs, "function WifiReset() {\n");
+	fprintf(fs, "	var loc = 'WifiReset.cgi?';\n");
+	fprintf(fs, "	loc += 'cnuid=' + %d;\n", id);
+	fprintf(fs, "	var code = 'location=\"' + loc + '\"';\n");
+	fprintf(fs, "	eval(code);\n");
+	fprintf(fs, "}\n");
+
 	fprintf(fs, "$(function(){\n");
 	fprintf(fs, "	frmLoad();\n");
 	fprintf(fs, "	$('#accordion').accordion({\n");
@@ -3762,6 +3769,10 @@ void cgiCnuWifi(char *query, FILE *fs)
 	fprintf(fs, "	$('#reboot').button().click(function(event) {\n");
 	fprintf(fs, "		event.preventDefault();\n");
 	fprintf(fs, "		WifiReboot();\n");
+	fprintf(fs, "	});\n");
+	fprintf(fs, "	$('#reset').button().click(function(event) {\n");
+	fprintf(fs, "		event.preventDefault();\n");
+	fprintf(fs, "		WifiReset();\n");
 	fprintf(fs, "	});\n");
 	fprintf(fs, "});\n");
 	
