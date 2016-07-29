@@ -1891,6 +1891,46 @@ int CMM_ProcessWriteHgBusiness(BBLOCK_QUEUE *this)
 	return opt_sts;
 }
 
+int CMM_ProcessRebootHg(BBLOCK_QUEUE *this)
+{
+	int opt_sts = CMM_SUCCESS;
+	st_dbsCnu cnu;
+	uint8_t bMac[6] = {0};
+	
+	T_Msg_CMM *req = (T_Msg_CMM *)(this->b);
+	stTmUserInfo  *req_data = (stTmUserInfo *)(req->BUF);
+	
+	if( (req_data->cnu<1)||(req_data->cnu > MAX_CNU_AMOUNT_LIMIT))
+	{
+		printf("\n#ERROR[01]\n");
+		opt_sts = CMM_FAILED;
+	}	
+	else if( CMM_SUCCESS != dbsGetCnu(dbsdev, req_data->cnu, &cnu) )
+	{
+		printf("\n#ERROR[02]\n");
+		opt_sts = CMM_FAILED;
+	}
+	else if( (DEV_STS_ONLINE != cnu.col_sts)||BOOL_TRUE != cnu.col_row_sts )
+	{
+		printf("\n#ERROR[03]\n");
+		opt_sts = CMM_FAILED;
+	}
+	else if( CMM_SUCCESS != boardapi_macs2b(cnu.col_mac, bMac) )
+	{
+		printf("\n#ERROR[04]\n");
+		opt_sts = CMM_FAILED;
+	}
+	else if( CMM_SUCCESS != mmead_reboot_Hg(bMac))
+	{
+		printf("\n#ERROR[05]\n");
+		opt_sts = CMM_FAILED;
+	}
+
+	/* 将处理信息发送给请求者 */
+	CMM_ProcessAck(opt_sts, this, NULL, 0);
+
+	return opt_sts;
+}
 
 int CMM_ProcessWriteAr8236Reg(BBLOCK_QUEUE *this)
 {
@@ -3145,6 +3185,11 @@ void cmmProcessManager(void)
 			case CMM_SET_HG_BUSINESS:
 			{
 				opt_sts = CMM_ProcessWriteHgBusiness(this);
+				break;
+			}
+			case CMM_REBOOT_HG:
+			{
+				opt_sts = CMM_ProcessRebootHg(this);
 				break;
 			}
 			case CMM_AR8236_SW_REG_WRITE:

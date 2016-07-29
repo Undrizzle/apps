@@ -3699,7 +3699,13 @@ void cgiCnuWifi(char *query, FILE *fs)
 	fprintf(fs, "	//alert(code);\n");
 	fprintf(fs, "	eval(code);\n");
 	fprintf(fs, "}\n");
-	
+
+	fprintf(fs, "function WifiReboot() {\n");
+	fprintf(fs, "	var loc = 'WifiReboot.cgi?';\n");
+	fprintf(fs, "	loc += 'cnuid=' + %d;\n", id);
+	fprintf(fs, "	var code = 'location=\"' + loc + '\"';\n");
+	fprintf(fs, "	eval(code);\n");
+	fprintf(fs, "}\n");
 
 	fprintf(fs, "$(function(){\n");
 	fprintf(fs, "	frmLoad();\n");
@@ -3752,6 +3758,10 @@ void cgiCnuWifi(char *query, FILE *fs)
 	fprintf(fs, "	$('#write2Btn').button().click(function(event) {\n");
 	fprintf(fs, "		event.preventDefault();\n");
 	fprintf(fs, "		BusinessWan2Write();\n");
+	fprintf(fs, "	});\n");
+	fprintf(fs, "	$('#reboot').button().click(function(event) {\n");
+	fprintf(fs, "		event.preventDefault();\n");
+	fprintf(fs, "		WifiReboot();\n");
 	fprintf(fs, "	});\n");
 	fprintf(fs, "});\n");
 	
@@ -4084,6 +4094,27 @@ void cgiCnuWifi(char *query, FILE *fs)
 	fprintf(fs, "			</div>\n");
 	fprintf(fs, "		</div>\n");
 	fprintf(fs, "	</div>\n");
+
+	fprintf(fs, "	<h3>Wifi Management</h3>\n");
+	fprintf(fs, "	<div>\n");
+	fprintf(fs, "		<div class='dwall'>\n");
+	fprintf(fs, "			<table border=0 cellpadding=0 cellspacing=0>\n");
+	fprintf(fs, "				<tr>\n");
+	fprintf(fs, "					<td class='diagdata' width=250>Wifi Reboot</td>\n");
+	fprintf(fs, "					<td class='diagdata' width=300>\n");
+	fprintf(fs, "						<button id='reboot'>Reboot</button>\n");
+	fprintf(fs, "					</td>\n");
+	fprintf(fs, "				</tr>\n");
+	fprintf(fs, "				<tr><td class='diagdata' colspan=2>&nbsp;</td></tr>\n");
+	fprintf(fs, "				<tr>\n");
+	fprintf(fs, "					<td class='diagdata' width=250>Restore Default</td>\n");
+	fprintf(fs, "					<td class='diagdata' width=350>\n");
+	fprintf(fs, "						<button id='reset'>Reset</button>\n");
+	fprintf(fs, "					</td>\n");
+	fprintf(fs, "				</tr>\n");
+	fprintf(fs, "			</table>\n");
+	fprintf(fs, "		</div>\n");
+	fprintf(fs, "	</div>\n");	
 	
 	fprintf(fs, "</div>\n");
 

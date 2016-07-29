@@ -2869,6 +2869,34 @@ int MME_Atheros_MsgSetHgBusiness(T_MME_SK_HANDLE *MME_SK, uint8_t ODA[], T_szSet
 	return CMM_MME_ERROR;
 }
 
+int MME_Atheros_MsgRebootHg(T_MME_SK_HANDLE *MME_SK, uint8_t ODA[])
+{
+	int packetsize;
+	uint8_t buffer[IHPAPI_ETHER_MIN_LEN];
+
+	mmead_debug_printf("--------->MME_Atheros_MsgRebootHg\n");
+	memset(buffer, 0, sizeof(buffer));
+
+	packetsize = ihpapi_RebootHg(OSA, ODA, IHPAPI_ETHER_MIN_LEN, buffer);
+
+	if(0 != packetsize)
+	{
+		if(mme_tx(MME_SK, buffer, packetsize) <= 0)
+		{
+			return CMM_MME_ERROR;
+		}
+		else
+		{
+			return CMM_SUCCESS;
+		}
+	}
+	else
+	{
+		return CMM_FAILED;
+	}
+
+	return CMM_MME_ERROR;
+}
 
 /********************************************************************************************
 *	º¯ÊýÃû³Æ:MME_Atheros_MsgGetModuleCrc

@@ -65,6 +65,7 @@
 #include "../ihpapi/GetHgBusiness.c"
 #include "../ihpapi/SetHgManage.c"
 #include "../ihpapi/SetHgBusiness.c"
+#include "../ihpapi/RebootHg.c"
 /*====================================================================*
  *   internal source files; see ihp.h;
  *--------------------------------------------------------------------*/

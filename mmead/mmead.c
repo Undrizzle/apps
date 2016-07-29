@@ -32,7 +32,7 @@ uint8_t OSA [6] =
 };
 
 static MMEAD_BBLOCK_QUEUE bblock;
-int MMEAD_MODULE_DEBUG_ENABLE = 0;
+int MMEAD_MODULE_DEBUG_ENABLE = 1;
 
 /* 与DBS  通讯的设备文件*/
 T_DBS_DEV_INFO *dbsdev = NULL;
@@ -374,6 +374,13 @@ void MME_Atheros_ProcessSetHgBusiness(MMEAD_BBLOCK_QUEUE *this, T_MME_SK_HANDLE 
 	MMEAD_ProcessAck(MME_Atheros_MsgSetHgBusiness(MME_SK, req->header.ODA, manage), this, NULL, 0);
 }
 
+void MME_Atheros_ProcessRebootHg(MMEAD_BBLOCK_QUEUE *this, T_MME_SK_HANDLE *MME_SK)
+{
+	T_Msg_Header_MMEAD *h = (T_Msg_Header_MMEAD *)(this->b);
+
+	MMEAD_ProcessAck(MME_Atheros_MsgRebootHg(MME_SK, h->ODA), this, NULL, 0);
+}
+
 /*
 void MME_Atheros_ProcessSetUserHFID(MMEAD_BBLOCK_QUEUE *this, T_MME_SK_HANDLE *MME_SK)
 {
@@ -650,6 +657,13 @@ void MME_ProcessSetHgBusiness(MMEAD_BBLOCK_QUEUE *this, T_MME_SK_HANDLE *MME_SK)
 	T_Msg_Header_MMEAD *h = (T_Msg_Header_MMEAD *)(this->b);
 
 	MME_Atheros_ProcessSetHgBusiness(this, MME_SK);
+}
+
+void MME_ProcessRebootHg(MMEAD_BBLOCK_QUEUE *this, T_MME_SK_HANDLE *MME_SK)
+{
+	T_Msg_Header_MMEAD *h = (T_Msg_Header_MMEAD *)(this->b);
+
+	MME_Atheros_ProcessRebootHg(this, MME_SK);
 }
 
 
@@ -1934,6 +1948,9 @@ void ComReqManager(T_MME_SK_HANDLE *MME_SK)
 			break;
 		case MMEAD_SET_HG_BUSINESS:
 			MME_ProcessSetHgBusiness(this, MME_SK);
+			break;
+		case MMEAD_REBOOT_HG:
+			MME_ProcessRebootHg(this, MME_SK);
 			break;
 		case MMEAD_SET_TX_GAIN:
 			MME_ProcessSetTxGain(this, MME_SK);

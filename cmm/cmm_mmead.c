@@ -714,6 +714,29 @@ int mmead_set_Hg_Business(uint8_t ODA[], T_szSetHgBusinessConfig *manageInfo)
 	return __cmm_mmead_communicate(buf, len);
 }
 
+int mmead_reboot_Hg(uint8_t ODA[])
+{
+	int len = 0;
+	uint8_t buf[MAX_UDP_SIZE] = {0};
+
+	T_Msg_Header_MMEAD h;
+	T_REQ_Msg_MMEAD *r = (T_REQ_Msg_MMEAD *)buf;
+
+	h.M_TYPE = 0xCC08;
+	h.DEV_TYPE = WEC701W_C4;
+	h.MM_TYPE = MMEAD_REBOOT_HG;
+	h.fragment = 0;
+	memcpy(h.ODA, ODA, 6);
+
+	h.LEN = 0;
+
+	memcpy(buf, &h, sizeof(T_Msg_Header_MMEAD));
+
+	len = sizeof(T_Msg_Header_MMEAD);
+	
+	return __cmm_mmead_communicate(buf, len);
+}
+
 
 int mmead_do_link_diag
 (

@@ -46,6 +46,8 @@ int http2cmm_eraseSwitchSettings(PWEB_NTWK_VAR pWebVar);
 int http2cmm_getHgBusiness(PWEB_NTWK_VAR pWebVar);
 int http2cmm_setHgBusiness1(PWEB_NTWK_VAR pWebVar);
 int http2cmm_setHgBusiness2(PWEB_NTWK_VAR pWebVar);
+int http2cmm_rebootHg(PWEB_NTWK_VAR pWebVar);
+
 int http2cmm_getNmsBusiness(stCnuNode *node,T_szNmsBusiness *business);
 int http2cmm_setNmsBusiness(stCnuNode *node, T_szSetNmsBusiness *business);
 

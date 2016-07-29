@@ -2755,6 +2755,32 @@ int http2cmm_setHgBusiness2(PWEB_NTWK_VAR pWebVar)
 	return __http2cmm_comm(buf, len);
 }
 
+int http2cmm_rebootHg(PWEB_NTWK_VAR pWebVar)
+{
+	uint8_t buf[MAX_UDP_SIZE] = {0};
+	uint32_t len = 0;
+
+	T_Msg_CMM *req = (T_Msg_CMM *)buf;
+	stTmUserInfo *req_data = (stTmUserInfo *)(req->BUF);
+
+	req->HEADER.usSrcMID = MID_HTTP;
+	req->HEADER.usDstMID = MID_CMM;
+	req->HEADER.usMsgType = CMM_REBOOT_HG;
+	req->HEADER.ulBodyLength = sizeof(stTmNewUserInfo);
+	req->HEADER.fragment = 0;
+
+	req_data->clt = pWebVar->cltid;
+	req_data->cnu = pWebVar->cnuid;
+
+	len = sizeof(req->HEADER) + req->HEADER.ulBodyLength;
+
+	if( CMM_SUCCESS == __http2cmm_comm(buf, len))
+	{
+		return CMM_SUCCESS;
+	}
+	return CMM_FAILED;
+}
+
 int http2cmm_getNmsBusiness(stCnuNode *node, T_szNmsBusiness *business)
 {
 	uint8_t buf[MAX_UDP_SIZE] = {0};

@@ -787,6 +787,7 @@ size_t ihpapi_GetHgManage(uint8_t sa [], uint8_t da [], size_t bufferLen, uint8_
 size_t ihpapi_GetHgBusiness(uint8_t sa [], uint8_t da [], size_t bufferLen, uint8_t buffer []);
 size_t ihpapi_SetHgManage(uint8_t sa [], uint8_t da [], size_t bufferLen, uint8_t buffer [], T_szHgManage manage);
 size_t ihpapi_SetHgBusiness(uint8_t sa [], uint8_t da [], size_t bufferLen, uint8_t buffer [], T_szSetHgBusiness manage);
+size_t ihpapi_RebootHg(uint8_t sa [], uint8_t da [], size_t bufferLen, uint8_t buffer []);
 
 
 /*====================================================================*

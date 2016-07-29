@@ -651,6 +651,21 @@ void do_cgi(char *path, FILE *fs) {
 		}
 		else sprintf(filename, "editCnuWifi.cmd?cnuid=%d",glbWebVar.cnuid);
 	}
+	else if ( strstr(filename, "WifiReboot") != NULL )
+	{
+		cltid = (glbWebVar.cnuid-1)/MAX_CNUS_PER_CLT + 1;
+		cnuid = (glbWebVar.cnuid-1)%MAX_CNUS_PER_CLT + 1;
+		sprintf(logmsg, "reboot cnu/%d/%d home gateway", cltid, cnuid);
+		ret = http2cmm_rebootHg(&glbWebVar);
+		http2dbs_writeOptlog(ret, logmsg);
+		if(ret != 0)
+		{
+			sprintf(glbWebVar.returnUrl, "editCnuWifi.cmd?cnuid=%d", glbWebVar.cnuid);
+			glbWebVar.wecOptCode = CMM_FAILED;
+			strcpy(filename, "/webs/wecOptResult2.html");
+		}
+		else sprintf(filename, "editCnuWifi.cmd?cnuid=%d", glbWebVar.cnuid);
+	}
 	else if ( strstr(filename, "rtl8306eConfigWrite.html") != NULL )
 	{
 		cltid = (glbWebVar.cnuid-1)/MAX_CNUS_PER_CLT + 1;
