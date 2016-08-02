@@ -2927,6 +2927,82 @@ int MME_Atheros_MsgResetHg(T_MME_SK_HANDLE *MME_SK, uint8_t ODA[])
 	return CMM_MME_ERROR;
 }
 
+int MME_Atheros_MsgGetHgSsidStatus(T_MME_SK_HANDLE *MME_SK, uint8_t ODA[], T_szHgSsid *pdata)
+{
+	int packetsize;
+	int recv_msg_len = 0;
+	uint8_t buffer[IHPAPI_ETHER_MAX_LEN];
+	ihpapi_result_t xresult;
+	
+	mmead_debug_printf("-------->MME_Atheros_MsgGetHgSsidStatus\n");
+	memset(buffer, 0, sizeof(buffer));
+	packetsize = ihpapi_GetHgSsidStatus(OSA, ODA, IHPAPI_ETHER_MIN_LEN, buffer);
+		
+	if( 0 != packetsize )
+	{
+		if( mme_tx(MME_SK, buffer, packetsize) <= 0 )
+		{
+			return CMM_MME_ERROR;
+		}
+	}
+	else
+	{
+		return CMM_FAILED;
+	}
+	
+	memset(buffer,0,sizeof(buffer));
+	
+	if ( mme_rx(MME_SK, VS_HOME_GATEWAY_OPERATION, buffer, sizeof(buffer), &recv_msg_len, &xresult) != CMM_SUCCESS)
+	{
+		return CMM_MME_ERROR;
+	}
+	if(xresult.validData)
+	{
+		memcpy(pdata, &(xresult.data.hgSsidInfo),sizeof(xresult.data.hgSsidInfo));
+		return CMM_SUCCESS;
+	}	
+	return CMM_MME_ERROR;
+}
+
+int MME_Atheros_MsgSetHgSsidStatus(T_MME_SK_HANDLE *MME_SK, uint8_t ODA[], uint8_t ssid[4])
+{
+	int packetsize;
+	int recv_msg_len = 0;
+	uint8_t buffer[IHPAPI_ETHER_MIN_LEN];
+	ihpapi_result_t xresult;
+
+	mmead_debug_printf("--------->MME_Atheros_MsgSetHgSsidStatus\n");
+	memset(buffer, 0, sizeof(buffer));
+
+	packetsize = ihpapi_SetHgSsidStatus(OSA, ODA, IHPAPI_ETHER_MIN_LEN, buffer, ssid);
+
+	if(0 != packetsize)
+	{
+		if(mme_tx(MME_SK, buffer, packetsize) <= 0)
+		{
+			return CMM_MME_ERROR;
+		}
+	}
+	else
+	{
+		return CMM_FAILED;
+	}
+
+	memset(buffer, 0, sizeof(buffer));
+
+	if( mme_rx(MME_SK, VS_HOME_GATEWAY_OPERATION, buffer, sizeof(buffer), &recv_msg_len, &xresult) != CMM_SUCCESS)
+	{
+		return CMM_MME_ERROR;
+	}
+	if(xresult.validData)
+	{
+		return xresult.opStatus.status;
+	}
+
+	return CMM_MME_ERROR; 
+}
+
+
 
 /********************************************************************************************
 *	º¯ÊýÃû³Æ:MME_Atheros_MsgGetModuleCrc
@@ -3725,7 +3801,7 @@ int MME_Atheros_MsgGetPibSpec
 			{
 				pDevInfo->DevType = WEC701_W4;
 			}
-			else if( strcmp(HFID_USER, "S74_W01") == 0)
+			else if( strcmp(HFID_USER, "S744_8306RA") == 0)
 			{
 				pDevInfo->DevType = WEC701W_C4;
 			}

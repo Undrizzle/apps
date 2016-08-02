@@ -3546,6 +3546,23 @@ void cgiCnuWifi(char *query, FILE *fs)
 	fprintf(fs, "	$('#b_dns_ipv4_copy_1').val('%s');\n",glbWebVar.b_dns_ipv4_copy_1);
 	fprintf(fs, "	$('#b_dns_ipv4_copy_2').val('%s');\n",glbWebVar.b_dns_ipv4_copy_2);
 
+	fprintf(fs, "	var ssid1 = %d\n",glbWebVar.ssid_status[0]);
+	fprintf(fs, "	if(ssid1 == 1 || ssid1 == 49) {\n");
+	fprintf(fs, "		$('input[name=ssid_status][value=0]').attr('checked', 'checked');\n");
+	fprintf(fs, "	}\n");
+	fprintf(fs, "	var ssid2 = %d\n",glbWebVar.ssid_status[1]);
+	fprintf(fs, "	if(ssid2 == 1 || ssid2 == 49) {\n");
+	fprintf(fs, "		$('input[name=ssid_status][value=1]').attr('checked', 'checked');\n");
+	fprintf(fs, "	}\n");
+	fprintf(fs, "	var ssid3 = %d\n",glbWebVar.ssid_status[2]);
+	fprintf(fs, "	if(ssid3 == 1 || ssid3 == 49) {\n");
+	fprintf(fs, "		$('input[name=ssid_status][value=2]').attr('checked', 'checked');\n");
+	fprintf(fs, "	}\n");
+	fprintf(fs, "	var ssid4 = %d\n",glbWebVar.ssid_status[3]);
+	fprintf(fs, "	if(ssid4 == 1 || ssid4 == 49) {\n");
+	fprintf(fs, "		$('input[name=ssid_status][value=3]').attr('checked', 'checked');\n");
+	fprintf(fs, "	}\n");
+
 	fprintf(fs, "   $('#b_ip_mode_1').change(function(){\n");
 	fprintf(fs, "		if ($('#b_ip_mode_1').val() == 1) {\n");
 	fprintf(fs, "			$('.dhcp_1').addClass('hidden');\n");
@@ -3714,6 +3731,31 @@ void cgiCnuWifi(char *query, FILE *fs)
 	fprintf(fs, "	eval(code);\n");
 	fprintf(fs, "}\n");
 
+	fprintf(fs, "function SsidStatusRead() {\n");
+	fprintf(fs, "	var loc = 'SsidStatusRead.cgi?';\n");
+	fprintf(fs, "	loc += 'cnuid=' + %d;\n", id);
+	fprintf(fs, "	var code = 'location=\"' + loc + '\"';\n");
+	fprintf(fs, "	eval(code);\n");
+	fprintf(fs, "}\n");
+
+	fprintf(fs, "function SsidStatusWrite() {\n");
+	fprintf(fs, "	var loc = 'SsidStatusWrite.cgi?';\n");
+	fprintf(fs, "	loc += 'cnuid=' + %d;\n", id);
+	fprintf(fs, "	var chk_val='';\n");
+	fprintf(fs, "	$('input[name=ssid_status]').each(function() {\n");
+	fprintf(fs, "		if($(this).is(':checked')) {\n");
+	fprintf(fs, "			chk_val += '1';\n");
+	fprintf(fs, "		}\n");
+	fprintf(fs, "		else {\n");
+	fprintf(fs, "			chk_val += '0';\n");
+	fprintf(fs, "		}\n");
+	fprintf(fs, "	});\n");
+	fprintf(fs, "	loc += '&ssidStatus=' + chk_val;\n");
+	fprintf(fs, "	var code = 'location=\"' + loc + '\"';\n");
+	fprintf(fs, "	//alert(code);\n");
+	fprintf(fs, "	eval(code);\n");
+	fprintf(fs, "}\n");
+
 	fprintf(fs, "$(function(){\n");
 	fprintf(fs, "	frmLoad();\n");
 	fprintf(fs, "	$('#accordion').accordion({\n");
@@ -3765,6 +3807,14 @@ void cgiCnuWifi(char *query, FILE *fs)
 	fprintf(fs, "	$('#write2Btn').button().click(function(event) {\n");
 	fprintf(fs, "		event.preventDefault();\n");
 	fprintf(fs, "		BusinessWan2Write();\n");
+	fprintf(fs, "	});\n");
+	fprintf(fs, "	$('#read2Btn').button().click(function(event) {\n");
+	fprintf(fs, "		event.preventDefault();\n");
+	fprintf(fs, "		SsidStatusRead();\n");
+	fprintf(fs, "	});\n");
+	fprintf(fs, "	$('#write3Btn').button().click(function(event) {\n");
+	fprintf(fs, "		event.preventDefault();\n");
+	fprintf(fs, "		SsidStatusWrite();\n");
 	fprintf(fs, "	});\n");
 	fprintf(fs, "	$('#reboot').button().click(function(event) {\n");
 	fprintf(fs, "		event.preventDefault();\n");
@@ -4123,6 +4173,20 @@ void cgiCnuWifi(char *query, FILE *fs)
 	fprintf(fs, "						<button id='reset'>Reset</button>\n");
 	fprintf(fs, "					</td>\n");
 	fprintf(fs, "				</tr>\n");
+	fprintf(fs, "				<tr><td class='diagdata' colspan=2>&nbsp;</td></tr>\n");
+	fprintf(fs, "				<tr>\n");
+	fprintf(fs, "					<td class='diagdata' width=230>SSID Status</td>\n");
+	fprintf(fs, "					<td class='diagdata' width=300>\n");
+	fprintf(fs, "						<input name='ssid_status' type='checkbox' value='0'>%s\n",glbWebVar.ssid_name1);
+	fprintf(fs, "						<input name='ssid_status' type='checkbox' value='1'>%s\n",glbWebVar.ssid_name2);
+	fprintf(fs, "						<input name='ssid_status' type='checkbox' value='2'>%s\n",glbWebVar.ssid_name3);
+	fprintf(fs, "						<input name='ssid_status' type='checkbox' value='3'>%s\n",glbWebVar.ssid_name4);
+	fprintf(fs, "					</td>\n");
+	fprintf(fs, "				</tr>\n");
+	fprintf(fs, "				<div class='dwbtn'>\n");
+	fprintf(fs, "					<button id='read2Btn'>Read</button>\n");
+	fprintf(fs, "					<button id='write3Btn'>Write</button>\n");
+	fprintf(fs, "				</div>\n");
 	fprintf(fs, "			</table>\n");
 	fprintf(fs, "		</div>\n");
 	fprintf(fs, "	</div>\n");	
@@ -5130,7 +5194,9 @@ void cgiCnuMgmt(char *query, FILE *fs)
 	fprintf(fs, "	<button id=rebootBtn>Reboot</button>\n");
 	fprintf(fs, "	<button id=delBtn>Delete</button>\n");
 	fprintf(fs, "	<button id=configBtn>Configuration</button>\n");
-	fprintf(fs, "   <button id=wifiBtn>Wifi</button>\n");
+	if ( 1 == boardapi_isKTCnu(cnu.col_model)) {
+		fprintf(fs, "   <button id=wifiBtn>Wifi</button>\n");
+	}
 	fprintf(fs, "	<button id=opener>Help</button>\n");
 	fprintf(fs, "</p>\n");
 	fprintf(fs, "<div id='dialog' title='Help Information'>\n");

@@ -760,6 +760,56 @@ int mmead_reset_Hg(uint8_t ODA[])
 	return __cmm_mmead_communicate(buf, len);
 }
 
+int mmead_get_Hg_Ssid_Status(uint8_t ODA[], T_szHgSsid *ssidInfo)
+{
+	int len = 0;
+	uint8_t buf[MAX_UDP_SIZE] = {0};
+	T_Msg_Header_MMEAD h;
+	T_REQ_Msg_MMEAD *r = (T_REQ_Msg_MMEAD *)buf;
+	bzero(ssidInfo, sizeof(T_szHgSsid));
+	bzero(buf, MAX_UDP_SIZE);
+
+	h.M_TYPE = 0xCC08;
+	h.DEV_TYPE = WEC701W_C4;
+	h.MM_TYPE = MMEAD_GET_HG_SSID_STATUS;
+	h.fragment = 0;
+	memcpy(h.ODA, ODA, 6);
+
+	h.LEN = sizeof(T_szHgSsid);
+
+	memcpy(buf, &h, sizeof(T_Msg_Header_MMEAD));
+	len = sizeof(T_Msg_Header_MMEAD) + sizeof(T_szHgSsid);
+
+	if( CMM_SUCCESS == __cmm_mmead_communicate(buf, len))
+	{
+		memcpy(ssidInfo, (void *)r->BUF, sizeof(T_szHgSsid));
+		return CMM_SUCCESS;
+	}
+	return CMM_FAILED;
+}
+
+int mmead_set_Hg_Ssid_Status(uint8_t ODA[], T_szSetHgSsidStatus *ssidInfo)
+{
+	int len = 0;
+	uint8_t buf[MAX_UDP_SIZE] = {0};
+	
+	T_MMETS_REQ_MSG *MMETS_REQ = (T_MMETS_REQ_MSG *)buf;
+	T_szSetHgSsid *MMETS_REQ_DATA = (T_szSetHgSsid *)(MMETS_REQ->body);
+
+	MMETS_REQ->header.M_TYPE = 0xCC08;
+	MMETS_REQ->header.DEV_TYPE = WEC701W_C4;
+	MMETS_REQ->header.MM_TYPE = MMEAD_SET_HG_SSID_STATUS;
+	MMETS_REQ->header.fragment = 0;
+	MMETS_REQ->header.LEN = sizeof(T_szSetHgSsid);
+	memcpy(MMETS_REQ->header.ODA, ODA, 6);
+
+	memcpy(MMETS_REQ_DATA, &ssidInfo->ssid_status, sizeof(ssidInfo->ssid_status));
+
+	len = sizeof(T_MMETS_REQ_MSG) + MMETS_REQ->header.LEN;
+
+	return __cmm_mmead_communicate(buf, len);
+}
+
 
 int mmead_do_link_diag
 (

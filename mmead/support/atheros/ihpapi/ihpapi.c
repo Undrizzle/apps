@@ -67,6 +67,8 @@
 #include "../ihpapi/SetHgBusiness.c"
 #include "../ihpapi/RebootHg.c"
 #include "../ihpapi/ResetHg.c"
+#include "../ihpapi/GetHgSsidStatus.c"
+#include "../ihpapi/SetHgSsidStatus.c"
 /*====================================================================*
  *   internal source files; see ihp.h;
  *--------------------------------------------------------------------*/
@@ -108,6 +110,8 @@
 #include "../ihpapi/DecodeGetHgBusiness.c"
 #include "../ihpapi/DecodeSetHgManage.c"
 #include "../ihpapi/DecodeSetHgBusiness.c"
+#include "../ihpapi/DecodeGetHgSsidStatus.c"
+#include "../ihpapi/DecodeSetHgSsidStatus.c"
 /*====================================================================*
  *
  *--------------------------------------------------------------------*/

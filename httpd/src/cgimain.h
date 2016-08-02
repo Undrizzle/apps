@@ -287,7 +287,11 @@ typedef struct {
    char b_ipv4_gw_2[16];
    char b_dns_ipv4_2[16];
    char b_dns_ipv4_copy_2[16];
-   
+   char ssid_status[5];
+   char ssid_name1[100];
+   char ssid_name2[100];
+   char ssid_name3[100];
+   char ssid_name4[100];
    
    char wecTemprature[IFC_SMALL_LEN];	/* host envirument temperature */
 

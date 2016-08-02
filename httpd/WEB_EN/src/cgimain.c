@@ -681,6 +681,36 @@ void do_cgi(char *path, FILE *fs) {
 		}
 		else sprintf(filename, "editCnuWifi.cmd?cnuid=%d", glbWebVar.cnuid);
 	}
+	else if ( strstr(filename, "SsidStatusRead") != NULL )
+	{
+		cltid = (glbWebVar.cnuid-1)/MAX_CNUS_PER_CLT + 1;
+		cnuid = (glbWebVar.cnuid-1)%MAX_CNUS_PER_CLT + 1;
+		sprintf(logmsg, "read cnu/%d/%d ssid status", cltid, cnuid);
+		ret = http2cmm_getHgSsidStatus(&glbWebVar);
+		http2dbs_writeOptlog(ret, logmsg);
+		if(ret != 0)
+		{
+			sprintf(glbWebVar.returnUrl, "editCnuWifi.cmd?cnuid=%d", glbWebVar.cnuid);
+			glbWebVar.wecOptCode = CMM_FAILED;
+			strcpy(filename, "/webs/wecOptResult2.html");
+		}
+		else sprintf(filename, "editCnuWifi.cmd?cnuid=%d", glbWebVar.cnuid);
+	}
+	else if ( strstr(filename, "SsidStatusWrite") != NULL )
+	{
+		cltid = (glbWebVar.cnuid-1)/MAX_CNUS_PER_CLT + 1;
+		cnuid = (glbWebVar.cnuid-1)%MAX_CNUS_PER_CLT + 1;
+		sprintf(logmsg, "write cnu/%d/%d ssid status", cltid, cnuid);
+		ret = http2cmm_setHgSsidStatus(&glbWebVar);
+		http2dbs_writeOptlog(ret, logmsg);
+		if(ret != 0)
+		{
+			sprintf(glbWebVar.returnUrl, "editCnuWifi.cmd?cnuid=%d", glbWebVar.cnuid);
+			glbWebVar.wecOptCode = CMM_FAILED;
+			strcpy(filename, "/webs/wecOptResult2.html");
+		}
+		else sprintf(filename, "editCnuWifi.cmd?cnuid=%d", glbWebVar.cnuid);
+	}
 	else if ( strstr(filename, "rtl8306eConfigWrite.html") != NULL )
 	{
 		cltid = (glbWebVar.cnuid-1)/MAX_CNUS_PER_CLT + 1;
@@ -1253,6 +1283,11 @@ CGI_ITEM CgiSetTable[] = {
    { "bDnsIpv42", (void *)&glbWebVar.b_dns_ipv4_2, CGI_TYPE_STR },
    { "bDnsTpv4Copy1", (void *)&glbWebVar.b_dns_ipv4_copy_1, CGI_TYPE_STR },
    { "bDnsTpv4Copy2", (void *)&glbWebVar.b_dns_ipv4_copy_1, CGI_TYPE_STR },
+   { "ssidStatus", (void *)&glbWebVar.ssid_status, CGI_TYPE_STR },
+   { "ssidName1", (void *)&glbWebVar.ssid_name1, CGI_TYPE_STR },
+   { "ssidName2", (void *)&glbWebVar.ssid_name2, CGI_TYPE_STR },
+   { "ssidName3", (void *)&glbWebVar.ssid_name3, CGI_TYPE_STR },
+   { "ssidName4", (void *)&glbWebVar.ssid_name4, CGI_TYPE_STR },
    
    { NULL, NULL, CGI_TYPE_NONE }
 };

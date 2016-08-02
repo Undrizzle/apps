@@ -418,6 +418,8 @@ enum
 	CMM_SET_HG_BUSINESS,
 	CMM_REBOOT_HG,
 	CMM_RESET_HG,
+	CMM_GET_HG_SSID_STATUS,
+	CMM_SET_HG_SSID_STATUS,
 	/* 请在中间增加其他枚举定义 */
 	
 	CMM_GET_SNMP_TABLE_ROW = 0xF0,
@@ -536,6 +538,8 @@ enum
 	MMEAD_SET_HG_BUSINESS,
 	MMEAD_REBOOT_HG,
 	MMEAD_RESET_HG,
+	MMEAD_GET_HG_SSID_STATUS,
+	MMEAD_SET_HG_SSID_STATUS,
 	/* 请在中间增加其他枚举定义 */
 
 	MMEAD_MAX_REQ = 0xff
@@ -2259,6 +2263,14 @@ typedef struct
 	uint8_t dns_ipv4_copy_2[4];
 }T_szHgBusiness;
 
+typedef struct
+{
+	uint8_t ssid_status;
+	uint8_t ssid_name1[100];
+	uint8_t ssid_name2[100];
+	uint8_t ssid_name3[100];
+	uint8_t ssid_name4[100];
+}T_szHgSsid;
 
 typedef struct
 {	
@@ -2356,6 +2368,18 @@ typedef struct
 	uint32_t cnu;
 	T_szSetHgBusiness wanInfo;
 }T_szSetHgBusinessConfig;
+
+typedef struct
+{
+	uint32_t clt;
+	uint32_t cnu;
+	uint8_t ssid_status[4];
+}T_szSetHgSsidStatus;
+
+typedef struct
+{
+	uint8_t ssid_status[4];
+}T_szSetHgSsid;
 
 /* CLI进行set vlan 操作时与CMM通讯的接口*/
 typedef struct

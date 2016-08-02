@@ -388,6 +388,24 @@ void MME_Atheros_ProcessResetHg(MMEAD_BBLOCK_QUEUE *this, T_MME_SK_HANDLE *MME_S
 	MMEAD_ProcessAck(MME_Atheros_MsgResetHg(MME_SK, h->ODA), this, NULL, 0);
 }
 
+void MME_Atheros_ProcessGetHgSsidStatus(MMEAD_BBLOCK_QUEUE *this, T_MME_SK_HANDLE *MME_SK)
+{
+	T_Msg_Header_MMEAD *h = (T_Msg_Header_MMEAD *)(this->b);
+	T_szHgSsid ssid_info;
+	
+	MMEAD_ProcessAck(MME_Atheros_MsgGetHgSsidStatus(MME_SK, h->ODA, &ssid_info), this, &ssid_info, sizeof(T_szHgSsid));
+} 
+
+void MME_Atheros_ProcessSetHgSsidStatus(MMEAD_BBLOCK_QUEUE *this, T_MME_SK_HANDLE *MME_SK)
+{
+	T_MMETS_REQ_MSG *req = (T_MMETS_REQ_MSG *)(this->b);
+	uint8_t ssid[4];
+
+	memcpy(&ssid, req->body, sizeof(ssid));
+
+	MMEAD_ProcessAck(MME_Atheros_MsgSetHgSsidStatus(MME_SK, req->header.ODA, ssid), this, NULL, 0);
+}
+
 
 /*
 void MME_Atheros_ProcessSetUserHFID(MMEAD_BBLOCK_QUEUE *this, T_MME_SK_HANDLE *MME_SK)
@@ -680,6 +698,21 @@ void MME_ProcessResetHg(MMEAD_BBLOCK_QUEUE *this, T_MME_SK_HANDLE *MME_SK)
 
 	MME_Atheros_ProcessResetHg(this, MME_SK);
 }
+
+void MME_ProcessGetHgSsidStatus(MMEAD_BBLOCK_QUEUE *this, T_MME_SK_HANDLE *MME_SK)
+{
+	T_Msg_Header_MMEAD *h = (T_Msg_Header_MMEAD *)(this->b);
+
+	MME_Atheros_ProcessGetHgSsidStatus(this, MME_SK);
+} 
+
+void MME_ProcessSetHgSsidStatus(MMEAD_BBLOCK_QUEUE *this, T_MME_SK_HANDLE *MME_SK)
+{
+	T_Msg_Header_MMEAD *h = (T_Msg_Header_MMEAD *)(this->b);
+
+	MME_Atheros_ProcessSetHgSsidStatus(this, MME_SK);
+} 
+
 
 
 /*
@@ -1969,6 +2002,12 @@ void ComReqManager(T_MME_SK_HANDLE *MME_SK)
 			break;
 		case MMEAD_RESET_HG:
 			MME_ProcessResetHg(this, MME_SK);
+			break;
+		case MMEAD_GET_HG_SSID_STATUS:
+			MME_ProcessGetHgSsidStatus(this, MME_SK);
+			break;
+		case MMEAD_SET_HG_SSID_STATUS:
+			MME_ProcessSetHgSsidStatus(this, MME_SK);
 			break;
 		case MMEAD_SET_TX_GAIN:
 			MME_ProcessSetTxGain(this, MME_SK);

@@ -459,6 +459,16 @@ typedef struct __packed ihpapi_getHgBusiness_s
 }
 ihpapi_getHgBusiness_t;
 
+typedef struct __packed ihpapi_getHgSsid_s
+{
+	uint8_t ssid_status;
+	uint8_t ssid_name1[100];
+	uint8_t ssid_name2[100];
+	uint8_t ssid_name3[100];
+	uint8_t ssid_name4[100];
+}
+ihpapi_getHgSsid_t;
+
 /*====================================================================*
  *   
  *--------------------------------------------------------------------*/
@@ -698,6 +708,7 @@ typedef struct __packed ihpapi_result_s
 		ihpapi_getUserHFID_t UserHFIDInfo;
 		ihpapi_getHgManage_t hgmanageInfo;
 		ihpapi_getHgBusiness_t hgbusinessInfo;
+		ihpapi_getHgSsid_t hgSsidInfo;
 	}
 	data;
 }
@@ -789,8 +800,8 @@ size_t ihpapi_SetHgManage(uint8_t sa [], uint8_t da [], size_t bufferLen, uint8_
 size_t ihpapi_SetHgBusiness(uint8_t sa [], uint8_t da [], size_t bufferLen, uint8_t buffer [], T_szSetHgBusiness manage);
 size_t ihpapi_RebootHg(uint8_t sa [], uint8_t da [], size_t bufferLen, uint8_t buffer []);
 size_t ihpapi_ResetHg(uint8_t sa [], uint8_t da [], size_t bufferLen, uint8_t buffer []);
-
-
+size_t ihpapi_GetHgSsidStatus(uint8_t sa [], uint8_t da [], size_t bufferLen, uint8_t buffer []);
+size_t ihpapi_SetHgSsidStatus(uint8_t sa [], uint8_t da [], size_t bufferLen, uint8_t buffer [], uint8_t ssid[4]);
 /*====================================================================*
  *   decoder functions; see the Intellon HomePlug AV
  *   Application Programming Interface Manual for more information;

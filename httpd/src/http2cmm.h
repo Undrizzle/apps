@@ -48,6 +48,8 @@ int http2cmm_setHgBusiness1(PWEB_NTWK_VAR pWebVar);
 int http2cmm_setHgBusiness2(PWEB_NTWK_VAR pWebVar);
 int http2cmm_rebootHg(PWEB_NTWK_VAR pWebVar);
 int http2cmm_resetHg(PWEB_NTWK_VAR pWebVar);
+int http2cmm_getHgSsidStatus(PWEB_NTWK_VAR pWebVar);
+int http2cmm_setHgSsidStatus(PWEB_NTWK_VAR pWebVar);
 
 int http2cmm_getNmsBusiness(stCnuNode *node,T_szNmsBusiness *business);
 int http2cmm_setNmsBusiness(stCnuNode *node, T_szSetNmsBusiness *business);
