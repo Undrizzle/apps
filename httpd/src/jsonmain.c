@@ -1365,6 +1365,143 @@ json_ack:
 	return CMM_SUCCESS;
 }
 
+int jsonCnuWifiReboot(fs)
+{
+	int ret = CMM_SUCCESS;
+	char strlog[128] = {0};
+	stCnuNode iNode;
+	st_dbsCnu cnu;
+	json_object *my_object;
+	int clt_index = 0;
+	int cnu_index = 0;
+
+	/* process json set request here */
+	ret = boardapi_mac2Uppercase(glbJsonVar.macAddr);
+	if( CMM_SUCCESS != ret )
+	{
+		printf("ERROR: jsonConvertMac2Uppercase\n");
+		goto json_ack;
+	}
+
+	/* 1. get cnu index by input mac address */
+	ret = http2dbs_getCnuIndexByMacaddress(glbJsonVar.macAddr, &iNode);
+	if ( CMM_SUCCESS != ret )
+	{
+		/* system error */
+		printf("ERROR: selectCnuIndex(%s)\n", glbJsonVar.macAddr);
+		goto json_ack;
+	}
+	else if ( 0 == iNode.cnu)
+	{
+		/* can not select this cnu */
+		printf("ERROR: selectCnuIndex\n");
+		ret = CMM_FAILED;
+		goto json_ack;
+	}
+
+	ret = http2dbs_getCnu(iNode.cnu, &cnu);
+	if(CMM_SUCCESS != ret)
+	{
+		printf("ERROR: http2dbs_getCnu\n");
+		goto json_ack;
+	}
+
+	if( 1 == boardapi_isKTCnu(cnu.col_model))
+	{
+		ret = http2cmm_rebootNmsWifi(&iNode);
+		if (CMM_SUCCESS != ret)
+		{
+			printf("ERROR: http2cmm_rebootNmsWifi\n");
+			goto json_ack;
+		}
+	}
+
+json_ack:
+	/* send ack to nms */
+	my_object = json_object_new_object();
+	json_object_object_add(my_object, "status", json_object_new_int(ret?1:0));
+	jsonSendAck(fs, CMM_SUCCESS, json_object_to_json_string(my_object));
+	/* free json object */
+	json_object_put(my_object);
+
+	/* write opt-log here */
+	clt_index = (iNode.cnu -1)/MAX_CNUS_PER_CLT + 1;
+	cnu_index = (iNode.cnu -1)%MAX_CNUS_PER_CLT + 1;
+	sprintf(strlog, "json reboot wifi of cnu/%d/%d", clt_index, cnu_index);
+	http2dbs_writeOptlog(ret, strlog);
+
+	return CMM_SUCCESS;
+}
+
+int jsonCnuWifiReset(fs)
+{
+	int ret = CMM_SUCCESS;
+	char strlog[128] = {0};
+	stCnuNode iNode;
+	st_dbsCnu cnu;
+	json_object *my_object;
+	int clt_index = 0;
+	int cnu_index = 0;
+
+	/* process json set request here */
+	ret = boardapi_mac2Uppercase(glbJsonVar.macAddr);
+	if( CMM_SUCCESS != ret )
+	{
+		printf("ERROR: jsonConvertMac2Uppercase\n");
+		goto json_ack;
+	}
+
+	/* 1. get cnu index by input mac address */
+	ret = http2dbs_getCnuIndexByMacaddress(glbJsonVar.macAddr, &iNode);
+	if ( CMM_SUCCESS != ret )
+	{
+		/* system error */
+		printf("ERROR: selectCnuIndex(%s)\n", glbJsonVar.macAddr);
+		goto json_ack;
+	}
+	else if ( 0 == iNode.cnu)
+	{
+		/* can not select this cnu */
+		printf("ERROR: selectCnuIndex\n");
+		ret = CMM_FAILED;
+		goto json_ack;
+	}
+
+	ret = http2dbs_getCnu(iNode.cnu, &cnu);
+	if(CMM_SUCCESS != ret)
+	{
+		printf("ERROR: http2dbs_getCnu\n");
+		goto json_ack;
+	}
+
+	if( 1 == boardapi_isKTCnu(cnu.col_model))
+	{
+		ret = http2cmm_resetNmsWifi(&iNode);
+		if (CMM_SUCCESS != ret)
+		{
+			printf("ERROR: http2cmm_rebootNmsWifi\n");
+			goto json_ack;
+		}
+	}
+
+json_ack:
+	/* send ack to nms */
+	my_object = json_object_new_object();
+	json_object_object_add(my_object, "status", json_object_new_int(ret?1:0));
+	jsonSendAck(fs, CMM_SUCCESS, json_object_to_json_string(my_object));
+	/* free json object */
+	json_object_put(my_object);
+
+	/* write opt-log here */
+	clt_index = (iNode.cnu -1)/MAX_CNUS_PER_CLT + 1;
+	cnu_index = (iNode.cnu -1)%MAX_CNUS_PER_CLT + 1;
+	sprintf(strlog, "json reboot wifi of cnu/%d/%d", clt_index, cnu_index);
+	http2dbs_writeOptlog(ret, strlog);
+
+	return CMM_SUCCESS;
+}
+
+
 /******************************************************************************************
 curl -X "POST"  -H "Application/json" http://192.168.1.150/getcnu.json -d "{'mac':'30:71:B2:00:02:1E'}"
 *******************************************************************************************/
@@ -1408,6 +1545,14 @@ int do_json(char *path, FILE *fs, int jstrLen)
 	else if ( strcmp( path, "/setCnuBusWan.json" ) == 0 )
 	{
 		return jsonSetCnuBusinessWan(fs);
+	}
+	else if ( strcmp( path, "/cnuWifiReboot.json" ) == 0 )
+	{
+		return jsonCnuWifiReboot(fs);
+	}
+	else if ( strcmp( path, "/cnuWifiReset.json" ) == 0 )
+	{
+		return jsonCnuWifiReset(fs);
 	}
 	else
 	{

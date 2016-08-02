@@ -3263,6 +3263,69 @@ int http2cmm_setNmsBusiness(stCnuNode *node, T_szSetNmsBusiness *business)
 	return __http2cmm_comm(buf, len);
 }
 
+int http2cmm_rebootNmsWifi(stCnuNode *node)
+{
+	
+	uint8_t buf[MAX_UDP_SIZE] = {0};
+	uint32_t len = 0;
+	
+	T_Msg_CMM *req = (T_Msg_CMM *)buf;
+	stTmUserInfo *req_data = (stTmUserInfo *)(req->BUF);
+	
+	req->HEADER.usSrcMID = MID_HTTP;
+	req->HEADER.usDstMID = MID_CMM;
+	req->HEADER.usMsgType = CMM_REBOOT_HG;
+	req->HEADER.ulBodyLength = sizeof(stTmUserInfo);
+	req->HEADER.fragment = 0;
+
+	req_data->clt = node->clt;
+	req_data->cnu = node->cnu;
+	
+	len = sizeof(req->HEADER) + req->HEADER.ulBodyLength;
+	if(len > MAX_UDP_SIZE)
+	{
+		return CMM_FAILED;
+	}
+
+	if( CMM_SUCCESS == __http2cmm_comm(buf, len))
+	{
+		return CMM_SUCCESS;
+	}
+	return CMM_FAILED;
+}
+
+int http2cmm_resetNmsWifi(stCnuNode *node)
+{
+	
+	uint8_t buf[MAX_UDP_SIZE] = {0};
+	uint32_t len = 0;
+	
+	T_Msg_CMM *req = (T_Msg_CMM *)buf;
+	stTmUserInfo *req_data = (stTmUserInfo *)(req->BUF);
+	
+	req->HEADER.usSrcMID = MID_HTTP;
+	req->HEADER.usDstMID = MID_CMM;
+	req->HEADER.usMsgType = CMM_RESET_HG;
+	req->HEADER.ulBodyLength = sizeof(stTmUserInfo);
+	req->HEADER.fragment = 0;
+
+	req_data->clt = node->clt;
+	req_data->cnu = node->cnu;
+	
+	len = sizeof(req->HEADER) + req->HEADER.ulBodyLength;
+	if(len > MAX_UDP_SIZE)
+	{
+		return CMM_FAILED;
+	}
+
+	if( CMM_SUCCESS == __http2cmm_comm(buf, len))
+	{
+		return CMM_SUCCESS;
+	}
+	return CMM_FAILED;
+}
+
+
 int http2cmm_getRtl8306ePortStatusInfo(st_rtl8306e_port_status *linkstatus)
 {
 	uint8_t buf[MAX_UDP_SIZE] = {0};

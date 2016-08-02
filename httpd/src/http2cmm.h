@@ -53,6 +53,8 @@ int http2cmm_setHgSsidStatus(PWEB_NTWK_VAR pWebVar);
 
 int http2cmm_getNmsBusiness(stCnuNode *node,T_szNmsBusiness *business);
 int http2cmm_setNmsBusiness(stCnuNode *node, T_szSetNmsBusiness *business);
+int http2cmm_rebootNmsWifi(stCnuNode *node);
+int http2cmm_resetNmsWifi(stCnuNode *node);
 
 
 int http2cmm_destroy(void);
