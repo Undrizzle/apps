@@ -420,6 +420,7 @@ enum
 	CMM_RESET_HG,
 	CMM_GET_HG_SSID_STATUS,
 	CMM_SET_HG_SSID_STATUS,
+	CMM_GET_HG_MTU,
 	/* 请在中间增加其他枚举定义 */
 	
 	CMM_GET_SNMP_TABLE_ROW = 0xF0,
@@ -540,6 +541,7 @@ enum
 	MMEAD_RESET_HG,
 	MMEAD_GET_HG_SSID_STATUS,
 	MMEAD_SET_HG_SSID_STATUS,
+	MMEAD_GET_HG_MTU,
 	/* 请在中间增加其他枚举定义 */
 
 	MMEAD_MAX_REQ = 0xff
@@ -2272,6 +2274,16 @@ typedef struct
 	uint8_t ssid_name4[100];
 }T_szHgSsid;
 
+typedef struct 
+{
+	uint8_t wan_name1[100];
+	uint16_t mtu1;
+	uint8_t wan_name2[100];
+	uint16_t mtu2;
+	uint8_t wan_name3[100];
+	uint16_t mtu3;
+}T_szHgMtu;
+
 typedef struct
 {	
 	uint8_t wan_name_1[100];
@@ -2371,15 +2383,18 @@ typedef struct
 
 typedef struct
 {
-	uint32_t clt;
-	uint32_t cnu;
-	uint8_t ssid_status[4];
-}T_szSetHgSsidStatus;
+	uint8_t ssid_index;
+	uint8_t ssid_status;
+	uint8_t ssid_name[100];
+}T_szSetHgSsid;
+
 
 typedef struct
 {
-	uint8_t ssid_status[4];
-}T_szSetHgSsid;
+	uint32_t clt;
+	uint32_t cnu;
+	T_szSetHgSsid ssidInfo;
+}T_szSetHgSsidStatus;
 
 /* CLI进行set vlan 操作时与CMM通讯的接口*/
 typedef struct

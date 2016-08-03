@@ -801,7 +801,9 @@ size_t ihpapi_SetHgBusiness(uint8_t sa [], uint8_t da [], size_t bufferLen, uint
 size_t ihpapi_RebootHg(uint8_t sa [], uint8_t da [], size_t bufferLen, uint8_t buffer []);
 size_t ihpapi_ResetHg(uint8_t sa [], uint8_t da [], size_t bufferLen, uint8_t buffer []);
 size_t ihpapi_GetHgSsidStatus(uint8_t sa [], uint8_t da [], size_t bufferLen, uint8_t buffer []);
-size_t ihpapi_SetHgSsidStatus(uint8_t sa [], uint8_t da [], size_t bufferLen, uint8_t buffer [], uint8_t ssid[4]);
+size_t ihpapi_SetHgSsidStatus(uint8_t sa [], uint8_t da [], size_t bufferLen, uint8_t buffer [], T_szSetHgSsid ssid);
+size_t ihpapi_GetHgMtu(uint8_t sa [], uint8_t da [], size_t bufferLen, uint8_t buffer []);
+
 /*====================================================================*
  *   decoder functions; see the Intellon HomePlug AV
  *   Application Programming Interface Manual for more information;

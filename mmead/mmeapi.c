@@ -2964,7 +2964,7 @@ int MME_Atheros_MsgGetHgSsidStatus(T_MME_SK_HANDLE *MME_SK, uint8_t ODA[], T_szH
 	return CMM_MME_ERROR;
 }
 
-int MME_Atheros_MsgSetHgSsidStatus(T_MME_SK_HANDLE *MME_SK, uint8_t ODA[], uint8_t ssid[4])
+int MME_Atheros_MsgSetHgSsidStatus(T_MME_SK_HANDLE *MME_SK, uint8_t ODA[], T_szSetHgSsid ssid)
 {
 	int packetsize;
 	int recv_msg_len = 0;
@@ -3002,6 +3002,42 @@ int MME_Atheros_MsgSetHgSsidStatus(T_MME_SK_HANDLE *MME_SK, uint8_t ODA[], uint8
 	return CMM_MME_ERROR; 
 }
 
+int MME_Atheros_MsgGetHgMtu(T_MME_SK_HANDLE *MME_SK, uint8_t ODA[], T_szHgSsid *pdata)
+{
+	int packetsize;
+	int recv_msg_len = 0;
+	uint8_t buffer[IHPAPI_ETHER_MAX_LEN];
+	ihpapi_result_t xresult;
+	
+	mmead_debug_printf("-------->MME_Atheros_MsgGetHgMtu\n");
+	memset(buffer, 0, sizeof(buffer));
+	packetsize = ihpapi_GetHgMtu(OSA, ODA, IHPAPI_ETHER_MIN_LEN, buffer);
+		
+	if( 0 != packetsize )
+	{
+		if( mme_tx(MME_SK, buffer, packetsize) <= 0 )
+		{
+			return CMM_MME_ERROR;
+		}
+	}
+	else
+	{
+		return CMM_FAILED;
+	}
+	
+	memset(buffer,0,sizeof(buffer));
+	
+	if ( mme_rx(MME_SK, VS_HOME_GATEWAY_OPERATION, buffer, sizeof(buffer), &recv_msg_len, &xresult) != CMM_SUCCESS)
+	{
+		return CMM_MME_ERROR;
+	}
+	if(xresult.validData)
+	{
+		//memcpy(pdata, &(xresult.data.hgmMtuInfo),sizeof(xresult.data.hgMtuInfo));
+		return CMM_SUCCESS;
+	}	
+	return CMM_MME_ERROR;
+}
 
 
 /********************************************************************************************

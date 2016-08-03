@@ -940,6 +940,8 @@ int ihp_DecodeSetHgManage(const uint8_t buffer [], size_t length, ihpapi_result_
 int ihp_DecodeSetHgBusiness(const uint8_t buffer [], size_t length, ihpapi_result_t * result);
 int ihp_DecodeGetHgSsidStatus(const uint8_t buffer [], size_t length, ihpapi_result_t * result);
 int ihp_DecodeGetHgSsidStatus(const uint8_t buffer [], size_t length, ihpapi_result_t * result);
+int ihp_DecodeGetHgMtu(const uint8_t buffer [], size_t length, ihpapi_result_t * result);
+
 /*====================================================================*
  *   internal sequencer functions;
  *--------------------------------------------------------------------*/

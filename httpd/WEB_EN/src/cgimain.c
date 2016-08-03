@@ -696,12 +696,72 @@ void do_cgi(char *path, FILE *fs) {
 		}
 		else sprintf(filename, "editCnuWifi.cmd?cnuid=%d", glbWebVar.cnuid);
 	}
-	else if ( strstr(filename, "SsidStatusWrite") != NULL )
+	else if ( strstr(filename, "Ssid1StatusWrite") != NULL )
 	{
 		cltid = (glbWebVar.cnuid-1)/MAX_CNUS_PER_CLT + 1;
 		cnuid = (glbWebVar.cnuid-1)%MAX_CNUS_PER_CLT + 1;
 		sprintf(logmsg, "write cnu/%d/%d ssid status", cltid, cnuid);
-		ret = http2cmm_setHgSsidStatus(&glbWebVar);
+		ret = http2cmm_setHgSsid1Status(&glbWebVar);
+		http2dbs_writeOptlog(ret, logmsg);
+		if(ret != 0)
+		{
+			sprintf(glbWebVar.returnUrl, "editCnuWifi.cmd?cnuid=%d", glbWebVar.cnuid);
+			glbWebVar.wecOptCode = CMM_FAILED;
+			strcpy(filename, "/webs/wecOptResult2.html");
+		}
+		else sprintf(filename, "editCnuWifi.cmd?cnuid=%d", glbWebVar.cnuid);
+	}
+	else if ( strstr(filename, "Ssid2StatusWrite") != NULL )
+	{
+		cltid = (glbWebVar.cnuid-1)/MAX_CNUS_PER_CLT + 1;
+		cnuid = (glbWebVar.cnuid-1)%MAX_CNUS_PER_CLT + 1;
+		sprintf(logmsg, "write cnu/%d/%d ssid status", cltid, cnuid);
+		ret = http2cmm_setHgSsid2Status(&glbWebVar);
+		http2dbs_writeOptlog(ret, logmsg);
+		if(ret != 0)
+		{
+			sprintf(glbWebVar.returnUrl, "editCnuWifi.cmd?cnuid=%d", glbWebVar.cnuid);
+			glbWebVar.wecOptCode = CMM_FAILED;
+			strcpy(filename, "/webs/wecOptResult2.html");
+		}
+		else sprintf(filename, "editCnuWifi.cmd?cnuid=%d", glbWebVar.cnuid);
+	}
+	else if ( strstr(filename, "Ssid3StatusWrite") != NULL )
+	{
+		cltid = (glbWebVar.cnuid-1)/MAX_CNUS_PER_CLT + 1;
+		cnuid = (glbWebVar.cnuid-1)%MAX_CNUS_PER_CLT + 1;
+		sprintf(logmsg, "write cnu/%d/%d ssid status", cltid, cnuid);
+		ret = http2cmm_setHgSsid3Status(&glbWebVar);
+		http2dbs_writeOptlog(ret, logmsg);
+		if(ret != 0)
+		{
+			sprintf(glbWebVar.returnUrl, "editCnuWifi.cmd?cnuid=%d", glbWebVar.cnuid);
+			glbWebVar.wecOptCode = CMM_FAILED;
+			strcpy(filename, "/webs/wecOptResult2.html");
+		}
+		else sprintf(filename, "editCnuWifi.cmd?cnuid=%d", glbWebVar.cnuid);
+	}
+	else if ( strstr(filename, "Ssid4StatusWrite") != NULL )
+	{
+		cltid = (glbWebVar.cnuid-1)/MAX_CNUS_PER_CLT + 1;
+		cnuid = (glbWebVar.cnuid-1)%MAX_CNUS_PER_CLT + 1;
+		sprintf(logmsg, "write cnu/%d/%d ssid status", cltid, cnuid);
+		ret = http2cmm_setHgSsid4Status(&glbWebVar);
+		http2dbs_writeOptlog(ret, logmsg);
+		if(ret != 0)
+		{
+			sprintf(glbWebVar.returnUrl, "editCnuWifi.cmd?cnuid=%d", glbWebVar.cnuid);
+			glbWebVar.wecOptCode = CMM_FAILED;
+			strcpy(filename, "/webs/wecOptResult2.html");
+		}
+		else sprintf(filename, "editCnuWifi.cmd?cnuid=%d", glbWebVar.cnuid);
+	}
+	else if ( strstr(filename, "MtuRead") != NULL )
+	{
+		cltid = (glbWebVar.cnuid-1)/MAX_CNUS_PER_CLT + 1;
+		cnuid = (glbWebVar.cnuid-1)%MAX_CNUS_PER_CLT + 1;
+		sprintf(logmsg, "Read cnu/%d/%d mtu value", cltid, cnuid);
+		ret = http2cmm_getHgMtu(&glbWebVar);
 		http2dbs_writeOptlog(ret, logmsg);
 		if(ret != 0)
 		{
@@ -1283,11 +1343,14 @@ CGI_ITEM CgiSetTable[] = {
    { "bDnsIpv42", (void *)&glbWebVar.b_dns_ipv4_2, CGI_TYPE_STR },
    { "bDnsTpv4Copy1", (void *)&glbWebVar.b_dns_ipv4_copy_1, CGI_TYPE_STR },
    { "bDnsTpv4Copy2", (void *)&glbWebVar.b_dns_ipv4_copy_1, CGI_TYPE_STR },
-   { "ssidStatus", (void *)&glbWebVar.ssid_status, CGI_TYPE_STR },
-   { "ssidName1", (void *)&glbWebVar.ssid_name1, CGI_TYPE_STR },
-   { "ssidName2", (void *)&glbWebVar.ssid_name2, CGI_TYPE_STR },
-   { "ssidName3", (void *)&glbWebVar.ssid_name3, CGI_TYPE_STR },
-   { "ssidName4", (void *)&glbWebVar.ssid_name4, CGI_TYPE_STR },
+   { "ssid1Status", (void *)&glbWebVar.ssid1_status, CGI_TYPE_NUM },
+   { "ssid2Status", (void *)&glbWebVar.ssid2_status, CGI_TYPE_NUM },
+   { "ssid3Status", (void *)&glbWebVar.ssid3_status, CGI_TYPE_NUM },
+   { "ssid4Status", (void *)&glbWebVar.ssid4_status, CGI_TYPE_NUM },
+   { "ssid1Name", (void *)&glbWebVar.ssid_name1, CGI_TYPE_STR },
+   { "ssid2Name", (void *)&glbWebVar.ssid_name2, CGI_TYPE_STR },
+   { "ssid3Name", (void *)&glbWebVar.ssid_name3, CGI_TYPE_STR },
+   { "ssid4Name", (void *)&glbWebVar.ssid_name4, CGI_TYPE_STR },
    
    { NULL, NULL, CGI_TYPE_NONE }
 };

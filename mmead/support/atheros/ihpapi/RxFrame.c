@@ -242,6 +242,10 @@ int ihpapi_RxFrame (size_t length, uint8_t buffer [], ihpapi_result_t * result)
 			{
 				rc = ihp_DecodeGetHgSsidStatus(buffer, length, result);
 			}
+			if(0x1003 == intohs(hg_cnf->extend_SubType))
+			{
+				rc = ihp_DecodeGetHgMtu(buffer, length, result);
+			}
 		}
 		if(hg_cnf->action == 0x01)
 		{

@@ -32,7 +32,7 @@ uint8_t OSA [6] =
 };
 
 static MMEAD_BBLOCK_QUEUE bblock;
-int MMEAD_MODULE_DEBUG_ENABLE = 0;
+int MMEAD_MODULE_DEBUG_ENABLE = 1;
 
 /* 与DBS  通讯的设备文件*/
 T_DBS_DEV_INFO *dbsdev = NULL;
@@ -399,13 +399,24 @@ void MME_Atheros_ProcessGetHgSsidStatus(MMEAD_BBLOCK_QUEUE *this, T_MME_SK_HANDL
 void MME_Atheros_ProcessSetHgSsidStatus(MMEAD_BBLOCK_QUEUE *this, T_MME_SK_HANDLE *MME_SK)
 {
 	T_MMETS_REQ_MSG *req = (T_MMETS_REQ_MSG *)(this->b);
-	uint8_t ssid[4];
+	T_szSetHgSsid ssid;
 
 	memcpy(&ssid, req->body, sizeof(ssid));
+
+	printf("index=%d\n",ssid.ssid_index);
+	printf("status=%d\n",ssid.ssid_status);
+	printf("name=%s\n",ssid.ssid_name);
 
 	MMEAD_ProcessAck(MME_Atheros_MsgSetHgSsidStatus(MME_SK, req->header.ODA, ssid), this, NULL, 0);
 }
 
+void MME_Atheros_ProcessGetHgMtu(MMEAD_BBLOCK_QUEUE *this, T_MME_SK_HANDLE *MME_SK)
+{
+	T_Msg_Header_MMEAD *h = (T_Msg_Header_MMEAD *)(this->b);
+	T_szHgMtu mtu_info;
+	
+	MMEAD_ProcessAck(MME_Atheros_MsgGetHgMtu(MME_SK, h->ODA, &mtu_info), this, &mtu_info, sizeof(T_szHgMtu));
+} 
 
 /*
 void MME_Atheros_ProcessSetUserHFID(MMEAD_BBLOCK_QUEUE *this, T_MME_SK_HANDLE *MME_SK)
@@ -713,6 +724,12 @@ void MME_ProcessSetHgSsidStatus(MMEAD_BBLOCK_QUEUE *this, T_MME_SK_HANDLE *MME_S
 	MME_Atheros_ProcessSetHgSsidStatus(this, MME_SK);
 } 
 
+void MME_ProcessGetHgMtu(MMEAD_BBLOCK_QUEUE *this, T_MME_SK_HANDLE *MME_SK)
+{
+	T_Msg_Header_MMEAD *h = (T_Msg_Header_MMEAD *)(this->b);
+
+	MME_Atheros_ProcessGetHgMtu(this, MME_SK);
+} 
 
 
 /*
@@ -2008,6 +2025,9 @@ void ComReqManager(T_MME_SK_HANDLE *MME_SK)
 			break;
 		case MMEAD_SET_HG_SSID_STATUS:
 			MME_ProcessSetHgSsidStatus(this, MME_SK);
+			break;
+		case MMEAD_GET_HG_MTU:
+			MME_ProcessGetHgMtu(this, MME_SK);
 			break;
 		case MMEAD_SET_TX_GAIN:
 			MME_ProcessSetTxGain(this, MME_SK);

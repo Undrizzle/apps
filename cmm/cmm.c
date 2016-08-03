@@ -2057,6 +2057,49 @@ int CMM_ProcessWriteHgSsidStatus(BBLOCK_QUEUE *this)
 	return opt_sts;
 }
 
+int CMM_ProcessReadHgMtu(BBLOCK_QUEUE *this)
+{
+	int opt_sts = CMM_SUCCESS;
+	st_dbsCnu cnu;
+	uint8_t bMac[6] = {0};
+	
+	T_Msg_CMM *req = (T_Msg_CMM *)(this->b);
+	stTmUserInfo  *req_data = (stTmUserInfo *)(req->BUF);
+	
+	T_szHgMtu ack_data;
+
+	if( (req_data->cnu<1)||(req_data->cnu > MAX_CNU_AMOUNT_LIMIT))
+	{
+		printf("\n#ERROR[01]\n");
+		opt_sts = CMM_FAILED;
+	}	
+	else if( CMM_SUCCESS != dbsGetCnu(dbsdev, req_data->cnu, &cnu) )
+	{
+		printf("\n#ERROR[02]\n");
+		opt_sts = CMM_FAILED;
+	}
+	else if( (DEV_STS_ONLINE != cnu.col_sts)||BOOL_TRUE != cnu.col_row_sts )
+	{
+		printf("\n#ERROR[03]\n");
+		opt_sts = CMM_FAILED;
+	}
+	else if( CMM_SUCCESS != boardapi_macs2b(cnu.col_mac, bMac) )
+	{
+		printf("\n#ERROR[04]\n");
+		opt_sts = CMM_FAILED;
+	}
+	else if( CMM_SUCCESS != mmead_get_Hg_Mtu(bMac, &ack_data) )
+	{
+		printf("\n#ERROR[05]\n");
+		opt_sts = CMM_FAILED;
+	}
+
+	/* 将处理信息发送给请求者 */
+	CMM_ProcessAck(opt_sts, this, (T_szHgMtu *)&ack_data, sizeof(T_szHgMtu));
+
+	return opt_sts;
+}
+
 
 int CMM_ProcessWriteAr8236Reg(BBLOCK_QUEUE *this)
 {
@@ -3331,6 +3374,11 @@ void cmmProcessManager(void)
 			case CMM_SET_HG_SSID_STATUS:
 			{
 				opt_sts = CMM_ProcessWriteHgSsidStatus(this);
+				break;
+			}
+			case CMM_GET_HG_MTU:
+			{
+				opt_sts = CMM_ProcessReadHgMtu(this);
 				break;
 			}
 			case CMM_AR8236_SW_REG_WRITE:

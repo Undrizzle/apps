@@ -10,8 +10,10 @@
 #include "ihpapi.h"
 #include "ihp.h"
  
-size_t ihpapi_SetHgSsidStatus(uint8_t sa [], uint8_t da [], size_t bufferLen, uint8_t buffer [], uint8_t ssid[4]) 
+size_t ihpapi_SetHgSsidStatus(uint8_t sa [], uint8_t da [], size_t bufferLen, uint8_t buffer [], T_szSetHgSsid ssid) 
 {	
+	uint8_t ssid_name_length_v = strlen(ssid.ssid_name) + 1;
+	
 	struct __packed vs_set_hg_ssid_status_req
 	{
 		struct header_vs header;
@@ -25,14 +27,14 @@ size_t ihpapi_SetHgSsidStatus(uint8_t sa [], uint8_t da [], size_t bufferLen, ui
 		uint8_t extend_MainType;
 		uint16_t extend_SubType;
 		uint8_t variable_length;
+		uint8_t ssid_index;
+		uint8_t ssid_status;
+		uint8_t extend1_MainType;
+		uint16_t extend1_SubType;
+		uint8_t variable1_length;
 		uint8_t ssid1_index;
-		uint8_t ssid1_status;
-		uint8_t ssid2_index;
-		uint8_t ssid2_status;
-		uint8_t ssid3_index;
-		uint8_t ssid3_status;
-		uint8_t ssid4_index;
-		uint8_t ssid4_status;
+		uint8_t ssid_name_length;
+		uint8_t ssid_name[ssid_name_length_v];
 	}
 	* request = (struct vs_set_hg_ssid_status_req *)(buffer);
 
@@ -62,20 +64,16 @@ size_t ihpapi_SetHgSsidStatus(uint8_t sa [], uint8_t da [], size_t bufferLen, ui
 	request->case_val2 = 0;
 	request->extend_MainType = 0xf8;
 	request->extend_SubType = ihtons(0x3013);
-	request->variable_length = 8;
-	//printf("ssid1=%d\n",ssid[0]);
-	//printf("ssid2=%d\n",ssid[1]);
-	//printf("ssid3=%d\n",ssid[2]);
-	//printf("ssid4=%d\n",ssid[3]);
-	request->ssid1_index = 1;
-	request->ssid1_status = ssid[0];
-	request->ssid2_index = 2;
-	request->ssid2_status = ssid[1];
-	request->ssid3_index = 3;
-	request->ssid3_status = ssid[2];
-	request->ssid4_index = 4;
-	request->ssid4_status = ssid[3];
-	
+	request->variable_length = 2;
+	request->ssid_index = ssid.ssid_index;
+	request->ssid_status = ssid.ssid_status;
+	request->extend1_MainType = 0xf8;
+	request->extend1_SubType = ihtons(0x3003);
+	request->variable1_length = 1 + 1 + ssid_name_length_v;
+	request->ssid1_index = ssid.ssid_index;
+	request->ssid_name_length = ssid_name_length_v;
+	memcpy(request->ssid_name, &ssid.ssid_name, ssid_name_length_v);
+
 	return IHPAPI_ETHER_MIN_LEN;
 }
 

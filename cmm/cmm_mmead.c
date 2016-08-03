@@ -803,12 +803,41 @@ int mmead_set_Hg_Ssid_Status(uint8_t ODA[], T_szSetHgSsidStatus *ssidInfo)
 	MMETS_REQ->header.LEN = sizeof(T_szSetHgSsid);
 	memcpy(MMETS_REQ->header.ODA, ODA, 6);
 
-	memcpy(MMETS_REQ_DATA, &ssidInfo->ssid_status, sizeof(ssidInfo->ssid_status));
+	memcpy(MMETS_REQ_DATA, &ssidInfo->ssidInfo, sizeof(ssidInfo->ssidInfo));
 
 	len = sizeof(T_MMETS_REQ_MSG) + MMETS_REQ->header.LEN;
 
 	return __cmm_mmead_communicate(buf, len);
 }
+
+int mmead_get_Hg_Mtu(uint8_t ODA[], T_szHgMtu *mtuInfo)
+{
+	int len = 0;
+	uint8_t buf[MAX_UDP_SIZE] = {0};
+	T_Msg_Header_MMEAD h;
+	T_REQ_Msg_MMEAD *r = (T_REQ_Msg_MMEAD *)buf;
+	bzero(mtuInfo, sizeof(T_szHgMtu));
+	bzero(buf, MAX_UDP_SIZE);
+
+	h.M_TYPE = 0xCC08;
+	h.DEV_TYPE = WEC701W_C4;
+	h.MM_TYPE = MMEAD_GET_HG_MTU;
+	h.fragment = 0;
+	memcpy(h.ODA, ODA, 6);
+
+	h.LEN = sizeof(T_szHgMtu);
+
+	memcpy(buf, &h, sizeof(T_Msg_Header_MMEAD));
+	len = sizeof(T_Msg_Header_MMEAD) + sizeof(T_szHgMtu);
+
+	if( CMM_SUCCESS == __cmm_mmead_communicate(buf, len))
+	{
+		memcpy(mtuInfo, (void *)r->BUF, sizeof(T_szHgMtu));
+		return CMM_SUCCESS;
+	}
+	return CMM_FAILED;
+}
+
 
 
 int mmead_do_link_diag

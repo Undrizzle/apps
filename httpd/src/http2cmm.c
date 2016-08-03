@@ -2831,10 +2831,10 @@ int http2cmm_getHgSsidStatus(PWEB_NTWK_VAR pWebVar)
 
 	if ( CMM_SUCCESS == __http2cmm_comm(buf, len))
 	{
-		pWebVar->ssid_status[0] = ack_data->ssid_status%2;
-		pWebVar->ssid_status[1] = ack_data->ssid_status/2%2;
-		pWebVar->ssid_status[2] = ack_data->ssid_status/2/2%2; 
-		pWebVar->ssid_status[3] = ack_data->ssid_status/2/2/2%2;
+		pWebVar->ssid1_status = ack_data->ssid_status%2;
+		pWebVar->ssid2_status = ack_data->ssid_status/2%2;
+		pWebVar->ssid3_status = ack_data->ssid_status/2/2%2; 
+		pWebVar->ssid4_status = ack_data->ssid_status/2/2/2%2;
 		//printf("ssid_name1=%s\n",ack_data->ssid_name1);
 		//printf("ssid_name2=%s\n",ack_data->ssid_name2);
 		//printf("ssid_name3=%s\n",ack_data->ssid_name3);
@@ -2848,7 +2848,7 @@ int http2cmm_getHgSsidStatus(PWEB_NTWK_VAR pWebVar)
 	return CMM_FAILED;
 }
 
-int http2cmm_setHgSsidStatus(PWEB_NTWK_VAR pWebVar)
+int http2cmm_setHgSsid1Status(PWEB_NTWK_VAR pWebVar)
 {
 	uint8_t buf[MAX_UDP_SIZE] = {0};
 	uint32_t len = 0;
@@ -2871,27 +2871,162 @@ int http2cmm_setHgSsidStatus(PWEB_NTWK_VAR pWebVar)
 	req_data->clt = pWebVar->cltid;
 	req_data->cnu = pWebVar->cnuid;
 
-	if(pWebVar->ssid_status[0] == 0x31) 
-		req_data->ssid_status[0] = 1;
+	req_data->ssidInfo.ssid_index = 1;
+
+	if(pWebVar->ssid1_status == 1) 
+		req_data->ssidInfo.ssid_status = 1;
 	else 
-		req_data->ssid_status[0] = 0;
+		req_data->ssidInfo.ssid_status = 0;
 
-	if(pWebVar->ssid_status[1] == 0x31)
-		req_data->ssid_status[1] = 1;
-	else
-		req_data->ssid_status[1] = 0;
+	memcpy(req_data->ssidInfo.ssid_name,pWebVar->ssid_name1,sizeof(pWebVar->ssid_name1));
 
-	if(pWebVar->ssid_status[2] == 0x31)
-		req_data->ssid_status[2] = 1;
-	else
-		req_data->ssid_status[2] = 0;
-		
-	if(pWebVar->ssid_status[3] == 0x31)
-		req_data->ssid_status[3] = 1;
-	else
-		req_data->ssid_status[3] = 0;
-
+	//printf("req_data->ssid_index=%d\n",req_data->ssid_index);
+	//printf("req_data->ssid_status=%d\n",req_data->ssid_status);
+	//printf("req_data->ssid_name=%s\n",req_data->ssid_name);
 	return __http2cmm_comm(buf, len);
+}
+
+int http2cmm_setHgSsid2Status(PWEB_NTWK_VAR pWebVar)
+{
+	uint8_t buf[MAX_UDP_SIZE] = {0};
+	uint32_t len = 0;
+
+	T_Msg_CMM *req = (T_Msg_CMM *)buf;
+	T_szSetHgSsidStatus *req_data = (T_szSetHgSsidStatus *)(req->BUF);
+
+	req->HEADER.usSrcMID = MID_HTTP;
+	req->HEADER.usDstMID = MID_CMM;
+	req->HEADER.usMsgType = CMM_SET_HG_SSID_STATUS;
+	req->HEADER.ulBodyLength = sizeof(T_szSetHgSsidStatus);
+	req->HEADER.fragment = 0;
+
+	len = sizeof(req->HEADER) + req->HEADER.ulBodyLength;
+	if(len > MAX_UDP_SIZE)
+	{
+		return CMM_FAILED;
+	}
+
+	req_data->clt = pWebVar->cltid;
+	req_data->cnu = pWebVar->cnuid;
+
+	req_data->ssidInfo.ssid_index = 2;
+
+	if(pWebVar->ssid2_status == 1) 
+		req_data->ssidInfo.ssid_status = 1;
+	else 
+		req_data->ssidInfo.ssid_status = 0;
+
+	memcpy(req_data->ssidInfo.ssid_name,pWebVar->ssid_name2,sizeof(pWebVar->ssid_name2));
+
+	//printf("req_data->ssid_index=%d\n",req_data->ssid_index);
+	//printf("req_data->ssid_status=%d\n",req_data->ssid_status);
+	//printf("req_data->ssid_name=%s\n",req_data->ssid_name);
+	return __http2cmm_comm(buf, len);
+}
+
+int http2cmm_setHgSsid3Status(PWEB_NTWK_VAR pWebVar)
+{
+	uint8_t buf[MAX_UDP_SIZE] = {0};
+	uint32_t len = 0;
+
+	T_Msg_CMM *req = (T_Msg_CMM *)buf;
+	T_szSetHgSsidStatus *req_data = (T_szSetHgSsidStatus *)(req->BUF);
+
+	req->HEADER.usSrcMID = MID_HTTP;
+	req->HEADER.usDstMID = MID_CMM;
+	req->HEADER.usMsgType = CMM_SET_HG_SSID_STATUS;
+	req->HEADER.ulBodyLength = sizeof(T_szSetHgSsidStatus);
+	req->HEADER.fragment = 0;
+
+	len = sizeof(req->HEADER) + req->HEADER.ulBodyLength;
+	if(len > MAX_UDP_SIZE)
+	{
+		return CMM_FAILED;
+	}
+
+	req_data->clt = pWebVar->cltid;
+	req_data->cnu = pWebVar->cnuid;
+
+	req_data->ssidInfo.ssid_index = 3;
+
+	if(pWebVar->ssid3_status == 1) 
+		req_data->ssidInfo.ssid_status = 1;
+	else 
+		req_data->ssidInfo.ssid_status = 0;
+
+	memcpy(req_data->ssidInfo.ssid_name,pWebVar->ssid_name3,sizeof(pWebVar->ssid_name3));
+
+	//printf("req_data->ssid_index=%d\n",req_data->ssid_index);
+	//printf("req_data->ssid_status=%d\n",req_data->ssid_status);
+	//printf("req_data->ssid_name=%s\n",req_data->ssid_name);
+	return __http2cmm_comm(buf, len);
+}
+
+int http2cmm_setHgSsid4Status(PWEB_NTWK_VAR pWebVar)
+{
+	uint8_t buf[MAX_UDP_SIZE] = {0};
+	uint32_t len = 0;
+
+	T_Msg_CMM *req = (T_Msg_CMM *)buf;
+	T_szSetHgSsidStatus *req_data = (T_szSetHgSsidStatus *)(req->BUF);
+
+	req->HEADER.usSrcMID = MID_HTTP;
+	req->HEADER.usDstMID = MID_CMM;
+	req->HEADER.usMsgType = CMM_SET_HG_SSID_STATUS;
+	req->HEADER.ulBodyLength = sizeof(T_szSetHgSsidStatus);
+	req->HEADER.fragment = 0;
+
+	len = sizeof(req->HEADER) + req->HEADER.ulBodyLength;
+	if(len > MAX_UDP_SIZE)
+	{
+		return CMM_FAILED;
+	}
+
+	req_data->clt = pWebVar->cltid;
+	req_data->cnu = pWebVar->cnuid;
+
+	req_data->ssidInfo.ssid_index = 4;
+
+	if(pWebVar->ssid4_status == 1) 
+		req_data->ssidInfo.ssid_status = 1;
+	else 
+		req_data->ssidInfo.ssid_status = 0;
+
+	memcpy(req_data->ssidInfo.ssid_name,pWebVar->ssid_name4,sizeof(pWebVar->ssid_name4));
+
+	//printf("req_data->ssid_index=%d\n",req_data->ssid_index);
+	//printf("req_data->ssid_status=%d\n",req_data->ssid_status);
+	//printf("req_data->ssid_name=%d\n",req_data->ssid_name);
+	return __http2cmm_comm(buf, len);
+}
+
+int http2cmm_getHgMtu(PWEB_NTWK_VAR pWebVar)
+{
+	uint8_t buf[MAX_UDP_SIZE] = {0};
+	uint32_t len = 0;
+
+	T_Msg_CMM *req = (T_Msg_CMM *)buf;
+	stTmUserInfo *req_data = (stTmUserInfo *)(req->BUF);
+
+	T_REQ_Msg_CMM *ack = (T_REQ_Msg_CMM *)buf;
+	T_szHgMtu *ack_data = (T_szHgMtu *)(ack->BUF);
+
+	req->HEADER.usSrcMID = MID_HTTP;
+	req->HEADER.usDstMID = MID_CMM;
+	req->HEADER.usMsgType = CMM_GET_HG_MTU;
+	req->HEADER.ulBodyLength = sizeof(stTmNewUserInfo);
+	req->HEADER.fragment = 0;
+
+	req_data->clt = pWebVar->cltid;
+	req_data->cnu = pWebVar->cnuid;
+
+	len = sizeof(req->HEADER) + req->HEADER.ulBodyLength;
+
+	if ( CMM_SUCCESS == __http2cmm_comm(buf, len))
+	{
+		return CMM_SUCCESS;
+	}
+	return CMM_FAILED;
 }
 
 int http2cmm_getNmsBusiness(stCnuNode *node, T_szNmsBusiness *business)
