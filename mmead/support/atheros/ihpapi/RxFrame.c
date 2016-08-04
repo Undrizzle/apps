@@ -242,9 +242,13 @@ int ihpapi_RxFrame (size_t length, uint8_t buffer [], ihpapi_result_t * result)
 			{
 				rc = ihp_DecodeGetHgSsidStatus(buffer, length, result);
 			}
-			if(0x1003 == intohs(hg_cnf->extend_SubType))
+			if(0x1004 == intohs(hg_cnf->extend_SubType))
 			{
-				rc = ihp_DecodeGetHgMtu(buffer, length, result);
+				rc = ihp_DecodeGetHgWanStatus(buffer, length, result);
+			}
+			if(0x2004 == intohs(hg_cnf->extend_SubType))
+			{
+				rc = ihp_DecodeGetHgWifiMode(buffer, length, result);
 			}
 		}
 		if(hg_cnf->action == 0x01)
@@ -261,6 +265,10 @@ int ihpapi_RxFrame (size_t length, uint8_t buffer [], ihpapi_result_t * result)
 			if(0x3013 == intohs(hg_cnf->extend_SubType))
 			{
 				rc = ihp_DecodeSetHgSsidStatus(buffer, length, result);
+			}
+			if(0x2004 == intohs(hg_cnf->extend_SubType))
+			{
+				rc = ihp_DecodeSetHgWifiMode(buffer, length, result);
 			}
 		}
 		break;

@@ -3002,16 +3002,16 @@ int MME_Atheros_MsgSetHgSsidStatus(T_MME_SK_HANDLE *MME_SK, uint8_t ODA[], T_szS
 	return CMM_MME_ERROR; 
 }
 
-int MME_Atheros_MsgGetHgMtu(T_MME_SK_HANDLE *MME_SK, uint8_t ODA[], T_szHgSsid *pdata)
+int MME_Atheros_MsgGetHgWanStatus(T_MME_SK_HANDLE *MME_SK, uint8_t ODA[], T_szHgWanStatus *pdata)
 {
 	int packetsize;
 	int recv_msg_len = 0;
 	uint8_t buffer[IHPAPI_ETHER_MAX_LEN];
 	ihpapi_result_t xresult;
 	
-	mmead_debug_printf("-------->MME_Atheros_MsgGetHgMtu\n");
+	mmead_debug_printf("-------->MME_Atheros_MsgGetHgWanStatus\n");
 	memset(buffer, 0, sizeof(buffer));
-	packetsize = ihpapi_GetHgMtu(OSA, ODA, IHPAPI_ETHER_MIN_LEN, buffer);
+	packetsize = ihpapi_GetHgWanStatus(OSA, ODA, IHPAPI_ETHER_MIN_LEN, buffer);
 		
 	if( 0 != packetsize )
 	{
@@ -3033,11 +3033,87 @@ int MME_Atheros_MsgGetHgMtu(T_MME_SK_HANDLE *MME_SK, uint8_t ODA[], T_szHgSsid *
 	}
 	if(xresult.validData)
 	{
-		//memcpy(pdata, &(xresult.data.hgmMtuInfo),sizeof(xresult.data.hgMtuInfo));
+		memcpy(pdata, &(xresult.data.hgWanInfo),sizeof(xresult.data.hgWanInfo));
 		return CMM_SUCCESS;
 	}	
 	return CMM_MME_ERROR;
 }
+
+int MME_Atheros_MsgGetHgWifiMode(T_MME_SK_HANDLE *MME_SK, uint8_t ODA[], uint8_t *pdata)
+{
+	int packetsize;
+	int recv_msg_len = 0;
+	uint8_t buffer[IHPAPI_ETHER_MAX_LEN];
+	ihpapi_result_t xresult;
+	
+	mmead_debug_printf("-------->MME_Atheros_MsgGetHgWifiMode\n");
+	memset(buffer, 0, sizeof(buffer));
+	packetsize = ihpapi_GetHgWifiMode(OSA, ODA, IHPAPI_ETHER_MIN_LEN, buffer);
+		
+	if( 0 != packetsize )
+	{
+		if( mme_tx(MME_SK, buffer, packetsize) <= 0 )
+		{
+			return CMM_MME_ERROR;
+		}
+	}
+	else
+	{
+		return CMM_FAILED;
+	}
+	
+	memset(buffer,0,sizeof(buffer));
+	
+	if ( mme_rx(MME_SK, VS_HOME_GATEWAY_OPERATION, buffer, sizeof(buffer), &recv_msg_len, &xresult) != CMM_SUCCESS)
+	{
+		return CMM_MME_ERROR;
+	}
+	if(xresult.validData)
+	{
+		memcpy(pdata, &(xresult.data.hgWifiMode),sizeof(xresult.data.hgWifiMode));
+		return CMM_SUCCESS;
+	}	
+	return CMM_MME_ERROR;
+}
+
+int MME_Atheros_MsgSetHgWifiMode(T_MME_SK_HANDLE *MME_SK, uint8_t ODA[], uint8_t mode)
+{
+	int packetsize;
+	int recv_msg_len = 0;
+	uint8_t buffer[IHPAPI_ETHER_MIN_LEN];
+	ihpapi_result_t xresult;
+
+	mmead_debug_printf("--------->MME_Atheros_MsgSetHgWifiMode\n");
+	memset(buffer, 0, sizeof(buffer));
+
+	packetsize = ihpapi_SetHgWifiMode(OSA, ODA, IHPAPI_ETHER_MIN_LEN, buffer, mode);
+
+	if(0 != packetsize)
+	{
+		if(mme_tx(MME_SK, buffer, packetsize) <= 0)
+		{
+			return CMM_MME_ERROR;
+		}
+	}
+	else
+	{
+		return CMM_FAILED;
+	}
+
+	memset(buffer, 0, sizeof(buffer));
+
+	if( mme_rx(MME_SK, VS_HOME_GATEWAY_OPERATION, buffer, sizeof(buffer), &recv_msg_len, &xresult) != CMM_SUCCESS)
+	{
+		return CMM_MME_ERROR;
+	}
+	if(xresult.validData)
+	{
+		return xresult.opStatus.status;
+	}
+
+	return CMM_MME_ERROR; 
+}
+
 
 
 /********************************************************************************************

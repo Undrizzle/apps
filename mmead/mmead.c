@@ -403,20 +403,34 @@ void MME_Atheros_ProcessSetHgSsidStatus(MMEAD_BBLOCK_QUEUE *this, T_MME_SK_HANDL
 
 	memcpy(&ssid, req->body, sizeof(ssid));
 
-	printf("index=%d\n",ssid.ssid_index);
-	printf("status=%d\n",ssid.ssid_status);
-	printf("name=%s\n",ssid.ssid_name);
-
 	MMEAD_ProcessAck(MME_Atheros_MsgSetHgSsidStatus(MME_SK, req->header.ODA, ssid), this, NULL, 0);
 }
 
-void MME_Atheros_ProcessGetHgMtu(MMEAD_BBLOCK_QUEUE *this, T_MME_SK_HANDLE *MME_SK)
+void MME_Atheros_ProcessGetHgWanStatus(MMEAD_BBLOCK_QUEUE *this, T_MME_SK_HANDLE *MME_SK)
 {
 	T_Msg_Header_MMEAD *h = (T_Msg_Header_MMEAD *)(this->b);
-	T_szHgMtu mtu_info;
+	T_szHgWanStatus wan_info;
 	
-	MMEAD_ProcessAck(MME_Atheros_MsgGetHgMtu(MME_SK, h->ODA, &mtu_info), this, &mtu_info, sizeof(T_szHgMtu));
+	MMEAD_ProcessAck(MME_Atheros_MsgGetHgWanStatus(MME_SK, h->ODA, &wan_info), this, &wan_info, sizeof(T_szHgWanStatus));
 } 
+
+void MME_Atheros_ProcessGetHgWifiMode(MMEAD_BBLOCK_QUEUE *this, T_MME_SK_HANDLE *MME_SK)
+{
+	T_Msg_Header_MMEAD *h = (T_Msg_Header_MMEAD *)(this->b);
+	uint8_t mode;
+	
+	MMEAD_ProcessAck(MME_Atheros_MsgGetHgWifiMode(MME_SK, h->ODA, &mode), this, &mode, sizeof(uint8_t));
+} 
+
+void MME_Atheros_ProcessSetHgWifiMode(MMEAD_BBLOCK_QUEUE *this, T_MME_SK_HANDLE *MME_SK)
+{
+	T_MMETS_REQ_MSG *req = (T_MMETS_REQ_MSG *)(this->b);
+	uint8_t mode;
+
+	memcpy(&mode, req->body, sizeof(mode));
+
+	MMEAD_ProcessAck(MME_Atheros_MsgSetHgWifiMode(MME_SK, req->header.ODA, mode), this, NULL, 0);
+}
 
 /*
 void MME_Atheros_ProcessSetUserHFID(MMEAD_BBLOCK_QUEUE *this, T_MME_SK_HANDLE *MME_SK)
@@ -724,11 +738,25 @@ void MME_ProcessSetHgSsidStatus(MMEAD_BBLOCK_QUEUE *this, T_MME_SK_HANDLE *MME_S
 	MME_Atheros_ProcessSetHgSsidStatus(this, MME_SK);
 } 
 
-void MME_ProcessGetHgMtu(MMEAD_BBLOCK_QUEUE *this, T_MME_SK_HANDLE *MME_SK)
+void MME_ProcessGetHgWanStatus(MMEAD_BBLOCK_QUEUE *this, T_MME_SK_HANDLE *MME_SK)
 {
 	T_Msg_Header_MMEAD *h = (T_Msg_Header_MMEAD *)(this->b);
 
-	MME_Atheros_ProcessGetHgMtu(this, MME_SK);
+	MME_Atheros_ProcessGetHgWanStatus(this, MME_SK);
+} 
+
+void MME_ProcessGetHgWifiMode(MMEAD_BBLOCK_QUEUE *this, T_MME_SK_HANDLE *MME_SK)
+{
+	T_Msg_Header_MMEAD *h = (T_Msg_Header_MMEAD *)(this->b);
+
+	MME_Atheros_ProcessGetHgWifiMode(this, MME_SK);
+} 
+
+void MME_ProcessSetHgWifiMode(MMEAD_BBLOCK_QUEUE *this, T_MME_SK_HANDLE *MME_SK)
+{
+	T_Msg_Header_MMEAD *h = (T_Msg_Header_MMEAD *)(this->b);
+
+	MME_Atheros_ProcessSetHgWifiMode(this, MME_SK);
 } 
 
 
@@ -2026,8 +2054,14 @@ void ComReqManager(T_MME_SK_HANDLE *MME_SK)
 		case MMEAD_SET_HG_SSID_STATUS:
 			MME_ProcessSetHgSsidStatus(this, MME_SK);
 			break;
-		case MMEAD_GET_HG_MTU:
-			MME_ProcessGetHgMtu(this, MME_SK);
+		case MMEAD_GET_HG_WAN_STATUS:
+			MME_ProcessGetHgWanStatus(this, MME_SK);
+			break;
+		case MMEAD_GET_HG_WIFI_MODE:
+			MME_ProcessGetHgWifiMode(this, MME_SK);
+			break;
+		case MMEAD_SET_HG_WIFI_MODE:
+			MME_ProcessSetHgWifiMode(this, MME_SK);
 			break;
 		case MMEAD_SET_TX_GAIN:
 			MME_ProcessSetTxGain(this, MME_SK);

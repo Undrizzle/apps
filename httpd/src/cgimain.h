@@ -295,6 +295,11 @@ typedef struct {
    char ssid_name2[100];
    char ssid_name3[100];
    char ssid_name4[100];
+   char wan_name_1[100];
+   char wan_name_2[100];
+   int b_wan1_status;
+   int b_wan2_status;
+   int wifi_mode;
    
    char wecTemprature[IFC_SMALL_LEN];	/* host envirument temperature */
 

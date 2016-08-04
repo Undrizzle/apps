@@ -3000,7 +3000,7 @@ int http2cmm_setHgSsid4Status(PWEB_NTWK_VAR pWebVar)
 	return __http2cmm_comm(buf, len);
 }
 
-int http2cmm_getHgMtu(PWEB_NTWK_VAR pWebVar)
+int http2cmm_getHgWanStatus(PWEB_NTWK_VAR pWebVar)
 {
 	uint8_t buf[MAX_UDP_SIZE] = {0};
 	uint32_t len = 0;
@@ -3009,11 +3009,11 @@ int http2cmm_getHgMtu(PWEB_NTWK_VAR pWebVar)
 	stTmUserInfo *req_data = (stTmUserInfo *)(req->BUF);
 
 	T_REQ_Msg_CMM *ack = (T_REQ_Msg_CMM *)buf;
-	T_szHgMtu *ack_data = (T_szHgMtu *)(ack->BUF);
+	T_szHgWanStatus *ack_data = (T_szHgWanStatus *)(ack->BUF);
 
 	req->HEADER.usSrcMID = MID_HTTP;
 	req->HEADER.usDstMID = MID_CMM;
-	req->HEADER.usMsgType = CMM_GET_HG_MTU;
+	req->HEADER.usMsgType = CMM_GET_HG_WAN_STATUS;
 	req->HEADER.ulBodyLength = sizeof(stTmNewUserInfo);
 	req->HEADER.fragment = 0;
 
@@ -3024,10 +3024,69 @@ int http2cmm_getHgMtu(PWEB_NTWK_VAR pWebVar)
 
 	if ( CMM_SUCCESS == __http2cmm_comm(buf, len))
 	{
+		memcpy(pWebVar->wan_name_1, ack_data->wan_name1, sizeof(ack_data->wan_name1));
+		pWebVar->b_wan1_status = ack_data->wan_status1;
+		memcpy(pWebVar->wan_name_2, ack_data->wan_name2, sizeof(ack_data->wan_name2));
+		pWebVar->b_wan2_status = ack_data->wan_status2;
 		return CMM_SUCCESS;
 	}
 	return CMM_FAILED;
 }
+
+int http2cmm_getHgWifiMode(PWEB_NTWK_VAR pWebVar)
+{
+	uint8_t buf[MAX_UDP_SIZE] = {0};
+	uint32_t len = 0;
+
+	T_Msg_CMM *req = (T_Msg_CMM *)buf;
+	stTmUserInfo *req_data = (stTmUserInfo *)(req->BUF);
+
+	T_REQ_Msg_CMM *ack = (T_REQ_Msg_CMM *)buf;
+	uint8_t *ack_data = (uint8_t *)(ack->BUF);
+
+	req->HEADER.usSrcMID = MID_HTTP;
+	req->HEADER.usDstMID = MID_CMM;
+	req->HEADER.usMsgType = CMM_GET_HG_WIFI_MODE;
+	req->HEADER.ulBodyLength = sizeof(stTmUserInfo);
+	req->HEADER.fragment = 0;
+
+	req_data->clt = pWebVar->cltid;
+	req_data->cnu = pWebVar->cnuid;
+
+	len = sizeof(req->HEADER) + req->HEADER.ulBodyLength;
+
+	if ( CMM_SUCCESS == __http2cmm_comm(buf, len))
+	{
+		
+		pWebVar->wifi_mode = *ack_data;
+		return CMM_SUCCESS;
+	}
+	return CMM_FAILED;
+}
+
+int http2cmm_setHgWifiMode(PWEB_NTWK_VAR pWebVar)
+{
+	uint8_t buf[MAX_UDP_SIZE] = {0};
+	uint32_t len = 0;
+
+	T_Msg_CMM *req = (T_Msg_CMM *)buf;
+	T_szSetHgWifiMode *req_data = (T_szSetHgWifiMode *)(req->BUF);
+
+	req->HEADER.usSrcMID = MID_HTTP;
+	req->HEADER.usDstMID = MID_CMM;
+	req->HEADER.usMsgType = CMM_SET_HG_WIFI_MODE;
+	req->HEADER.ulBodyLength = sizeof(T_szSetHgWifiMode);
+	req->HEADER.fragment = 0;
+
+	req_data->clt = pWebVar->cltid;
+	req_data->cnu = pWebVar->cnuid;
+	req_data->mode = pWebVar->wifi_mode;
+
+	len = sizeof(req->HEADER) + req->HEADER.ulBodyLength;
+
+	return __http2cmm_comm(buf, len);
+}
+
 
 int http2cmm_getNmsBusiness(stCnuNode *node, T_szNmsBusiness *business)
 {

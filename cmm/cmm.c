@@ -2057,7 +2057,7 @@ int CMM_ProcessWriteHgSsidStatus(BBLOCK_QUEUE *this)
 	return opt_sts;
 }
 
-int CMM_ProcessReadHgMtu(BBLOCK_QUEUE *this)
+int CMM_ProcessReadHgWanStatus(BBLOCK_QUEUE *this)
 {
 	int opt_sts = CMM_SUCCESS;
 	st_dbsCnu cnu;
@@ -2066,7 +2066,7 @@ int CMM_ProcessReadHgMtu(BBLOCK_QUEUE *this)
 	T_Msg_CMM *req = (T_Msg_CMM *)(this->b);
 	stTmUserInfo  *req_data = (stTmUserInfo *)(req->BUF);
 	
-	T_szHgMtu ack_data;
+	T_szHgWanStatus ack_data;
 
 	if( (req_data->cnu<1)||(req_data->cnu > MAX_CNU_AMOUNT_LIMIT))
 	{
@@ -2088,17 +2088,102 @@ int CMM_ProcessReadHgMtu(BBLOCK_QUEUE *this)
 		printf("\n#ERROR[04]\n");
 		opt_sts = CMM_FAILED;
 	}
-	else if( CMM_SUCCESS != mmead_get_Hg_Mtu(bMac, &ack_data) )
+	else if( CMM_SUCCESS != mmead_get_Hg_Wan_Status(bMac, &ack_data) )
 	{
 		printf("\n#ERROR[05]\n");
 		opt_sts = CMM_FAILED;
 	}
 
 	/* 将处理信息发送给请求者 */
-	CMM_ProcessAck(opt_sts, this, (T_szHgMtu *)&ack_data, sizeof(T_szHgMtu));
+	CMM_ProcessAck(opt_sts, this, (T_szHgWanStatus *)&ack_data, sizeof(T_szHgWanStatus));
 
 	return opt_sts;
 }
+
+int CMM_ProcessReadHgWifiMode(BBLOCK_QUEUE *this)
+{
+	int opt_sts = CMM_SUCCESS;
+	st_dbsCnu cnu;
+	uint8_t bMac[6] = {0};
+	
+	T_Msg_CMM *req = (T_Msg_CMM *)(this->b);
+	stTmUserInfo  *req_data = (stTmUserInfo *)(req->BUF);
+	
+	uint8_t ack_data;
+
+	if( (req_data->cnu<1)||(req_data->cnu > MAX_CNU_AMOUNT_LIMIT))
+	{
+		printf("\n#ERROR[01]\n");
+		opt_sts = CMM_FAILED;
+	}	
+	else if( CMM_SUCCESS != dbsGetCnu(dbsdev, req_data->cnu, &cnu) )
+	{
+		printf("\n#ERROR[02]\n");
+		opt_sts = CMM_FAILED;
+	}
+	else if( (DEV_STS_ONLINE != cnu.col_sts)||BOOL_TRUE != cnu.col_row_sts )
+	{
+		printf("\n#ERROR[03]\n");
+		opt_sts = CMM_FAILED;
+	}
+	else if( CMM_SUCCESS != boardapi_macs2b(cnu.col_mac, bMac) )
+	{
+		printf("\n#ERROR[04]\n");
+		opt_sts = CMM_FAILED;
+	}
+	else if( CMM_SUCCESS != mmead_get_Hg_Wifi_Mode(bMac, &ack_data) )
+	{
+		printf("\n#ERROR[05]\n");
+		opt_sts = CMM_FAILED;
+	}
+
+	/* 将处理信息发送给请求者 */
+	CMM_ProcessAck(opt_sts, this, (uint8_t *)&ack_data, sizeof(uint8_t));
+
+	return opt_sts;
+}
+
+int CMM_ProcessWriteHgWifiMode(BBLOCK_QUEUE *this)
+{
+	int opt_sts = CMM_SUCCESS;
+	st_dbsCnu cnu;
+	uint8_t bMac[6] = {0};
+	
+	T_Msg_CMM *req = (T_Msg_CMM *)(this->b);
+	T_szSetHgWifiMode  *req_data = (T_szSetHgWifiMode *)(req->BUF);
+	
+	if( (req_data->cnu<1)||(req_data->cnu > MAX_CNU_AMOUNT_LIMIT))
+	{
+		printf("\n#ERROR[01]\n");
+		opt_sts = CMM_FAILED;
+	}	
+	else if( CMM_SUCCESS != dbsGetCnu(dbsdev, req_data->cnu, &cnu) )
+	{
+		printf("\n#ERROR[02]\n");
+		opt_sts = CMM_FAILED;
+	}
+	else if( (DEV_STS_ONLINE != cnu.col_sts)||BOOL_TRUE != cnu.col_row_sts )
+	{
+		printf("\n#ERROR[03]\n");
+		opt_sts = CMM_FAILED;
+	}
+	else if( CMM_SUCCESS != boardapi_macs2b(cnu.col_mac, bMac) )
+	{
+		printf("\n#ERROR[04]\n");
+		opt_sts = CMM_FAILED;
+	}
+	else if( CMM_SUCCESS != mmead_set_Hg_Wifi_Mode(bMac, req_data->mode) )
+	{
+		printf("\n#ERROR[05]\n");
+		opt_sts = CMM_FAILED;
+	}
+
+	/* 将处理信息发送给请求者 */
+	CMM_ProcessAck(opt_sts, this, NULL, 0);
+
+	return opt_sts;
+}
+
 
 
 int CMM_ProcessWriteAr8236Reg(BBLOCK_QUEUE *this)
@@ -3376,9 +3461,19 @@ void cmmProcessManager(void)
 				opt_sts = CMM_ProcessWriteHgSsidStatus(this);
 				break;
 			}
-			case CMM_GET_HG_MTU:
+			case CMM_GET_HG_WAN_STATUS:
 			{
-				opt_sts = CMM_ProcessReadHgMtu(this);
+				opt_sts = CMM_ProcessReadHgWanStatus(this);
+				break;
+			}
+			case CMM_GET_HG_WIFI_MODE:
+			{
+				opt_sts = CMM_ProcessReadHgWifiMode(this);
+				break;
+			}
+			case CMM_SET_HG_WIFI_MODE:
+			{
+				opt_sts = CMM_ProcessWriteHgWifiMode(this);
 				break;
 			}
 			case CMM_AR8236_SW_REG_WRITE:
