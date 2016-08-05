@@ -299,7 +299,6 @@ typedef struct {
    char wan_name_2[100];
    int b_wan1_status;
    int b_wan2_status;
-   int wifi_mode;
    
    char wecTemprature[IFC_SMALL_LEN];	/* host envirument temperature */
 

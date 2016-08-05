@@ -54,6 +54,9 @@ typedef struct
 	char ipv4_gw[16];
 	char dns_ipv4[16];
 	char dns_ipv4_copy[16];
+	char ssid_name[100];
+	int ssid_status;
+	int ssid_index;
 }
 JSON_VAR, *PJSON_VAR;
 
@@ -99,9 +102,22 @@ typedef struct {
 	char dns_ipv4_copy_2[16];
 }JSON_VAR2, *PJSON_VAR2;
 
+typedef struct 
+{
+	char ssid_name_1[100];
+	int ssid_status_1;
+	char ssid_name_2[100];
+	int ssid_status_2;
+	char wan_name_1[100];
+	int wan_status_1;
+	char wan_name_2[100];
+	int wan_status_2;
+}JSON_VAR3, *PJSON_VAR3;
+
 JSON_VAR glbJsonVar;
 JSON_VAR1 glbJsonVar1;
 JSON_VAR2 glbJsonVar2;
+JSON_VAR3 glbJsonVar3;
 
 CGI_ITEM jsonSetTable[] = 
 {
@@ -143,6 +159,9 @@ CGI_ITEM jsonSetTable[] =
 	{ "ipv4Gw", (void *)(&(glbJsonVar.ipv4_gw)), CGI_TYPE_STR },
 	{ "dnsIpv4", (void *)(&(glbJsonVar.dns_ipv4)), CGI_TYPE_STR },
 	{ "dnsIpv4Copy", (void *)(&(glbJsonVar.dns_ipv4_copy)), CGI_TYPE_STR },
+	{ "ssidName", (void *)(&(glbJsonVar.ssid_name)), CGI_TYPE_STR },
+	{ "ssidStatus", (void *)(&(glbJsonVar.ssid_status)), CGI_TYPE_NUM },
+	{ "ssidIndex", (void *)(&(glbJsonVar.ssid_index)), CGI_TYPE_NUM },
 	
 	{ NULL, NULL, CGI_TYPE_NONE }
 };
@@ -188,8 +207,24 @@ CGI_ITEM jsonSetTable2[] = {
 	{ "ipv4Gw2", (void *)(&(glbJsonVar2.ipv4_gw_1)), CGI_TYPE_STR },
 	{ "dnsIpv42", (void *)(&(glbJsonVar2.dns_ipv4_1)), CGI_TYPE_STR },
 	{ "dnsIpv4Copy2", (void *)(&(glbJsonVar2.dns_ipv4_copy_1)), CGI_TYPE_STR },
+
+	
 	{ NULL, NULL, CGI_TYPE_NONE }
 };
+
+CGI_ITEM jsonSetTable3[] = {
+	{ "ssidName1", (void *)(&(glbJsonVar3.ssid_name_1)), CGI_TYPE_STR },
+	{ "ssidStatus1", (void *)(&(glbJsonVar3.ssid_status_1)), CGI_TYPE_NUM },
+	{ "ssidName2", (void *)(&(glbJsonVar3.ssid_name_2)), CGI_TYPE_STR },
+	{ "ssidStatus2", (void *)(&(glbJsonVar3.ssid_status_2)), CGI_TYPE_NUM },
+	{"wanName1", (void *)(&(glbJsonVar3.wan_name_1)), CGI_TYPE_STR },
+	{"wanStatus1", (void *)(&(glbJsonVar3.wan_status_1)), CGI_TYPE_NUM },
+	{"wanName2", (void *)(&(glbJsonVar3.wan_name_2)), CGI_TYPE_STR },
+	{"wanStatus2", (void *)(&(glbJsonVar3.wan_status_2)), CGI_TYPE_NUM },
+
+	{ NULL, NULL, CGI_TYPE_NONE }
+};
+
 
 void json_debug(char *jsonString, size_t jstrLen)
 {
@@ -1253,7 +1288,7 @@ json_out:
 	/* write opt-log here */
 	clt_index = (iNode.cnu -1)/MAX_CNUS_PER_CLT + 1;
 	cnu_index = (iNode.cnu -1)%MAX_CNUS_PER_CLT + 1;
-	sprintf(strlog, "json get link status from cnu/%d/%d", clt_index, cnu_index);
+	sprintf(strlog, "json get bussiness wan from cnu/%d/%d", clt_index, cnu_index);
 	http2dbs_writeOptlog(ret, strlog);
 
 	return CMM_SUCCESS;
@@ -1501,13 +1536,202 @@ json_ack:
 	return CMM_SUCCESS;
 }
 
+int jsonGetCnuWifiSsid(fs)
+{
+	int ret = CMM_SUCCESS;
+	int i = 0;
+	char strlog[128] = {0};
+	stCnuNode iNode;
+	int clt_index = 0;
+	int cnu_index = 0;
+	st_dbsCnu cnu;
+	T_szNmsSsid ssid;
+	T_szNmsWanStatus wanStatus;
+	json_object *my_object;
+
+	/* process json get request here */
+	ret = boardapi_mac2Uppercase(glbJsonVar.macAddr);
+	if(CMM_SUCCESS != ret)
+	{
+		printf("ERROR: jsonConvertMac2Uppercase\n");
+		goto json_out;
+	}
+	/* 1. get cnu index by input mac address */
+	ret = http2dbs_getCnuIndexByMacaddress(glbJsonVar.macAddr, &iNode);
+	if(CMM_SUCCESS != ret)
+	{
+		/* system error */
+		printf("ERROR: selectCnuIndex(%s)\n", glbJsonVar.macAddr);
+		goto json_out;
+	}
+	else if(0 == iNode.cnu)
+	{
+		/* can not select this cnu */
+		printf("ERROR: selectCnuIndex\n");
+		ret = CMM_FAILED;
+		goto json_out;
+	}
+	/* 2. check input */
+	ret = jsonGetCnuCheckInput();
+	if(CMM_SUCCESS != ret)
+	{
+		printf("ERROR: jsonGetCnuCheckInput\n");
+		goto json_out;
+	}
+	/* 3. get cnu permit status */
+	ret = http2dbs_getCnu(iNode.cnu, &cnu);
+	if(CMM_SUCCESS != ret)
+	{
+		printf("ERROR: http2dbs_getCbu\n");
+		goto json_out;
+	}
+	if(1 == boardapi_isKTCnu(cnu.col_model))
+	{
+		/* 4 get cnu manage wan */
+		if (cnu.col_sts == 1)
+		{
+			ret = http2cmm_getNmsSsid(&iNode, &ssid);
+			if(ret == CMM_SUCCESS)
+			{
+				sprintf(glbJsonVar3.ssid_name_1, "%s", ssid.ssid_name1);
+				glbJsonVar3.ssid_status_1 = ssid.ssid_status1;
+				sprintf(glbJsonVar3.ssid_name_2, "%s", ssid.ssid_name2);
+				glbJsonVar3.ssid_status_2 = ssid.ssid_status2;
+			}
+			else
+			{
+				printf("ERROR: jsonGetBusinessWan\n");
+				goto json_out;
+			}
+			ret = http2cmm_getNmsWanStatus(&iNode, &wanStatus);
+			if(ret == CMM_SUCCESS)
+			{
+				sprintf(glbJsonVar3.wan_name_1, "%s", wanStatus.wan_name1);
+				glbJsonVar3.wan_status_1 = wanStatus.wan_status1;
+				sprintf(glbJsonVar3.wan_name_2, "%s", wanStatus.wan_name2);
+				glbJsonVar3.wan_status_2 = wanStatus.wan_status2;
+			}
+			else
+			{
+				printf("ERROR: jsonGetBusinessWan\n");
+				goto json_out;
+			}
+		}
+	}
+json_out:
+	/* send ack to NMS */
+	my_object = json_object_new_object();
+	json_object_object_add(my_object, "status", json_object_new_int(ret?1:0));
+	if(CMM_SUCCESS == ret)
+	{
+		for (i=0; jsonSetTable3[i].variable != NULL; i++)
+		{
+			switch(jsonSetTable3[i].type)
+			{
+				case CGI_TYPE_STR:
+				{
+					json_object_object_add(my_object, jsonSetTable3[i].variable, json_object_new_string(jsonSetTable3[i].value));
+					break;
+				}
+				case CGI_TYPE_NUM:
+				{
+					json_object_object_add(my_object, jsonSetTable3[i].variable, json_object_new_int(*((int *)jsonSetTable3[i].value)));
+					break;
+				}
+			}
+		}
+	}
+	jsonSendAck(fs, CMM_SUCCESS, json_object_to_json_string(my_object));
+	json_object_put(my_object);
+
+	/* write opt-log here */
+	clt_index = (iNode.cnu -1)/MAX_CNUS_PER_CLT + 1;
+	cnu_index = (iNode.cnu -1)%MAX_CNUS_PER_CLT + 1;
+	sprintf(strlog, "json get wifi ssid from cnu/%d/%d", clt_index, cnu_index);
+	http2dbs_writeOptlog(ret, strlog);
+
+	return CMM_SUCCESS;
+}
+
+int jsonSetCnuWifiSsid(fs)
+{
+	int ret = CMM_SUCCESS;
+	char strlog[128] = {0};
+	stCnuNode iNode;
+	st_dbsCnu cnu;
+	T_szSetNmsSsid ssid;
+	json_object *my_object;
+	int clt_index = 0;
+	int cnu_index = 0;
+	
+	/* process json set request here */
+	ret = boardapi_mac2Uppercase(glbJsonVar.macAddr);
+	if( CMM_SUCCESS != ret )
+	{
+		printf("ERROR: jsonConvertMac2Uppercase\n");
+		goto json_ack;
+	}
+	
+	/* 1. get cnu index by input mac address */
+	ret = http2dbs_getCnuIndexByMacaddress(glbJsonVar.macAddr, &iNode);
+	if( CMM_SUCCESS != ret )
+	{
+		/* system error */
+		printf("ERROR: selectCnuIndex(%s)\n", glbJsonVar.macAddr);
+		goto json_ack;
+	}
+	else if( 0 == iNode.cnu)
+	{
+		/* can not select this cnu */
+		printf("ERROR: selectCnuIndex\n");
+		ret = CMM_FAILED;
+		goto json_ack;
+	}
+	
+	ret = http2dbs_getCnu(iNode.cnu, &cnu);
+	if(CMM_SUCCESS != ret)
+	{
+		printf("ERROR: http2dbs_getCnu\n");
+		goto json_ack;
+	}
+	
+	if( 1 == boardapi_isKTCnu(cnu.col_model))
+	{
+		ssid.ssid_index = glbJsonVar.ssid_index;
+		memcpy(ssid.ssid_name, glbJsonVar.ssid_name, sizeof(glbJsonVar.ssid_name));
+		ssid.ssid_status = glbJsonVar.ssid_status;
+			
+		ret = http2cmm_setNmsSsid(&iNode, &ssid);
+		if(CMM_SUCCESS != ret)
+		{
+			printf("ERROR: http2cmm_setNmsBusiness\n");
+			goto json_ack;
+		}
+	}
+json_ack:
+	/* send ack to nms */
+	my_object = json_object_new_object();
+	json_object_object_add(my_object, "status", json_object_new_int(ret?1:0));
+	jsonSendAck(fs, CMM_SUCCESS, json_object_to_json_string(my_object));
+	/* free json object !!! */
+	json_object_put(my_object);
+	
+	/* write opt-log here */
+	clt_index = (iNode.cnu -1)/MAX_CNUS_PER_CLT + 1;
+	cnu_index = (iNode.cnu -1)%MAX_CNUS_PER_CLT + 1;
+	sprintf(strlog, "json set wifi ssid to cnu/%d/%d", clt_index, cnu_index);
+	http2dbs_writeOptlog(ret, strlog);
+	
+	return CMM_SUCCESS;
+}
 
 /******************************************************************************************
 curl -X "POST"  -H "Application/json" http://192.168.1.150/getcnu.json -d "{'mac':'30:71:B2:00:02:1E'}"
 *******************************************************************************************/
 int do_json(char *path, FILE *fs, int jstrLen)
 {
-	char jsonString[JSON_STRING_SIZE] = {0};	
+	char jsonString[JSON_STRING_SIZE] = {0};
+	int ret;
 
 	/* get post json string */
 	fgets(jsonString, JSON_STRING_SIZE, fs);
@@ -1553,6 +1777,14 @@ int do_json(char *path, FILE *fs, int jstrLen)
 	else if ( strcmp( path, "/cnuWifiReset.json" ) == 0 )
 	{
 		return jsonCnuWifiReset(fs);
+	}
+	else if ( strcmp( path, "/getWifiSsid.json" ) == 0 )
+	{
+		return jsonGetCnuWifiSsid(fs);
+	}
+	else if ( strcmp( path, "/setWifiSsid.json" ) == 0 )
+	{
+		return jsonSetCnuWifiSsid(fs);
 	}
 	else
 	{

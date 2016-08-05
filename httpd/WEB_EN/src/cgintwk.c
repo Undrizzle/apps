@@ -3568,8 +3568,6 @@ void cgiCnuWifi(char *query, FILE *fs)
 	fprintf(fs, "	$('#wan_name_2').val('%s');\n",glbWebVar.wan_name_2);
 	fprintf(fs, "  	$('#wan_status_2').val(%d);\n",glbWebVar.b_wan2_status);
 
-	fprintf(fs, "	$('#wifi_mode').val(%d);\n",glbWebVar.wifi_mode);
-
 	fprintf(fs, "   $('#b_ip_mode_1').change(function(){\n");
 	fprintf(fs, "		if ($('#b_ip_mode_1').val() == 1) {\n");
 	fprintf(fs, "			$('.dhcp_1').addClass('hidden');\n");
@@ -3812,21 +3810,6 @@ void cgiCnuWifi(char *query, FILE *fs)
 	fprintf(fs, "	eval(code);\n");
 	fprintf(fs, "}\n");
 
-	fprintf(fs, "function WifiModeRead() {\n");
-	fprintf(fs, "	var loc = 'WifiModeRead.cgi?';\n");
-	fprintf(fs, "	loc += 'cnuid=' + %d;\n",id);
-	fprintf(fs, "	var code = 'location=\"' + loc + '\"';\n");
-	fprintf(fs, "	eval(code);\n");
-	fprintf(fs, "}\n");
-
-	fprintf(fs, "function WifiModeWrite() {\n");
-	fprintf(fs, " var loc = 'WifiModeWrite.cgi?';\n");
-	fprintf(fs, "	loc += 'cnuid=' + %d;\n",id);
-	fprintf(fs, "	loc += '&wifiMode=' + $('#wifi_mode').val();\n");
-	fprintf(fs, "	var code = 'location=\"' + loc + '\"';\n");
-	fprintf(fs, "	eval(code);\n");
-	fprintf(fs, "}\n");
-
 	fprintf(fs, "$(function(){\n");
 	fprintf(fs, "	frmLoad();\n");
 	fprintf(fs, "	$('#accordion').accordion({\n");
@@ -3902,14 +3885,6 @@ void cgiCnuWifi(char *query, FILE *fs)
 	fprintf(fs, "	$('#read3Btn').button().click(function(event) {\n");
 	fprintf(fs, "		event.preventDefault();\n");
 	fprintf(fs, "		WanStatusRead();\n");
-	fprintf(fs, "	});\n");
-	fprintf(fs, "	$('#read4Btn').button().click(function(event) {\n");
-	fprintf(fs, "		event.preventDefault();\n");
-	fprintf(fs, "		WifiModeRead();\n");
-	fprintf(fs, "	});\n");
-	fprintf(fs, "	$('#write7Btn').button().click(function(event) {\n");
-	fprintf(fs, "		event.preventDefault();\n");
-	fprintf(fs, "		WifiModeWrite();\n");
 	fprintf(fs, "	});\n");
 	fprintf(fs, "	$('#reboot').button().click(function(event) {\n");
 	fprintf(fs, "		event.preventDefault();\n");
@@ -4349,23 +4324,6 @@ void cgiCnuWifi(char *query, FILE *fs)
 	fprintf(fs, "				<tr>\n");
 	fprintf(fs, "					<td class='diagdata' width=250>\n");
 	fprintf(fs, "						<button id='read3Btn'>Read</button>\n");
-	fprintf(fs, "					</td>\n");
-	fprintf(fs, "				</tr>\n");
-	fprintf(fs, "				<tr><td class='diagdata' colspan=2>&nbsp;</td></tr>\n");
-	fprintf(fs, "				<tr>\n");
-	fprintf(fs, "					<td class='diagdata' width=250>Wifi Mode</td>\n");
-	fprintf(fs, "					<td class='diagdata' width=300>\n");
-	fprintf(fs, "						<select id='wifi_mode' size=1>\n");
-	fprintf(fs, "							<option value='0'>AP</option>\n");
-	fprintf(fs, "							<option value='1'>Repeater</option>\n");
-	fprintf(fs, "						</select>\n");
-	fprintf(fs, "					</td>\n");
-	fprintf(fs, "				</tr>\n");
-	fprintf(fs, "				<tr><td class='diagdata' colspan=2>&nbsp;</td></tr>\n");
-	fprintf(fs, "				<tr>\n");
-	fprintf(fs, "					<td class='diagdata' width=250>\n");
-	fprintf(fs, "						<button id='read4Btn'>Read</button>\n");
-	fprintf(fs, "						<button id='write7Btn'>Write</button>\n");
 	fprintf(fs, "					</td>\n");
 	fprintf(fs, "				</tr>\n");
 	fprintf(fs, "			</table>\n");

@@ -700,7 +700,7 @@ void do_cgi(char *path, FILE *fs) {
 	{
 		cltid = (glbWebVar.cnuid-1)/MAX_CNUS_PER_CLT + 1;
 		cnuid = (glbWebVar.cnuid-1)%MAX_CNUS_PER_CLT + 1;
-		sprintf(logmsg, "write cnu/%d/%d ssid status", cltid, cnuid);
+		sprintf(logmsg, "write cnu/%d/%d ssid1 status", cltid, cnuid);
 		ret = http2cmm_setHgSsid1Status(&glbWebVar);
 		http2dbs_writeOptlog(ret, logmsg);
 		if(ret != 0)
@@ -715,7 +715,7 @@ void do_cgi(char *path, FILE *fs) {
 	{
 		cltid = (glbWebVar.cnuid-1)/MAX_CNUS_PER_CLT + 1;
 		cnuid = (glbWebVar.cnuid-1)%MAX_CNUS_PER_CLT + 1;
-		sprintf(logmsg, "write cnu/%d/%d ssid status", cltid, cnuid);
+		sprintf(logmsg, "write cnu/%d/%d ssid2 status", cltid, cnuid);
 		ret = http2cmm_setHgSsid2Status(&glbWebVar);
 		http2dbs_writeOptlog(ret, logmsg);
 		if(ret != 0)
@@ -730,7 +730,7 @@ void do_cgi(char *path, FILE *fs) {
 	{
 		cltid = (glbWebVar.cnuid-1)/MAX_CNUS_PER_CLT + 1;
 		cnuid = (glbWebVar.cnuid-1)%MAX_CNUS_PER_CLT + 1;
-		sprintf(logmsg, "write cnu/%d/%d ssid status", cltid, cnuid);
+		sprintf(logmsg, "write cnu/%d/%d ssid3 status", cltid, cnuid);
 		ret = http2cmm_setHgSsid3Status(&glbWebVar);
 		http2dbs_writeOptlog(ret, logmsg);
 		if(ret != 0)
@@ -745,7 +745,7 @@ void do_cgi(char *path, FILE *fs) {
 	{
 		cltid = (glbWebVar.cnuid-1)/MAX_CNUS_PER_CLT + 1;
 		cnuid = (glbWebVar.cnuid-1)%MAX_CNUS_PER_CLT + 1;
-		sprintf(logmsg, "write cnu/%d/%d ssid status", cltid, cnuid);
+		sprintf(logmsg, "write cnu/%d/%d ssid4 status", cltid, cnuid);
 		ret = http2cmm_setHgSsid4Status(&glbWebVar);
 		http2dbs_writeOptlog(ret, logmsg);
 		if(ret != 0)
@@ -762,36 +762,6 @@ void do_cgi(char *path, FILE *fs) {
 		cnuid = (glbWebVar.cnuid-1)%MAX_CNUS_PER_CLT + 1;
 		sprintf(logmsg, "Read cnu/%d/%d wan status", cltid, cnuid);
 		ret = http2cmm_getHgWanStatus(&glbWebVar);
-		http2dbs_writeOptlog(ret, logmsg);
-		if(ret != 0)
-		{
-			sprintf(glbWebVar.returnUrl, "editCnuWifi.cmd?cnuid=%d", glbWebVar.cnuid);
-			glbWebVar.wecOptCode = CMM_FAILED;
-			strcpy(filename, "/webs/wecOptResult2.html");
-		}
-		else sprintf(filename, "editCnuWifi.cmd?cnuid=%d", glbWebVar.cnuid);
-	}
-	else if ( strstr(filename, "WifiModeRead") != NULL )
-	{
-		cltid = (glbWebVar.cnuid-1)/MAX_CNUS_PER_CLT + 1;
-		cnuid = (glbWebVar.cnuid-1)%MAX_CNUS_PER_CLT + 1;
-		sprintf(logmsg, "Read cnu/%d/%d wifi mode", cltid, cnuid);
-		ret = http2cmm_getHgWifiMode(&glbWebVar);
-		http2dbs_writeOptlog(ret, logmsg);
-		if(ret != 0)
-		{
-			sprintf(glbWebVar.returnUrl, "editCnuWifi.cmd?cnuid=%d", glbWebVar.cnuid);
-			glbWebVar.wecOptCode = CMM_FAILED;
-			strcpy(filename, "/webs/wecOptResult2.html");
-		}
-		else sprintf(filename, "editCnuWifi.cmd?cnuid=%d", glbWebVar.cnuid);
-	}
-	else if ( strstr(filename, "WifiModeWrite") != NULL )
-	{
-		cltid = (glbWebVar.cnuid-1)/MAX_CNUS_PER_CLT + 1;
-		cnuid = (glbWebVar.cnuid-1)%MAX_CNUS_PER_CLT + 1;
-		sprintf(logmsg, "Write cnu/%d/%d wifi mode", cltid, cnuid);
-		ret = http2cmm_setHgWifiMode(&glbWebVar);
 		http2dbs_writeOptlog(ret, logmsg);
 		if(ret != 0)
 		{
@@ -1381,7 +1351,6 @@ CGI_ITEM CgiSetTable[] = {
    { "ssid2Name", (void *)&glbWebVar.ssid_name2, CGI_TYPE_STR },
    { "ssid3Name", (void *)&glbWebVar.ssid_name3, CGI_TYPE_STR },
    { "ssid4Name", (void *)&glbWebVar.ssid_name4, CGI_TYPE_STR },
-   { "wifiMode", (void *)&glbWebVar.wifi_mode, CGI_TYPE_NUM },
    
    { NULL, NULL, CGI_TYPE_NONE }
 };

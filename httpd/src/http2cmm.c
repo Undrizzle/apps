@@ -2143,7 +2143,7 @@ int http2cmm_getHgBusiness(PWEB_NTWK_VAR pWebVar)
 	req->HEADER.usSrcMID = MID_HTTP;
 	req->HEADER.usDstMID = MID_CMM;
 	req->HEADER.usMsgType = CMM_GET_HG_BUSINESS;
-	req->HEADER.ulBodyLength = sizeof(T_szHgBusiness);
+	req->HEADER.ulBodyLength = sizeof(stTmUserInfo);
 	req->HEADER.fragment = 0;
 
 	req_data->clt = pWebVar->cltid;
@@ -2766,7 +2766,7 @@ int http2cmm_rebootHg(PWEB_NTWK_VAR pWebVar)
 	req->HEADER.usSrcMID = MID_HTTP;
 	req->HEADER.usDstMID = MID_CMM;
 	req->HEADER.usMsgType = CMM_REBOOT_HG;
-	req->HEADER.ulBodyLength = sizeof(stTmNewUserInfo);
+	req->HEADER.ulBodyLength = sizeof(stTmUserInfo);
 	req->HEADER.fragment = 0;
 
 	req_data->clt = pWebVar->cltid;
@@ -2792,7 +2792,7 @@ int http2cmm_resetHg(PWEB_NTWK_VAR pWebVar)
 	req->HEADER.usSrcMID = MID_HTTP;
 	req->HEADER.usDstMID = MID_CMM;
 	req->HEADER.usMsgType = CMM_RESET_HG;
-	req->HEADER.ulBodyLength = sizeof(stTmNewUserInfo);
+	req->HEADER.ulBodyLength = sizeof(stTmUserInfo);
 	req->HEADER.fragment = 0;
 
 	req_data->clt = pWebVar->cltid;
@@ -2821,7 +2821,7 @@ int http2cmm_getHgSsidStatus(PWEB_NTWK_VAR pWebVar)
 	req->HEADER.usSrcMID = MID_HTTP;
 	req->HEADER.usDstMID = MID_CMM;
 	req->HEADER.usMsgType = CMM_GET_HG_SSID_STATUS;
-	req->HEADER.ulBodyLength = sizeof(stTmNewUserInfo);
+	req->HEADER.ulBodyLength = sizeof(stTmUserInfo);
 	req->HEADER.fragment = 0;
 
 	req_data->clt = pWebVar->cltid;
@@ -3014,7 +3014,7 @@ int http2cmm_getHgWanStatus(PWEB_NTWK_VAR pWebVar)
 	req->HEADER.usSrcMID = MID_HTTP;
 	req->HEADER.usDstMID = MID_CMM;
 	req->HEADER.usMsgType = CMM_GET_HG_WAN_STATUS;
-	req->HEADER.ulBodyLength = sizeof(stTmNewUserInfo);
+	req->HEADER.ulBodyLength = sizeof(stTmUserInfo);
 	req->HEADER.fragment = 0;
 
 	req_data->clt = pWebVar->cltid;
@@ -3032,61 +3032,6 @@ int http2cmm_getHgWanStatus(PWEB_NTWK_VAR pWebVar)
 	}
 	return CMM_FAILED;
 }
-
-int http2cmm_getHgWifiMode(PWEB_NTWK_VAR pWebVar)
-{
-	uint8_t buf[MAX_UDP_SIZE] = {0};
-	uint32_t len = 0;
-
-	T_Msg_CMM *req = (T_Msg_CMM *)buf;
-	stTmUserInfo *req_data = (stTmUserInfo *)(req->BUF);
-
-	T_REQ_Msg_CMM *ack = (T_REQ_Msg_CMM *)buf;
-	uint8_t *ack_data = (uint8_t *)(ack->BUF);
-
-	req->HEADER.usSrcMID = MID_HTTP;
-	req->HEADER.usDstMID = MID_CMM;
-	req->HEADER.usMsgType = CMM_GET_HG_WIFI_MODE;
-	req->HEADER.ulBodyLength = sizeof(stTmUserInfo);
-	req->HEADER.fragment = 0;
-
-	req_data->clt = pWebVar->cltid;
-	req_data->cnu = pWebVar->cnuid;
-
-	len = sizeof(req->HEADER) + req->HEADER.ulBodyLength;
-
-	if ( CMM_SUCCESS == __http2cmm_comm(buf, len))
-	{
-		
-		pWebVar->wifi_mode = *ack_data;
-		return CMM_SUCCESS;
-	}
-	return CMM_FAILED;
-}
-
-int http2cmm_setHgWifiMode(PWEB_NTWK_VAR pWebVar)
-{
-	uint8_t buf[MAX_UDP_SIZE] = {0};
-	uint32_t len = 0;
-
-	T_Msg_CMM *req = (T_Msg_CMM *)buf;
-	T_szSetHgWifiMode *req_data = (T_szSetHgWifiMode *)(req->BUF);
-
-	req->HEADER.usSrcMID = MID_HTTP;
-	req->HEADER.usDstMID = MID_CMM;
-	req->HEADER.usMsgType = CMM_SET_HG_WIFI_MODE;
-	req->HEADER.ulBodyLength = sizeof(T_szSetHgWifiMode);
-	req->HEADER.fragment = 0;
-
-	req_data->clt = pWebVar->cltid;
-	req_data->cnu = pWebVar->cnuid;
-	req_data->mode = pWebVar->wifi_mode;
-
-	len = sizeof(req->HEADER) + req->HEADER.ulBodyLength;
-
-	return __http2cmm_comm(buf, len);
-}
-
 
 int http2cmm_getNmsBusiness(stCnuNode *node, T_szNmsBusiness *business)
 {
@@ -3107,7 +3052,7 @@ int http2cmm_getNmsBusiness(stCnuNode *node, T_szNmsBusiness *business)
 	req->HEADER.usSrcMID = MID_HTTP;
 	req->HEADER.usDstMID = MID_CMM;
 	req->HEADER.usMsgType = CMM_GET_HG_BUSINESS;
-	req->HEADER.ulBodyLength = sizeof(T_szHgBusiness);
+	req->HEADER.ulBodyLength = sizeof(stTmUserInfo);
 	req->HEADER.fragment = 0;
 
 	req_data->clt = node->clt;
@@ -3277,7 +3222,7 @@ int http2cmm_setNmsBusiness(stCnuNode *node, T_szSetNmsBusiness *business)
 {
 	uint8_t buf[MAX_UDP_SIZE] = {0};
 	uint32_t len = 0;
-	int i = 0;
+	//int i = 0;
 	int aa;
 
 	T_Msg_CMM *req = (T_Msg_CMM *)buf;
@@ -3298,11 +3243,11 @@ int http2cmm_setNmsBusiness(stCnuNode *node, T_szSetNmsBusiness *business)
 	req_data->clt = node->clt;
 	req_data->cnu = node->cnu;
 
-	printf("req_data->clt=%d\n", req_data->clt);
-	printf("req_data->cnu=%d\n", req_data->cnu);
+	//printf("req_data->clt=%d\n", req_data->clt);
+	//printf("req_data->cnu=%d\n", req_data->cnu);
 
 	memcpy(req_data->wanInfo.wan_name, business->wan_name, sizeof(business->wan_name));
-	printf("wan_name=%s\n", req_data->wanInfo.wan_name);
+	//printf("wan_name=%s\n", req_data->wanInfo.wan_name);
 
 	if(business->vlan == 1) {
 		req_data->wanInfo.vlan[0]= 0;
@@ -3313,36 +3258,36 @@ int http2cmm_setNmsBusiness(stCnuNode *node, T_szSetNmsBusiness *business)
 		req_data->wanInfo.vlan[1] = business->vlan/256;
 		req_data->wanInfo.priority = business->priority;
 	}
-	for(i=0;i<2;i++) {
-		printf("vlan[%d]=%x\n",i,req_data->wanInfo.vlan[i]);
-	}
-	printf("priority=%d\n", req_data->wanInfo.priority);
+	//for(i=0;i<2;i++) {
+//		printf("vlan[%d]=%x\n",i,req_data->wanInfo.vlan[i]);
+	//}
+	//printf("priority=%d\n", req_data->wanInfo.priority);
 
 	req_data->wanInfo.connection_mode = business->connection_mode;
-	printf("connection_mode=%d\n",req_data->wanInfo.connection_mode);
+	//printf("connection_mode=%d\n",req_data->wanInfo.connection_mode);
 
 	req_data->wanInfo.ip_assigned_mode = business->ip_assigned_mode;
-	printf("ip_mode=%d\n", req_data->wanInfo.ip_assigned_mode);
+	//printf("ip_mode=%d\n", req_data->wanInfo.ip_assigned_mode);
 
 	req_data->wanInfo.service_type = business->service_type;
-	printf("service_type=%d\n", req_data->wanInfo.service_type);
+	//printf("service_type=%d\n", req_data->wanInfo.service_type);
 
 	req_data->wanInfo.connection_protocol = 1;
-	printf("protocol=%d\n", req_data->wanInfo.connection_protocol);
+	//printf("protocol=%d\n", req_data->wanInfo.connection_protocol);
 
 	if(business->bind_lan[0] == 0x31 && business->bind_lan[1] == 0x30) {
 		req_data->wanInfo.bind_interface[0] = 0x01;
-		printf("port 1\n");
+		//printf("port 1\n");
 	}
 
 	if(business->bind_lan[0] == 0x30 && business->bind_lan[1] == 0x31) {
 		req_data->wanInfo.bind_interface[0] = 0x10;
-		printf("port 2\n");
+		//printf("port 2\n");
 	}
 
 	if(business->bind_lan[0] == 0x31 && business->bind_lan[1] == 0x31) {
 		req_data->wanInfo.bind_interface[0] = 0x11;
-		printf("port 1-2\n");
+		//printf("port 1-2\n");
 	}
 
 	if(business->bind_lan[0] == 0x30 && business->bind_lan[1] == 0x30) {
@@ -3351,17 +3296,17 @@ int http2cmm_setNmsBusiness(stCnuNode *node, T_szSetNmsBusiness *business)
 
 	if(business->bind_lan[2] == 0x31 && business->bind_lan[3] == 0x30) {
 		req_data->wanInfo.bind_interface[1] = 0x01;
-		printf("port 3\n");
+		//printf("port 3\n");
 	}
 
 	if(business->bind_lan[2] == 0x30 && business->bind_lan[3] == 0x31) {
 		req_data->wanInfo.bind_interface[1] = 0x10;
-		printf("port 4\n");
+		//printf("port 4\n");
 	}
 
 	if(business->bind_lan[2] == 0x31 && business->bind_lan[3] == 0x31) {
 		req_data->wanInfo.bind_interface[1] = 0x11;
-		printf("port 3-4\n");
+		//printf("port 3-4\n");
 	}
 
 	if(business->bind_lan[2] == 0x30 && business->bind_lan[3] == 0x30) {
@@ -3371,7 +3316,7 @@ int http2cmm_setNmsBusiness(stCnuNode *node, T_szSetNmsBusiness *business)
 	if(business->bind_ssid == 1) {
 		req_data->wanInfo.bind_interface[2] = 0x01;
 		req_data->wanInfo.bind_interface[3] = 0;
-		printf("ssid1\n");
+		//printf("ssid1\n");
 	}
 	if(business->bind_ssid == 2) {
 		req_data->wanInfo.bind_interface[2] = 0x10;
@@ -3389,15 +3334,15 @@ int http2cmm_setNmsBusiness(stCnuNode *node, T_szSetNmsBusiness *business)
 	if(req_data->wanInfo.ip_assigned_mode != 3) {
 		memset(req_data->wanInfo.user_name, 0, 100);
 		memset(req_data->wanInfo.password, 0, 100);
-		printf("username=%s\n", req_data->wanInfo.user_name);
-		printf("password=%s\n", req_data->wanInfo.password);
+		//printf("username=%s\n", req_data->wanInfo.user_name);
+		//printf("password=%s\n", req_data->wanInfo.password);
 	}
 	else {
 		memcpy(req_data->wanInfo.user_name, business->user_name, sizeof(business->user_name));
-		printf("username=%s\n", req_data->wanInfo.user_name);
+		//printf("username=%s\n", req_data->wanInfo.user_name);
 
 		memcpy(req_data->wanInfo.password, business->password, sizeof(business->password));
-		printf("password=%s\n", req_data->wanInfo.password);
+		//printf("password=%s\n", req_data->wanInfo.password);
 	}
 
 	if(req_data->wanInfo.ip_assigned_mode == 2) {
@@ -3407,44 +3352,44 @@ int http2cmm_setNmsBusiness(stCnuNode *node, T_szSetNmsBusiness *business)
 		req_data->wanInfo.ipv4_addr[2] = (aa & 0xff00) >> 8;
 		req_data->wanInfo.ipv4_addr[1] = (aa & 0xff0000) >> 16;
 		req_data->wanInfo.ipv4_addr[0] = (aa & 0xff000000) >> 24;
-		for(i=0;i<4;i++) {
-			printf("ipv4_addr[%d]=%d\n",i,req_data->wanInfo.ipv4_addr[i]);
-		}
+		//for(i=0;i<4;i++) {
+		//	printf("ipv4_addr[%d]=%d\n",i,req_data->wanInfo.ipv4_addr[i]);
+		//}
 
 		aa = inet_addr(business->ipv4_mask);
 		req_data->wanInfo.ipv4_mask[3] = aa & 0x000000ff;
 		req_data->wanInfo.ipv4_mask[2] = (aa & 0xff00) >> 8;
 		req_data->wanInfo.ipv4_mask[1] = (aa & 0xff0000) >> 16;
 		req_data->wanInfo.ipv4_mask[0] = (aa & 0xff000000) >> 24;
-		for(i=0;i<4;i++) {
-			printf("ipv4_mask[%d]=%d\n",i,req_data->wanInfo.ipv4_mask[i]);
-		}
+		//for(i=0;i<4;i++) {
+		//	printf("ipv4_mask[%d]=%d\n",i,req_data->wanInfo.ipv4_mask[i]);
+		//}
 
 		aa = inet_addr(business->ipv4_gw);
 		req_data->wanInfo.ipv4_gw[3] = aa & 0x000000ff;
 		req_data->wanInfo.ipv4_gw[2] = (aa & 0xff00) >> 8;
 		req_data->wanInfo.ipv4_gw[1] = (aa & 0xff0000) >> 16;
 		req_data->wanInfo.ipv4_gw[0] = (aa & 0xff000000) >> 24;
-		for(i=0;i<4;i++) {
-			printf("ipv4_gw[%d]=%d\n",i,req_data->wanInfo.ipv4_gw[i]);
-		}
+		//for(i=0;i<4;i++) {
+		//	printf("ipv4_gw[%d]=%d\n",i,req_data->wanInfo.ipv4_gw[i]);
+		//}
 		aa = inet_addr(business->dns_ipv4);
 		req_data->wanInfo.dns_ipv4[3] = aa & 0x000000ff;
 		req_data->wanInfo.dns_ipv4[2] = (aa & 0xff00) >> 8;
 		req_data->wanInfo.dns_ipv4[1] = (aa & 0xff0000) >> 16;
 		req_data->wanInfo.dns_ipv4[0] = (aa & 0xff000000) >> 24;
-		for(i=0;i<4;i++) {
-			printf("dns_ipv4[%d]=%d\n",i,req_data->wanInfo.dns_ipv4[i]);
-		}
+		//for(i=0;i<4;i++) {
+		//	printf("dns_ipv4[%d]=%d\n",i,req_data->wanInfo.dns_ipv4[i]);
+		//}
 
 		aa = inet_addr(business->dns_ipv4_copy);
 		req_data->wanInfo.dns_ipv4_copy[3] = aa & 0x000000ff;
 		req_data->wanInfo.dns_ipv4_copy[2] = (aa & 0xff00) >> 8;
 		req_data->wanInfo.dns_ipv4_copy[1] = (aa & 0xff0000) >> 16;
 		req_data->wanInfo.dns_ipv4_copy[0] = (aa & 0xff000000) >> 24;
-		for(i=0;i<4;i++) {
-			printf("dns_ipv4_copy[%d]=%d\n",i,req_data->wanInfo.dns_ipv4_copy[i]);
-		}
+		//for(i=0;i<4;i++) {
+		//	printf("dns_ipv4_copy[%d]=%d\n",i,req_data->wanInfo.dns_ipv4_copy[i]);
+		//}
 	}
 	else {
 		memset(req_data->wanInfo.ipv4_addr, 0, 4);
@@ -3456,6 +3401,107 @@ int http2cmm_setNmsBusiness(stCnuNode *node, T_szSetNmsBusiness *business)
 
 	return __http2cmm_comm(buf, len);
 }
+
+int http2cmm_getNmsSsid(stCnuNode *node, T_szNmsSsid *ssid)
+{
+	uint8_t buf[MAX_UDP_SIZE] = {0};
+	uint32_t len = 0;
+
+	T_Msg_CMM *req = (T_Msg_CMM *)buf;
+	stTmUserInfo *req_data = (stTmUserInfo *)(req->BUF);
+
+	T_REQ_Msg_CMM *ack = (T_REQ_Msg_CMM *)buf;
+	T_szHgSsid *ack_data = (T_szHgSsid *)(ack->BUF);
+
+	req->HEADER.usSrcMID = MID_HTTP;
+	req->HEADER.usDstMID = MID_CMM;
+	req->HEADER.usMsgType = CMM_GET_HG_SSID_STATUS;
+	req->HEADER.ulBodyLength = sizeof(stTmUserInfo);
+	req->HEADER.fragment = 0;
+
+	req_data->clt = node->clt;
+	req_data->cnu = node->cnu;
+
+	len = sizeof(req->HEADER) + req->HEADER.ulBodyLength;
+
+	if( CMM_SUCCESS == __http2cmm_comm(buf, len))
+	{
+		ssid->ssid_status1 = ack_data->ssid_status%2;
+		ssid->ssid_status2 = ack_data->ssid_status/2%2;
+		memcpy(ssid->ssid_name1, ack_data->ssid_name1, sizeof(ack_data->ssid_name1));
+		memcpy(ssid->ssid_name2, ack_data->ssid_name2, sizeof(ack_data->ssid_name2));
+		return CMM_SUCCESS;
+	}
+	return CMM_FAILED;
+}
+
+int http2cmm_setNmsSsid(stCnuNode *node, T_szSetNmsSsid *ssid)
+{
+	uint8_t buf[MAX_UDP_SIZE] = {0};
+	uint32_t len = 0;
+
+	T_Msg_CMM *req = (T_Msg_CMM *)buf;
+	T_szSetHgSsidStatus *req_data = (T_szSetHgSsidStatus *)(req->BUF);
+
+	req->HEADER.usSrcMID = MID_HTTP;
+	req->HEADER.usDstMID = MID_CMM;
+	req->HEADER.usMsgType = CMM_SET_HG_SSID_STATUS;
+	req->HEADER.ulBodyLength = sizeof(T_szSetHgSsidStatus);
+	req->HEADER.fragment = 0;
+
+	len = sizeof(req->HEADER) + req->HEADER.ulBodyLength;
+	if(len > MAX_UDP_SIZE)
+	{
+		return CMM_FAILED;
+	}
+
+	req_data->clt = node->clt;
+	req_data->cnu = node->cnu;
+
+	req_data->ssidInfo.ssid_index = ssid->ssid_index;
+	memcpy(req_data->ssidInfo.ssid_name, ssid->ssid_name, sizeof(ssid->ssid_name));
+	req_data->ssidInfo.ssid_status = ssid->ssid_status;
+
+	//printf("ssid_index=%d\n",req_data->ssidInfo.ssid_index);
+	//printf("ssid_name=%s\n", req_data->ssidInfo.ssid_name);
+	//printf("ssid_status=%d\n",req_data->ssidInfo.ssid_status);
+	
+	return __http2cmm_comm(buf, len);
+}
+
+int http2cmm_getNmsWanStatus(stCnuNode *node, T_szNmsWanStatus *wanStatus)
+{
+	uint8_t buf[MAX_UDP_SIZE] = {0};
+	uint32_t len = 0;
+
+	T_Msg_CMM *req = (T_Msg_CMM *)buf;
+	stTmUserInfo *req_data = (stTmUserInfo *)(req->BUF);
+
+	T_REQ_Msg_CMM *ack = (T_REQ_Msg_CMM *)buf;
+	T_szHgWanStatus *ack_data = (T_szHgWanStatus *)(ack->BUF);
+
+	req->HEADER.usSrcMID = MID_HTTP;
+	req->HEADER.usDstMID = MID_CMM;
+	req->HEADER.usMsgType = CMM_GET_HG_WAN_STATUS;
+	req->HEADER.ulBodyLength = sizeof(stTmUserInfo);
+	req->HEADER.fragment = 0;
+
+	req_data->clt = node->clt;
+	req_data->cnu = node->cnu;
+
+	len = sizeof(req->HEADER) + req->HEADER.ulBodyLength;
+
+	if( CMM_SUCCESS == __http2cmm_comm(buf, len))
+	{
+		memcpy(wanStatus->wan_name1, ack_data->wan_name1, sizeof(ack_data->wan_name1));
+		wanStatus->wan_status1 = ack_data->wan_status1;
+		memcpy(wanStatus->wan_name2, ack_data->wan_name2, sizeof(ack_data->wan_name2));
+		wanStatus->wan_status2 = ack_data->wan_status2;
+		return CMM_SUCCESS;
+	}
+	return CMM_FAILED;
+}
+
 
 int http2cmm_rebootNmsWifi(stCnuNode *node)
 {

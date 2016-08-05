@@ -421,8 +421,6 @@ enum
 	CMM_GET_HG_SSID_STATUS,
 	CMM_SET_HG_SSID_STATUS,
 	CMM_GET_HG_WAN_STATUS,
-	CMM_GET_HG_WIFI_MODE,
-	CMM_SET_HG_WIFI_MODE,
 	/* 请在中间增加其他枚举定义 */
 	
 	CMM_GET_SNMP_TABLE_ROW = 0xF0,
@@ -544,8 +542,6 @@ enum
 	MMEAD_GET_HG_SSID_STATUS,
 	MMEAD_SET_HG_SSID_STATUS,
 	MMEAD_GET_HG_WAN_STATUS,
-	MMEAD_GET_HG_WIFI_MODE,
-	MMEAD_SET_HG_WIFI_MODE,
 	/* 请在中间增加其他枚举定义 */
 
 	MMEAD_MAX_REQ = 0xff
@@ -2314,6 +2310,22 @@ typedef struct
 	uint8_t dns_ipv4_copy_2[4];
 }T_szNmsBusiness;
 
+typedef struct
+{
+	uint8_t ssid_name1[100];
+	uint8_t ssid_status1;
+	uint8_t ssid_name2[100];
+	uint8_t ssid_status2;
+}T_szNmsSsid;
+
+typedef struct
+{
+	uint8_t wan_name1[100];
+	uint8_t wan_status1;
+	uint8_t wan_name2[100];
+	uint8_t wan_status2;
+}T_szNmsWanStatus;
+
 typedef struct 
 {
 	char wan_name[100];
@@ -2333,6 +2345,13 @@ typedef struct
 	char dns_ipv4[16];
 	char dns_ipv4_copy[16];
 }T_szSetNmsBusiness;
+
+typedef struct
+{
+	uint8_t ssid_index;
+	uint8_t ssid_name[100];
+	uint8_t ssid_status;
+}T_szSetNmsSsid;
 
 typedef struct
 {
@@ -2389,13 +2408,6 @@ typedef struct
 	uint32_t cnu;
 	T_szSetHgSsid ssidInfo;
 }T_szSetHgSsidStatus;
-
-typedef struct 
-{
-	uint32_t clt;
-	uint32_t cnu;
-	uint32_t mode;
-}T_szSetHgWifiMode;
 
 typedef struct
 {

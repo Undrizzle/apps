@@ -723,7 +723,6 @@ typedef struct __packed ihpapi_result_s
 		ihpapi_getHgBusiness_t hgbusinessInfo;
 		ihpapi_getHgSsid_t hgSsidInfo;
 		ihpapi_getHgWanStatus_t hgWanInfo;
-		uint8_t hgWifiMode;
 	}
 	data;
 }
@@ -818,9 +817,6 @@ size_t ihpapi_ResetHg(uint8_t sa [], uint8_t da [], size_t bufferLen, uint8_t bu
 size_t ihpapi_GetHgSsidStatus(uint8_t sa [], uint8_t da [], size_t bufferLen, uint8_t buffer []);
 size_t ihpapi_SetHgSsidStatus(uint8_t sa [], uint8_t da [], size_t bufferLen, uint8_t buffer [], T_szSetHgSsid ssid);
 size_t ihpapi_GetHgWanStatus(uint8_t sa [], uint8_t da [], size_t bufferLen, uint8_t buffer []);
-size_t ihpapi_GetHgWifiMode(uint8_t sa [], uint8_t da [], size_t bufferLen, uint8_t buffer []);
-size_t ihpapi_SetHgWifiMode(uint8_t sa [], uint8_t da [], size_t bufferLen, uint8_t buffer [], uint8_t mode);
-
 /*====================================================================*
  *   decoder functions; see the Intellon HomePlug AV
  *   Application Programming Interface Manual for more information;

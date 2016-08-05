@@ -26,6 +26,8 @@ size_t ihpapi_GetHgSsidStatus(uint8_t sa [], uint8_t da [], size_t bufferLen, ui
 		uint16_t extend_SubType;
 		uint8_t extend_MainType1;
 		uint16_t extend_SubType1;
+		uint8_t extend_MainType2;
+		uint16_t extend_SubType2;
 	}
 	* request = (struct vs_get_hg_ssid_status_req *)(buffer);
 

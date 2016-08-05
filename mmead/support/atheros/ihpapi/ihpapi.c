@@ -70,8 +70,6 @@
 #include "../ihpapi/GetHgSsidStatus.c"
 #include "../ihpapi/SetHgSsidStatus.c"
 #include "../ihpapi/GetHgWanStatus.c"
-#include "../ihpapi/GetHgWifiMode.c"
-#include "../ihpapi/SetHgWifiMode.c"
 /*====================================================================*
  *   internal source files; see ihp.h;
  *--------------------------------------------------------------------*/
@@ -116,8 +114,6 @@
 #include "../ihpapi/DecodeGetHgSsidStatus.c"
 #include "../ihpapi/DecodeSetHgSsidStatus.c"
 #include "../ihpapi/DecodeGetHgWanStatus.c"
-#include "../ihpapi/DecodeGetHgWifiMode.c"
-#include "../ihpapi/DecodeSetHgWifiMode.c"
 /*====================================================================*
  *
  *--------------------------------------------------------------------*/

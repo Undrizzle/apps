@@ -32,7 +32,7 @@ uint8_t OSA [6] =
 };
 
 static MMEAD_BBLOCK_QUEUE bblock;
-int MMEAD_MODULE_DEBUG_ENABLE = 1;
+int MMEAD_MODULE_DEBUG_ENABLE = 0;
 
 /* 与DBS  通讯的设备文件*/
 T_DBS_DEV_INFO *dbsdev = NULL;
@@ -414,24 +414,6 @@ void MME_Atheros_ProcessGetHgWanStatus(MMEAD_BBLOCK_QUEUE *this, T_MME_SK_HANDLE
 	MMEAD_ProcessAck(MME_Atheros_MsgGetHgWanStatus(MME_SK, h->ODA, &wan_info), this, &wan_info, sizeof(T_szHgWanStatus));
 } 
 
-void MME_Atheros_ProcessGetHgWifiMode(MMEAD_BBLOCK_QUEUE *this, T_MME_SK_HANDLE *MME_SK)
-{
-	T_Msg_Header_MMEAD *h = (T_Msg_Header_MMEAD *)(this->b);
-	uint8_t mode;
-	
-	MMEAD_ProcessAck(MME_Atheros_MsgGetHgWifiMode(MME_SK, h->ODA, &mode), this, &mode, sizeof(uint8_t));
-} 
-
-void MME_Atheros_ProcessSetHgWifiMode(MMEAD_BBLOCK_QUEUE *this, T_MME_SK_HANDLE *MME_SK)
-{
-	T_MMETS_REQ_MSG *req = (T_MMETS_REQ_MSG *)(this->b);
-	uint8_t mode;
-
-	memcpy(&mode, req->body, sizeof(mode));
-
-	MMEAD_ProcessAck(MME_Atheros_MsgSetHgWifiMode(MME_SK, req->header.ODA, mode), this, NULL, 0);
-}
-
 /*
 void MME_Atheros_ProcessSetUserHFID(MMEAD_BBLOCK_QUEUE *this, T_MME_SK_HANDLE *MME_SK)
 {
@@ -744,21 +726,6 @@ void MME_ProcessGetHgWanStatus(MMEAD_BBLOCK_QUEUE *this, T_MME_SK_HANDLE *MME_SK
 
 	MME_Atheros_ProcessGetHgWanStatus(this, MME_SK);
 } 
-
-void MME_ProcessGetHgWifiMode(MMEAD_BBLOCK_QUEUE *this, T_MME_SK_HANDLE *MME_SK)
-{
-	T_Msg_Header_MMEAD *h = (T_Msg_Header_MMEAD *)(this->b);
-
-	MME_Atheros_ProcessGetHgWifiMode(this, MME_SK);
-} 
-
-void MME_ProcessSetHgWifiMode(MMEAD_BBLOCK_QUEUE *this, T_MME_SK_HANDLE *MME_SK)
-{
-	T_Msg_Header_MMEAD *h = (T_Msg_Header_MMEAD *)(this->b);
-
-	MME_Atheros_ProcessSetHgWifiMode(this, MME_SK);
-} 
-
 
 /*
 void MME_ProcessSetUserHFID(MMEAD_BBLOCK_QUEUE *this, T_MME_SK_HANDLE *MME_SK)
@@ -2056,12 +2023,6 @@ void ComReqManager(T_MME_SK_HANDLE *MME_SK)
 			break;
 		case MMEAD_GET_HG_WAN_STATUS:
 			MME_ProcessGetHgWanStatus(this, MME_SK);
-			break;
-		case MMEAD_GET_HG_WIFI_MODE:
-			MME_ProcessGetHgWifiMode(this, MME_SK);
-			break;
-		case MMEAD_SET_HG_WIFI_MODE:
-			MME_ProcessSetHgWifiMode(this, MME_SK);
 			break;
 		case MMEAD_SET_TX_GAIN:
 			MME_ProcessSetTxGain(this, MME_SK);

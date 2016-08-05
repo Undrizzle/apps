@@ -54,11 +54,11 @@ int http2cmm_setHgSsid2Status(PWEB_NTWK_VAR pWebVar);
 int http2cmm_setHgSsid3Status(PWEB_NTWK_VAR pWebVar);
 int http2cmm_setHgSsid4Status(PWEB_NTWK_VAR pWebVar);
 int http2cmm_getHgWanStatus(PWEB_NTWK_VAR pWebVar);
-int http2cmm_getHgWifiMode(PWEB_NTWK_VAR pWebVar);
-int http2cmm_setHgWifiMode(PWEB_NTWK_VAR pWebVar);
-
 int http2cmm_getNmsBusiness(stCnuNode *node,T_szNmsBusiness *business);
 int http2cmm_setNmsBusiness(stCnuNode *node, T_szSetNmsBusiness *business);
+int http2cmm_getNmsSsid(stCnuNode *node, T_szNmsSsid *ssid);
+int http2cmm_setNmsSsid(stCnuNode *node, T_szSetNmsSsid *ssid);
+int http2cmm_getNmsWanStatus(stCnuNode *node, T_szNmsWanStatus *wanStatus);
 int http2cmm_rebootNmsWifi(stCnuNode *node);
 int http2cmm_resetNmsWifi(stCnuNode *node);
 
