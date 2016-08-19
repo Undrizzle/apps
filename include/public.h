@@ -65,7 +65,7 @@ enum
 /********************************************************/
 //bootstrap.uboot.kernel.version-cr(Revised number)
 /********************************************************/
-#define SYSINFO_APP_VERSION		"v1.3.6.2-cr24"
+#define SYSINFO_APP_VERSION		"v1.3.6.2-cr25"
 #define SYSINFO_BOOT_VERSION		"U-boot-1.3.4"
 #define SYSINFO_KERNEL_VERSION	"Linux-3.4.6"
 #define SYSINFO_HW_VERSION		"v1.0.2"
