@@ -32,7 +32,7 @@ uint8_t OSA [6] =
 };
 
 static MMEAD_BBLOCK_QUEUE bblock;
-int MMEAD_MODULE_DEBUG_ENABLE = 0;
+int MMEAD_MODULE_DEBUG_ENABLE = 1;
 
 /* 与DBS  通讯的设备文件*/
 T_DBS_DEV_INFO *dbsdev = NULL;

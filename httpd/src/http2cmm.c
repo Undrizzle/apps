@@ -2226,8 +2226,8 @@ int http2cmm_getHgBusiness(PWEB_NTWK_VAR pWebVar)
 		pWebVar->b_connection_mode_2 = ack_data->connection_mode_2;
 		pWebVar->b_ip_assigned_mode_1 = ack_data->ip_assigned_mode_1;
 		pWebVar->b_ip_assigned_mode_2 = ack_data->ip_assigned_mode_2;
-		pWebVar->b_service_type_1 = ack_data->service_type_1;
-		pWebVar->b_service_type_2 = ack_data->service_type_2;
+		pWebVar->b_service_type_1 = ack_data->service_type_1 - 1;
+		pWebVar->b_service_type_2 = ack_data->service_type_2 - 1;
 		pWebVar->b_connection_protocol_1 = ack_data->connection_protocol_1;
 		pWebVar->b_connection_protocol_2 = ack_data->connection_protocol_2;
 		tem = ack_data->bind_interface_1[0];

@@ -3441,8 +3441,8 @@ void cgiCnuWifi(char *query, FILE *fs)
 	fprintf(fs, "	$('#b_protocol_2').val(%d);\n",glbWebVar.b_connection_protocol_2-1);
 	fprintf(fs, "	$('#b_connection_mode_1').val(%d);\n",glbWebVar.b_connection_mode_1-1);
 	fprintf(fs, "	$('#b_connection_mode_2').val(%d);\n",glbWebVar.b_connection_mode_2-1);
-	fprintf(fs, "	$('#b_service_type_1').val(%d);\n",glbWebVar.b_service_type_1-1);
-	fprintf(fs, "	$('#b_service_type_2').val(%d);\n",glbWebVar.b_service_type_2-1);
+	fprintf(fs, "	$('#b_service_type_1').val(%d);\n",glbWebVar.b_service_type_1);
+	fprintf(fs, "	$('#b_service_type_2').val(%d);\n",glbWebVar.b_service_type_2);
 	fprintf(fs, "	var val1 = %d\n",glbWebVar.b_bind_lan_1[0]);
 	fprintf(fs, "	if(val1 == 1 || val1 == 49) {\n");
 	fprintf(fs, "		$('input[name=bind_lan_1][value=1]').attr('checked', 'checked');\n");
@@ -5333,9 +5333,7 @@ void cgiCnuMgmt(char *query, FILE *fs)
 	fprintf(fs, "	<button id=rebootBtn>Reboot</button>\n");
 	fprintf(fs, "	<button id=delBtn>Delete</button>\n");
 	fprintf(fs, "	<button id=configBtn>Configuration</button>\n");
-	if ( 1 == boardapi_isKTCnu(cnu.col_model)) {
-		fprintf(fs, "   <button id=wifiBtn>Wifi</button>\n");
-	}
+	fprintf(fs, "   <button id=wifiBtn>Wifi</button>\n");
 	fprintf(fs, "	<button id=opener>Help</button>\n");
 	fprintf(fs, "</p>\n");
 	fprintf(fs, "<div id='dialog' title='Help Information'>\n");
