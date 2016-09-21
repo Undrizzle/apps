@@ -2968,13 +2968,13 @@ int MME_Atheros_MsgSetHgSsidStatus(T_MME_SK_HANDLE *MME_SK, uint8_t ODA[], T_szS
 {
 	int packetsize;
 	int recv_msg_len = 0;
-	uint8_t buffer[IHPAPI_ETHER_MIN_LEN];
+	uint8_t buffer[IHPAPI_ETHER_MAX_LEN];
 	ihpapi_result_t xresult;
 
 	mmead_debug_printf("--------->MME_Atheros_MsgSetHgSsidStatus\n");
 	memset(buffer, 0, sizeof(buffer));
 
-	packetsize = ihpapi_SetHgSsidStatus(OSA, ODA, IHPAPI_ETHER_MIN_LEN, buffer, ssid);
+	packetsize = ihpapi_SetHgSsidStatus(OSA, ODA, IHPAPI_ETHER_MAX_LEN/2, buffer, ssid);
 
 	if(0 != packetsize)
 	{

@@ -744,11 +744,12 @@ uint32_t rtl8306e_vlan_register_prepare(st_cnuSwitchVlanConfig *vlan)
 {
 	int i = 0;
 	uint32_t ret = CMM_SUCCESS;
+	uint16_t rdata;
 	
 	assert( NULL != vlan );
 
 	ret += rtl8306e_vlan_enable(vlan->vlan_enable);
-	ret += rtl8306e_tag_aware(vlan->vlan_tag_aware);
+	//ret += rtl8306e_tag_aware(vlan->vlan_tag_aware);
 	ret += rtl8306e_ingress_filter(vlan->ingress_filter);
 	ret += rtl8306e_admit_control(vlan->g_admit_control);
 
@@ -777,6 +778,12 @@ uint32_t rtl8306e_vlan_register_prepare(st_cnuSwitchVlanConfig *vlan)
 			ret += rtl8306e_setPortAcceptFrameType(i, 0);
 
 		}		
+	}
+	
+	// Æ¥Åämme
+	if (vlan->vlan_port[0].pvid != 1) {
+		ret += rtl8306e_getPhyReg(1, 24, 0, &rdata);
+		ret += rtl8306e_setPhyReg(1, 24, 0, (rdata | 0x000f));
 	}
 
 	return ret;
@@ -898,7 +905,7 @@ uint32_t rtl8306e_acl_register_prepare(void)
 	entry.phyport = 7;		/*any port*/
 	entry.priority = 0;
 	entry.protocol = 0;		/*ethertype*/
-	entry.action = 0;		/*drop*/
+	entry.action = 1;		/*drop*/
 	entry.data = 0x88e1;	/*HomePlug av*/
 
 	ret += rtl8306e_cpu_port_disable(0);
@@ -961,7 +968,7 @@ uint32_t rtl8306e_register_prepare(st_rtl8306eSettings *rtl8306e)
 	ret += rtl8306e_loop_detection_register_prepare(loopDetection);
 	ret += rtl8306e_storm_filter_register_prepare(stormFilter);
 	ret += rtl8306e_mac_limit_register_prepare(macLimit);
-	ret += rtl8306e_acl_register_prepare();
+	//ret += rtl8306e_acl_register_prepare();
 	ret += rtl8306e_port_control_register_prepare(portControl);
 	return ret;
 }

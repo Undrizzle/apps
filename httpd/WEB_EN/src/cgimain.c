@@ -1351,6 +1351,10 @@ CGI_ITEM CgiSetTable[] = {
    { "ssid2Name", (void *)&glbWebVar.ssid_name2, CGI_TYPE_STR },
    { "ssid3Name", (void *)&glbWebVar.ssid_name3, CGI_TYPE_STR },
    { "ssid4Name", (void *)&glbWebVar.ssid_name4, CGI_TYPE_STR },
+   { "ssid1Pwd", (void *)&glbWebVar.ssid_pwd1, CGI_TYPE_STR },
+   { "ssid2Pwd", (void *)&glbWebVar.ssid_pwd2, CGI_TYPE_STR },
+   { "ssid3Pwd", (void *)&glbWebVar.ssid_pwd3, CGI_TYPE_STR },
+   { "ssid4Pwd", (void *)&glbWebVar.ssid_pwd4, CGI_TYPE_STR },
    
    { NULL, NULL, CGI_TYPE_NONE }
 };

@@ -300,10 +300,7 @@ GT_STATUS __undo_mgmt_vlan(void)
 	{
 		hfcPort = 0;
 	}
-	else if (  dsdtSysinfo.col_model == 36 )
-	{
-		hfcPort = 4;
-	}
+	
 	/* 1) Set port 0-6 to 802.1q Fallback Mode */
 	for( i=0; i<dev->numOfPorts; i++)
 	{
@@ -365,10 +362,6 @@ GT_STATUS __do_mgmt_vlan(uint32_t vid)
 	else if ( dsdtSysinfo.col_model == 32 )
 	{
 		hfcPort = 0;
-	}
-	else if( dsdtSysinfo.col_model == 36 )
-	{
-		hfcPort = 4;
 	}
 
 #if 0	

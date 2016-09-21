@@ -59,6 +59,8 @@ size_t ihpapi_GetHgSsidStatus(uint8_t sa [], uint8_t da [], size_t bufferLen, ui
 	request->extend_SubType = ihtons(0x3013);
 	request->extend_MainType1 = 0xf8;
 	request->extend_SubType1 = ihtons(0x3003);
+	request->extend_MainType2 = 0xf8;
+	request->extend_SubType2 = ihtons(0x3803);
 	
 	return (IHPAPI_ETHER_MIN_LEN);
 }

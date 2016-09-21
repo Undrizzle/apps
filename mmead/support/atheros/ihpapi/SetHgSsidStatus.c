@@ -13,6 +13,7 @@
 size_t ihpapi_SetHgSsidStatus(uint8_t sa [], uint8_t da [], size_t bufferLen, uint8_t buffer [], T_szSetHgSsid ssid) 
 {	
 	uint8_t ssid_name_length_v = strlen(ssid.ssid_name) + 1;
+	uint8_t ssid_pwd_length_v = strlen(ssid.ssid_pwd) + 1;
 	
 	struct __packed vs_set_hg_ssid_status_req
 	{
@@ -35,6 +36,12 @@ size_t ihpapi_SetHgSsidStatus(uint8_t sa [], uint8_t da [], size_t bufferLen, ui
 		uint8_t ssid1_index;
 		uint8_t ssid_name_length;
 		uint8_t ssid_name[ssid_name_length_v];
+		uint8_t extend2_MainType;
+		uint16_t extend2_SubType;
+		uint8_t variable2_length;
+		uint8_t ssid2_index;
+		uint8_t ssid_pwd_length;
+		uint8_t ssid_pwd[ssid_pwd_length_v];
 	}
 	* request = (struct vs_set_hg_ssid_status_req *)(buffer);
 
@@ -73,8 +80,14 @@ size_t ihpapi_SetHgSsidStatus(uint8_t sa [], uint8_t da [], size_t bufferLen, ui
 	request->ssid1_index = ssid.ssid_index;
 	request->ssid_name_length = ssid_name_length_v;
 	memcpy(request->ssid_name, &ssid.ssid_name, ssid_name_length_v);
+	request->extend2_MainType = 0xf8;
+	request->extend2_SubType = ihtons(0x3803);
+	request->variable2_length = 1 + 1 + ssid_pwd_length_v;
+	request->ssid2_index = ssid.ssid_index;
+	request->ssid_pwd_length = ssid_pwd_length_v;
+	memcpy(request->ssid_pwd, &ssid.ssid_pwd, ssid_pwd_length_v);
 
-	return IHPAPI_ETHER_MIN_LEN;
+	return (IHPAPI_ETHER_MAX_LEN/2);
 }
 
 #endif

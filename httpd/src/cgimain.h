@@ -291,10 +291,14 @@ typedef struct {
    int ssid2_status;
    int ssid3_status;
    int ssid4_status;
-   char ssid_name1[100];
-   char ssid_name2[100];
-   char ssid_name3[100];
-   char ssid_name4[100];
+   char ssid_name1[32];
+   char ssid_name2[32];
+   char ssid_name3[32];
+   char ssid_name4[32];
+   char ssid_pwd1[32];
+   char ssid_pwd2[32];
+   char ssid_pwd3[32];
+   char ssid_pwd4[32];
    char wan_name_1[100];
    char wan_name_2[100];
    int b_wan1_status;

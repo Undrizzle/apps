@@ -462,10 +462,14 @@ ihpapi_getHgBusiness_t;
 typedef struct __packed ihpapi_getHgSsid_s
 {
 	uint8_t ssid_status;
-	uint8_t ssid_name1[100];
-	uint8_t ssid_name2[100];
-	uint8_t ssid_name3[100];
-	uint8_t ssid_name4[100];
+	uint8_t ssid_name1[32];
+	uint8_t ssid_name2[32];
+	uint8_t ssid_name3[32];
+	uint8_t ssid_name4[32];
+	uint8_t ssid_pwd1[32];
+	uint8_t ssid_pwd2[32];
+	uint8_t ssid_pwd3[32];
+	uint8_t ssid_pwd4[32];
 }
 ihpapi_getHgSsid_t;
 

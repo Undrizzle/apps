@@ -38,6 +38,10 @@ int ihp_DecodeGetHgSsidStatus (const uint8_t buffer [], size_t length, ihpapi_re
 	uint8_t ssid_name2_length;
 	uint8_t ssid_name3_length;
 	uint8_t ssid_name4_length;
+	uint8_t ssid_pwd1_length;
+	uint8_t ssid_pwd2_length;
+	uint8_t ssid_pwd3_length;
+	uint8_t ssid_pwd4_length;
 
 	result->validData = false;
 	result->opStatus.status = confirm->MSTATUS;
@@ -53,9 +57,22 @@ int ihp_DecodeGetHgSsidStatus (const uint8_t buffer [], size_t length, ihpapi_re
 		ssid_name3_length = confirm->ssid_name_data[1+ssid_name1_length+1+1+ssid_name2_length+1+1];
 		memcpy(result->data.hgSsidInfo.ssid_name3, &confirm->ssid_name_data[1+ssid_name1_length+1+1+ssid_name2_length+1+1+1], ssid_name3_length);
 		//printf("ssid3=%s\n",result->data.hgSsidInfo.ssid_name3);
-		ssid_name4_length = confirm->ssid_name_data[1+ssid_name1_length+1+ssid_name2_length+1+ssid_name2_length+1+1+1+1];
-		memcpy(result->data.hgSsidInfo.ssid_name4, &confirm->ssid_name_data[1+1+ssid_name1_length+1+1+ssid_name2_length+1+1+ssid_name2_length+1+1], ssid_name4_length);
+		ssid_name4_length = confirm->ssid_name_data[1+ssid_name1_length+1+ssid_name2_length+1+ssid_name3_length+1+1+1+1];
+		memcpy(result->data.hgSsidInfo.ssid_name4, &confirm->ssid_name_data[1+1+ssid_name1_length+1+1+ssid_name2_length+1+1+ssid_name3_length+1+1], ssid_name4_length);
 		//printf("ssid4=%s\n",result->data.hgSsidInfo.ssid_name4);
+		ssid_pwd1_length = confirm->ssid_name_data[1+ssid_name1_length+1+ssid_name2_length+1+ssid_name3_length+1+1+1+1+ssid_name4_length+6];
+		memcpy(result->data.hgSsidInfo.ssid_pwd1, &confirm->ssid_name_data[1+ssid_name1_length+1+ssid_name2_length+1+ssid_name3_length+1+1+1+1+ssid_name4_length+6+1], ssid_pwd1_length);
+		//printf("ssid1 pwd=%s\n",result->data.hgSsidInfo.ssid_pwd1);
+		ssid_pwd2_length = confirm->ssid_name_data[1+ssid_name1_length+1+ssid_name2_length+1+ssid_name3_length+1+1+1+1+ssid_name4_length+6+ssid_pwd1_length+2];
+		memcpy(result->data.hgSsidInfo.ssid_pwd2, &confirm->ssid_name_data[1+ssid_name1_length+1+ssid_name2_length+1+ssid_name3_length+1+1+1+1+ssid_name4_length+6+ssid_pwd1_length+2+1], ssid_pwd2_length);
+		//printf("ssid2 pwd=%s\n",result->data.hgSsidInfo.ssid_pwd2);
+		ssid_pwd3_length = confirm->ssid_name_data[1+ssid_name1_length+1+ssid_name2_length+1+ssid_name3_length+1+1+1+1+ssid_name4_length+6+ssid_pwd1_length+2+ssid_pwd2_length+2];
+		memcpy(result->data.hgSsidInfo.ssid_pwd3, &confirm->ssid_name_data[1+ssid_name1_length+1+ssid_name2_length+1+ssid_name3_length+1+1+1+1+ssid_name4_length+6+ssid_pwd1_length+2+ssid_pwd2_length+2+1], ssid_pwd3_length); 
+		//printf("ssid3 pwd=%s\n",result->data.hgSsidInfo.ssid_pwd3);
+		ssid_pwd4_length = confirm->ssid_name_data[1+ssid_name1_length+1+ssid_name2_length+1+ssid_name3_length+1+1+1+1+ssid_name4_length+6+ssid_pwd1_length+2+ssid_pwd2_length+2+ssid_pwd3_length+2];
+		memcpy(result->data.hgSsidInfo.ssid_pwd4, &confirm->ssid_name_data[1+ssid_name1_length+1+ssid_name2_length+1+ssid_name3_length+1+1+1+1+ssid_name4_length+6+ssid_pwd1_length+2+ssid_pwd2_length+2+ssid_pwd3_length+2+1], ssid_pwd4_length);
+		//printf("ssid4 pwd=%s\n",result->data.hgSsidInfo.ssid_pwd4);
+		
 		result->validData = true;
 	}
 	return (result->opStatus.status);

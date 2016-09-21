@@ -567,13 +567,21 @@ int http2cmm_readSwitchSettings(PWEB_NTWK_VAR pWebVar)
 	if( CMM_SUCCESS == __http2cmm_comm(buf, len) )
 	{
 		//802.1q Vlan Status
-		if( (1==ack_data->vlanConfig.vlan_enable)&&(1==ack_data->vlanConfig.vlan_tag_aware))
+		/*if( (1==ack_data->vlanConfig.vlan_enable)&&(1==ack_data->vlanConfig.vlan_tag_aware))
 		{
-			pWebVar->swVlanEnable = 1; //enable
+			pWebVar->swVlanEnable = 1; 
 		}
 		else
 		{
-			pWebVar->swVlanEnable = 0; //disable
+			pWebVar->swVlanEnable = 0; 
+		}*/
+		if( 1==ack_data->vlanConfig.vlan_enable)
+		{
+			pWebVar->swVlanEnable = 1; 
+		}
+		else
+		{
+			pWebVar->swVlanEnable = 0; 
 		}
 		//port egress mode
 		switch(ack_data->vlanConfig.vlan_port[0].egress_mode)
@@ -2843,6 +2851,11 @@ int http2cmm_getHgSsidStatus(PWEB_NTWK_VAR pWebVar)
 		memcpy(pWebVar->ssid_name2, ack_data->ssid_name2, sizeof(ack_data->ssid_name2));
 		memcpy(pWebVar->ssid_name3, ack_data->ssid_name3, sizeof(ack_data->ssid_name3));
 		memcpy(pWebVar->ssid_name4, ack_data->ssid_name4, sizeof(ack_data->ssid_name4));
+
+		memcpy(pWebVar->ssid_pwd1, ack_data->ssid_pwd1, sizeof(ack_data->ssid_pwd1));
+		memcpy(pWebVar->ssid_pwd2, ack_data->ssid_pwd2, sizeof(ack_data->ssid_pwd2));
+		memcpy(pWebVar->ssid_pwd3, ack_data->ssid_pwd3, sizeof(ack_data->ssid_pwd3));
+		memcpy(pWebVar->ssid_pwd4, ack_data->ssid_pwd4, sizeof(ack_data->ssid_pwd4));
 		return CMM_SUCCESS;
 	}
 	return CMM_FAILED;
@@ -2879,6 +2892,7 @@ int http2cmm_setHgSsid1Status(PWEB_NTWK_VAR pWebVar)
 		req_data->ssidInfo.ssid_status = 0;
 
 	memcpy(req_data->ssidInfo.ssid_name,pWebVar->ssid_name1,sizeof(pWebVar->ssid_name1));
+	memcpy(req_data->ssidInfo.ssid_pwd,pWebVar->ssid_pwd1,sizeof(pWebVar->ssid_pwd1));
 
 	//printf("req_data->ssid_index=%d\n",req_data->ssid_index);
 	//printf("req_data->ssid_status=%d\n",req_data->ssid_status);
@@ -2917,6 +2931,7 @@ int http2cmm_setHgSsid2Status(PWEB_NTWK_VAR pWebVar)
 		req_data->ssidInfo.ssid_status = 0;
 
 	memcpy(req_data->ssidInfo.ssid_name,pWebVar->ssid_name2,sizeof(pWebVar->ssid_name2));
+	memcpy(req_data->ssidInfo.ssid_pwd,pWebVar->ssid_pwd2,sizeof(pWebVar->ssid_pwd2));
 
 	//printf("req_data->ssid_index=%d\n",req_data->ssid_index);
 	//printf("req_data->ssid_status=%d\n",req_data->ssid_status);
@@ -2955,6 +2970,7 @@ int http2cmm_setHgSsid3Status(PWEB_NTWK_VAR pWebVar)
 		req_data->ssidInfo.ssid_status = 0;
 
 	memcpy(req_data->ssidInfo.ssid_name,pWebVar->ssid_name3,sizeof(pWebVar->ssid_name3));
+	memcpy(req_data->ssidInfo.ssid_pwd,pWebVar->ssid_pwd3,sizeof(pWebVar->ssid_pwd3));
 
 	//printf("req_data->ssid_index=%d\n",req_data->ssid_index);
 	//printf("req_data->ssid_status=%d\n",req_data->ssid_status);
@@ -2993,6 +3009,7 @@ int http2cmm_setHgSsid4Status(PWEB_NTWK_VAR pWebVar)
 		req_data->ssidInfo.ssid_status = 0;
 
 	memcpy(req_data->ssidInfo.ssid_name,pWebVar->ssid_name4,sizeof(pWebVar->ssid_name4));
+	memcpy(req_data->ssidInfo.ssid_pwd,pWebVar->ssid_pwd4,sizeof(pWebVar->ssid_pwd4));
 
 	//printf("req_data->ssid_index=%d\n",req_data->ssid_index);
 	//printf("req_data->ssid_status=%d\n",req_data->ssid_status);
