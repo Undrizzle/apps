@@ -2316,10 +2316,18 @@ typedef struct
 
 typedef struct
 {
-	uint8_t ssid_name1[100];
+	uint8_t ssid_name1[32];
 	uint8_t ssid_status1;
-	uint8_t ssid_name2[100];
+	uint8_t ssid_pwd1[32];
+	uint8_t ssid_name2[32];
 	uint8_t ssid_status2;
+	uint8_t ssid_pwd2[32];
+	uint8_t ssid_name3[32];
+	uint8_t ssid_status3;
+	uint8_t ssid_pwd3[32];
+	uint8_t ssid_name4[32];
+	uint8_t ssid_status4;
+	uint8_t ssid_pwd4[32];
 }T_szNmsSsid;
 
 typedef struct
@@ -2353,8 +2361,9 @@ typedef struct
 typedef struct
 {
 	uint8_t ssid_index;
-	uint8_t ssid_name[100];
+	uint8_t ssid_name[32];
 	uint8_t ssid_status;
+	uint8_t ssid_pwd[32];
 }T_szSetNmsSsid;
 
 typedef struct

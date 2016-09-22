@@ -3212,7 +3212,7 @@ int http2cmm_getNmsBusiness(stCnuNode *node, T_szNmsBusiness *business)
 				business->bind_ssid_2 = 4;
 				break;
 			default:
-				business->bind_ssid_1 = 0;
+				business->bind_ssid_2 = 0;
 				break;
 		}
 		memcpy(business->user_name_1, ack_data->user_name_1, 100);
@@ -3445,8 +3445,16 @@ int http2cmm_getNmsSsid(stCnuNode *node, T_szNmsSsid *ssid)
 	{
 		ssid->ssid_status1 = ack_data->ssid_status%2;
 		ssid->ssid_status2 = ack_data->ssid_status/2%2;
+		ssid->ssid_status3 = ack_data->ssid_status/4%2;
+		ssid->ssid_status4 = ack_data->ssid_status/8%2;
 		memcpy(ssid->ssid_name1, ack_data->ssid_name1, sizeof(ack_data->ssid_name1));
 		memcpy(ssid->ssid_name2, ack_data->ssid_name2, sizeof(ack_data->ssid_name2));
+		memcpy(ssid->ssid_name3, ack_data->ssid_name3, sizeof(ack_data->ssid_name3));
+		memcpy(ssid->ssid_name4, ack_data->ssid_name4, sizeof(ack_data->ssid_name4));
+		memcpy(ssid->ssid_pwd1, ack_data->ssid_pwd1, sizeof(ack_data->ssid_pwd1));
+		memcpy(ssid->ssid_pwd2, ack_data->ssid_pwd2, sizeof(ack_data->ssid_pwd2));
+		memcpy(ssid->ssid_pwd3, ack_data->ssid_pwd3, sizeof(ack_data->ssid_pwd3));
+		memcpy(ssid->ssid_pwd4, ack_data->ssid_pwd4, sizeof(ack_data->ssid_pwd4));
 		return CMM_SUCCESS;
 	}
 	return CMM_FAILED;
@@ -3478,6 +3486,7 @@ int http2cmm_setNmsSsid(stCnuNode *node, T_szSetNmsSsid *ssid)
 	req_data->ssidInfo.ssid_index = ssid->ssid_index;
 	memcpy(req_data->ssidInfo.ssid_name, ssid->ssid_name, sizeof(ssid->ssid_name));
 	req_data->ssidInfo.ssid_status = ssid->ssid_status;
+	memcpy(req_data->ssidInfo.ssid_pwd, ssid->ssid_pwd, sizeof(ssid->ssid_pwd));
 
 	//printf("ssid_index=%d\n",req_data->ssidInfo.ssid_index);
 	//printf("ssid_name=%s\n", req_data->ssidInfo.ssid_name);

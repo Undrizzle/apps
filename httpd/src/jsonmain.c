@@ -54,9 +54,10 @@ typedef struct
 	char ipv4_gw[16];
 	char dns_ipv4[16];
 	char dns_ipv4_copy[16];
-	char ssid_name[100];
+	char ssid_name[32];
 	int ssid_status;
 	int ssid_index;
+	char ssid_pwd[32];
 }
 JSON_VAR, *PJSON_VAR;
 
@@ -104,10 +105,18 @@ typedef struct {
 
 typedef struct 
 {
-	char ssid_name_1[100];
+	char ssid_name_1[32];
 	int ssid_status_1;
-	char ssid_name_2[100];
+	char ssid_pwd_1[32];
+	char ssid_name_2[32];
 	int ssid_status_2;
+	char ssid_pwd_2[32];
+	char ssid_name_3[32];
+	int ssid_status_3;
+	char ssid_pwd_3[32];
+	char ssid_name_4[32];
+	int ssid_status_4;
+	char ssid_pwd_4[32];
 	char wan_name_1[100];
 	int wan_status_1;
 	char wan_name_2[100];
@@ -162,6 +171,7 @@ CGI_ITEM jsonSetTable[] =
 	{ "ssidName", (void *)(&(glbJsonVar.ssid_name)), CGI_TYPE_STR },
 	{ "ssidStatus", (void *)(&(glbJsonVar.ssid_status)), CGI_TYPE_NUM },
 	{ "ssidIndex", (void *)(&(glbJsonVar.ssid_index)), CGI_TYPE_NUM },
+	{ "ssidPwd", (void *)(&(glbJsonVar.ssid_pwd)), CGI_TYPE_STR },
 	
 	{ NULL, NULL, CGI_TYPE_NONE }
 };
@@ -204,9 +214,9 @@ CGI_ITEM jsonSetTable2[] = {
 	{ "password2", (void *)(&(glbJsonVar2.password_2)), CGI_TYPE_STR },
 	{ "ipv4Addr2", (void *)(&(glbJsonVar2.ipv4_addr_2)), CGI_TYPE_STR },
 	{ "ipv4Mask2", (void *)(&(glbJsonVar2.ipv4_mask_2)), CGI_TYPE_STR },
-	{ "ipv4Gw2", (void *)(&(glbJsonVar2.ipv4_gw_1)), CGI_TYPE_STR },
-	{ "dnsIpv42", (void *)(&(glbJsonVar2.dns_ipv4_1)), CGI_TYPE_STR },
-	{ "dnsIpv4Copy2", (void *)(&(glbJsonVar2.dns_ipv4_copy_1)), CGI_TYPE_STR },
+	{ "ipv4Gw2", (void *)(&(glbJsonVar2.ipv4_gw_2)), CGI_TYPE_STR },
+	{ "dnsIpv42", (void *)(&(glbJsonVar2.dns_ipv4_2)), CGI_TYPE_STR },
+	{ "dnsIpv4Copy2", (void *)(&(glbJsonVar2.dns_ipv4_copy_2)), CGI_TYPE_STR },
 
 	
 	{ NULL, NULL, CGI_TYPE_NONE }
@@ -215,12 +225,20 @@ CGI_ITEM jsonSetTable2[] = {
 CGI_ITEM jsonSetTable3[] = {
 	{ "ssidName1", (void *)(&(glbJsonVar3.ssid_name_1)), CGI_TYPE_STR },
 	{ "ssidStatus1", (void *)(&(glbJsonVar3.ssid_status_1)), CGI_TYPE_NUM },
+	{ "ssidPwd1", (void *)(&(glbJsonVar3.ssid_pwd_1)), CGI_TYPE_STR },
 	{ "ssidName2", (void *)(&(glbJsonVar3.ssid_name_2)), CGI_TYPE_STR },
 	{ "ssidStatus2", (void *)(&(glbJsonVar3.ssid_status_2)), CGI_TYPE_NUM },
-	{"wanName1", (void *)(&(glbJsonVar3.wan_name_1)), CGI_TYPE_STR },
-	{"wanStatus1", (void *)(&(glbJsonVar3.wan_status_1)), CGI_TYPE_NUM },
-	{"wanName2", (void *)(&(glbJsonVar3.wan_name_2)), CGI_TYPE_STR },
-	{"wanStatus2", (void *)(&(glbJsonVar3.wan_status_2)), CGI_TYPE_NUM },
+	{ "ssidPwd2", (void *)(&(glbJsonVar3.ssid_pwd_2)), CGI_TYPE_STR },
+	{ "ssidName3", (void *)(&(glbJsonVar3.ssid_name_3)), CGI_TYPE_STR },
+	{ "ssidStatus3", (void *)(&(glbJsonVar3.ssid_status_3)), CGI_TYPE_NUM },
+	{ "ssidPwd3", (void *)(&(glbJsonVar3.ssid_pwd_3)), CGI_TYPE_STR },
+	{ "ssidName4", (void *)(&(glbJsonVar3.ssid_name_4)), CGI_TYPE_STR },
+	{ "ssidStatus4", (void *)(&(glbJsonVar3.ssid_status_4)), CGI_TYPE_NUM },
+	{ "ssidPwd4", (void *)(&(glbJsonVar3.ssid_pwd_4)), CGI_TYPE_STR },
+	{ "wanName1", (void *)(&(glbJsonVar3.wan_name_1)), CGI_TYPE_STR },
+	{ "wanStatus1", (void *)(&(glbJsonVar3.wan_status_1)), CGI_TYPE_NUM },
+	{ "wanName2", (void *)(&(glbJsonVar3.wan_name_2)), CGI_TYPE_STR },
+	{ "wanStatus2", (void *)(&(glbJsonVar3.wan_status_2)), CGI_TYPE_NUM },
 
 	{ NULL, NULL, CGI_TYPE_NONE }
 };
@@ -1595,8 +1613,16 @@ int jsonGetCnuWifiSsid(fs)
 			{
 				sprintf(glbJsonVar3.ssid_name_1, "%s", ssid.ssid_name1);
 				glbJsonVar3.ssid_status_1 = ssid.ssid_status1;
+				sprintf(glbJsonVar3.ssid_pwd_1, "%s", ssid.ssid_pwd1);
 				sprintf(glbJsonVar3.ssid_name_2, "%s", ssid.ssid_name2);
 				glbJsonVar3.ssid_status_2 = ssid.ssid_status2;
+				sprintf(glbJsonVar3.ssid_pwd_2, "%s", ssid.ssid_pwd2);
+				sprintf(glbJsonVar3.ssid_name_3, "%s", ssid.ssid_name3);
+				glbJsonVar3.ssid_status_3 = ssid.ssid_status3;
+				sprintf(glbJsonVar3.ssid_pwd_3, "%s", ssid.ssid_pwd3);
+				sprintf(glbJsonVar3.ssid_name_4, "%s", ssid.ssid_name4);
+				glbJsonVar3.ssid_status_4 = ssid.ssid_status4;
+				sprintf(glbJsonVar3.ssid_pwd_4, "%s", ssid.ssid_pwd4);
 			}
 			else
 			{
@@ -1700,6 +1726,7 @@ int jsonSetCnuWifiSsid(fs)
 		ssid.ssid_index = glbJsonVar.ssid_index;
 		memcpy(ssid.ssid_name, glbJsonVar.ssid_name, sizeof(glbJsonVar.ssid_name));
 		ssid.ssid_status = glbJsonVar.ssid_status;
+		memcpy(ssid.ssid_pwd, glbJsonVar.ssid_pwd, sizeof(glbJsonVar.ssid_pwd));
 			
 		ret = http2cmm_setNmsSsid(&iNode, &ssid);
 		if(CMM_SUCCESS != ret)
