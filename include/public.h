@@ -69,7 +69,7 @@ enum
 #define SYSINFO_BOOT_VERSION		"U-boot-1.3.4"
 #define SYSINFO_KERNEL_VERSION	"Linux-3.4.6"
 #define SYSINFO_HW_VERSION		"v1.0.2"
-#define SYSINFO_APP_HASH			"6802b21ad8725bdbe48b1cca609c765ac0f196a4"
+#define SYSINFO_APP_HASH			"ea5a2f47f06e45d5622edecd3dd3868d967d00fa"
 #define SYSINFO_FLASH_SIZE			256
 #define SYSINFO_RAM_SIZE			64
 /* NMS management protocal version */
