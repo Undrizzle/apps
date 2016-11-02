@@ -1232,6 +1232,12 @@ int http2cmm_setSwitchSettings(stCnuNode *node, st_rtl8306eSettings * rtl8306e)
 		profile.col_eth2vid = 1;
 		profile.col_eth3vid = 1;
 		profile.col_eth4vid = 1;
+		profile.col_uplinkvid = 1;
+		profile.col_eth1VMode = 0;
+		profile.col_eth2VMode = 0;
+		profile.col_eth3VMode = 0;
+		profile.col_eth4VMode = 0;
+		profile.col_uplinkVMode = 0;
 		rtl8306e->vlanConfig.vlan_port[0].pvid= 1;
 		rtl8306e->vlanConfig.vlan_port[1].pvid= 1;						
 		rtl8306e->vlanConfig.vlan_port[2].pvid= 1;
@@ -1249,7 +1255,13 @@ int http2cmm_setSwitchSettings(stCnuNode *node, st_rtl8306eSettings * rtl8306e)
 		profile.col_eth2vid = rtl8306e->vlanConfig.vlan_port[1].pvid;
 		profile.col_eth3vid = rtl8306e->vlanConfig.vlan_port[2].pvid;
 		profile.col_eth4vid = rtl8306e->vlanConfig.vlan_port[3].pvid;
-		rtl8306e->vlanConfig.vlan_port[4].egress_mode = 2;
+		profile.col_uplinkvid = rtl8306e->vlanConfig.vlan_port[4].pvid;
+		profile.col_eth1VMode = rtl8306e->vlanConfig.vlan_port[0].egress_mode;
+		profile.col_eth2VMode = rtl8306e->vlanConfig.vlan_port[1].egress_mode;
+		profile.col_eth3VMode = rtl8306e->vlanConfig.vlan_port[2].egress_mode;
+		profile.col_eth4VMode = rtl8306e->vlanConfig.vlan_port[3].egress_mode;
+		profile.col_uplinkVMode = rtl8306e->vlanConfig.vlan_port[4].egress_mode;
+		//rtl8306e->vlanConfig.vlan_port[4].egress_mode = 2;
 	}
 
 	/* 防止端口PVID 被设置为0 */
@@ -1296,7 +1308,7 @@ int http2cmm_setSwitchSettings(stCnuNode *node, st_rtl8306eSettings * rtl8306e)
 		return CMM_FAILED;
 	}
 	
-	/*  add by may2250 for port egress mode change */
+	/*  add by may2250 for port egress mode change *//*
 	if( (profile.col_eth1vid > 1) && (profile.col_eth1vid < 4094) )
 	{
 		rtl8306e->vlanConfig.vlan_port[0].egress_mode = 1;
@@ -1320,7 +1332,7 @@ int http2cmm_setSwitchSettings(stCnuNode *node, st_rtl8306eSettings * rtl8306e)
 		rtl8306e->vlanConfig.vlan_port[3].egress_mode = 1;
 	}else{
 		rtl8306e->vlanConfig.vlan_port[3].egress_mode = 3;
-	}	
+	}	*/
 
 	/* add by stan for save dbs  end */
 

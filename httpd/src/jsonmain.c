@@ -26,6 +26,12 @@ typedef struct
 	int cnuEth2Vid;			/* 1~4094 */
 	int cnuEth3Vid;			/* 1~4094 */
 	int cnuEth4Vid;			/* 1~4094 */
+	int cnuCpuVid;
+	int cnuEth1VMode;
+	int cnuEth2VMode;
+	int cnuEth3VMode;
+	int cnuEth4VMode;
+	int cnuCpuVMode;
 	int cnuTxRateLimitSts;	/* snmp true(1) or false(2) value */
 	int cnuCpuPortTxRate;	/* times of 32Kb(0Kb~100*1024Kb). No rate limiting if rate is 0, 1 means 32Kb, and so on */
 	int cnuEth1TxRate;		/* times of 32Kb(0Kb~100*1024Kb). No rate limiting if rate is 0 */
@@ -138,6 +144,12 @@ CGI_ITEM jsonSetTable[] =
 	{ "vlan1id",		(void *)(&(glbJsonVar.cnuEth2Vid)),			CGI_TYPE_NUM },
 	{ "vlan2id",		(void *)(&(glbJsonVar.cnuEth3Vid)),			CGI_TYPE_NUM },
 	{ "vlan3id",		(void *)(&(glbJsonVar.cnuEth4Vid)),			CGI_TYPE_NUM },
+	{ "vlanCpuid", (void *)(&(glbJsonVar.cnuCpuVid)), CGI_TYPE_NUM },
+	{ "vlan0Mode", (void *)(&(glbJsonVar.cnuEth1VMode)), CGI_TYPE_NUM },
+	{ "vlan1Mode", (void *)(&(glbJsonVar.cnuEth2VMode)), CGI_TYPE_NUM },
+	{ "vlan2Mode", (void *)(&(glbJsonVar.cnuEth3VMode)), CGI_TYPE_NUM },
+	{ "vlan3Mode", (void *)(&(glbJsonVar.cnuEth4VMode)), CGI_TYPE_NUM },
+	{ "vlanCpuMode", (void *)(&(glbJsonVar.cnuCpuVMode)), CGI_TYPE_NUM },
 	{ "txlimitsts",		(void *)(&(glbJsonVar.cnuTxRateLimitSts)),	CGI_TYPE_NUM },
 	{ "cpuporttxrate",	(void *)(&(glbJsonVar.cnuCpuPortTxRate)),	CGI_TYPE_NUM },
 	{ "port0txrate",	(void *)(&(glbJsonVar.cnuEth1TxRate)),		CGI_TYPE_NUM },
@@ -348,6 +360,8 @@ int jsonSetCnuCheckInput(void)
 			return CMM_FAILED;
 		if( (glbJsonVar.cnuEth4Vid < 1) || (glbJsonVar.cnuEth4Vid > 4094 ))
 			return CMM_FAILED;
+		if( (glbJsonVar.cnuCpuVid < 1) || (glbJsonVar.cnuCpuVid > 4094 ))
+			return CMM_FAILED;
 	}
 
 	/* check tx rate limiting parameters if cnuTxRateLimitSts enable */
@@ -394,6 +408,12 @@ int jsonSetCnuPrepare(st_dbsProfile * profile)
 		profile->col_eth2vid = glbJsonVar.cnuEth2Vid;
 		profile->col_eth3vid = glbJsonVar.cnuEth3Vid;
 		profile->col_eth4vid = glbJsonVar.cnuEth4Vid;
+		profile->col_uplinkvid = glbJsonVar.cnuCpuVid;
+		profile->col_eth1VMode = glbJsonVar.cnuEth1VMode;
+		profile->col_eth2VMode = glbJsonVar.cnuEth2VMode;
+		profile->col_eth3VMode = glbJsonVar.cnuEth3VMode;
+		profile->col_eth4VMode = glbJsonVar.cnuEth4VMode;
+		profile->col_uplinkVMode = glbJsonVar.cnuCpuVMode;
 	}
 	else
 	{
@@ -401,6 +421,12 @@ int jsonSetCnuPrepare(st_dbsProfile * profile)
 		profile->col_eth2vid = 1;
 		profile->col_eth3vid = 1;
 		profile->col_eth4vid = 1;
+		profile->col_uplinkvid = 1;
+		profile->col_eth1VMode = 0;
+		profile->col_eth2VMode = 0;
+		profile->col_eth3VMode = 0;
+		profile->col_eth4VMode = 0;
+		profile->col_uplinkVMode = 0;
 	}
 
 	/* over write rate limit settings*/
@@ -454,6 +480,7 @@ int jsonSetCnuProfile(FILE * fs)
 	int clt_index = 0;
 	int cnu_index = 0;
 	int i = 0;
+	int tmp;
 
 	/* for debug */
 	//printf("\n-->call jsonSetCnuProfile()\n");
@@ -589,12 +616,127 @@ int jsonSetCnuProfile(FILE * fs)
 			rtl8306e.vlanConfig.vlan_port[1].pvid = glbJsonVar.cnuEth2Vid;
 			rtl8306e.vlanConfig.vlan_port[2].pvid = glbJsonVar.cnuEth3Vid;
 			rtl8306e.vlanConfig.vlan_port[3].pvid = glbJsonVar.cnuEth4Vid;
-			rtl8306e.vlanConfig.vlan_port[4].pvid = 1;
-			if(1 != rtl8306e.vlanConfig.vlan_port[0].pvid ) rtl8306e.vlanConfig.vlan_port[0].egress_mode = 2; else rtl8306e.vlanConfig.vlan_port[0].egress_mode = 1;
-			if(1 != rtl8306e.vlanConfig.vlan_port[1].pvid ) rtl8306e.vlanConfig.vlan_port[1].egress_mode = 2; else rtl8306e.vlanConfig.vlan_port[1].egress_mode = 1;
-			if(1 != rtl8306e.vlanConfig.vlan_port[2].pvid ) rtl8306e.vlanConfig.vlan_port[2].egress_mode = 2; else rtl8306e.vlanConfig.vlan_port[2].egress_mode = 1;
-			if(1 != rtl8306e.vlanConfig.vlan_port[3].pvid ) rtl8306e.vlanConfig.vlan_port[3].egress_mode = 2; else rtl8306e.vlanConfig.vlan_port[3].egress_mode = 1;
-			rtl8306e.vlanConfig.vlan_port[4].egress_mode = 3;
+			rtl8306e.vlanConfig.vlan_port[4].pvid = glbJsonVar.cnuCpuVid;
+			switch(glbJsonVar.cnuEth1VMode)
+			{
+				case 0:		/* transparent */
+				{
+					tmp = 3;	/* transparent*/
+					break;
+				}
+				case 1:		/* remove tag */
+				{
+					tmp = 1;	/* remove tag */
+					break;
+				}
+				case 2:		/* tag */
+				{
+					tmp = 2;	/* tag */
+					break;
+				}
+				default:
+				{
+					tmp = 3;	/* transparent */
+					break;
+				}
+			}			
+			rtl8306e.vlanConfig.vlan_port[0].egress_mode = tmp;
+			switch(glbJsonVar.cnuEth2VMode)
+			{
+				case 0:		/* transparent */
+				{
+					tmp = 3;	/* transparent*/
+					break;
+				}
+				case 1:		/* remove tag */
+				{
+					tmp = 1;	/* remove tag */
+					break;
+				}
+				case 2:		/* tag */
+				{
+					tmp = 2;	/* tag */
+					break;
+				}
+				default:
+				{
+					tmp = 3;	/* transparent */
+					break;
+				}
+			}	
+			rtl8306e.vlanConfig.vlan_port[1].egress_mode = tmp;
+			switch(glbJsonVar.cnuEth3VMode)
+			{
+				case 0:		/* transparent */
+				{
+					tmp = 3;	/* transparent*/
+					break;
+				}
+				case 1:		/* remove tag */
+				{
+					tmp = 1;	/* remove tag */
+					break;
+				}
+				case 2:		/* tag */
+				{
+					tmp = 2;	/* tag */
+					break;
+				}
+				default:
+				{
+					tmp = 3;	/* transparent */
+					break;
+				}
+			}	
+			rtl8306e.vlanConfig.vlan_port[2].egress_mode = tmp;
+			switch(glbJsonVar.cnuEth4VMode)
+			{
+				case 0:		/* transparent */
+				{
+					tmp = 3;	/* transparent*/
+					break;
+				}
+				case 1:		/* remove tag */
+				{
+					tmp = 1;	/* remove tag */
+					break;
+				}
+				case 2:		/* tag */
+				{
+					tmp = 2;	/* tag */
+					break;
+				}
+				default:
+				{
+					tmp = 3;	/* transparent */
+					break;
+				}
+			}	
+			rtl8306e.vlanConfig.vlan_port[3].egress_mode = tmp;
+			switch(glbJsonVar.cnuCpuVMode)
+			{
+				case 0:		/* transparent */
+				{
+					tmp = 3;	/* transparent*/
+					break;
+				}
+				case 1:		/* remove tag */
+				{
+					tmp = 1;	/* remove tag */
+					break;
+				}
+				case 2:		/* tag */
+				{
+					tmp = 2;	/* tag */
+					break;
+				}
+				default:
+				{
+					tmp = 3;	/* transparent */
+					break;
+				}
+			}	
+			rtl8306e.vlanConfig.vlan_port[4].egress_mode = tmp;
 			rtl8306e.vlanConfig.vlan_port[0].admit_control = 0;
 			rtl8306e.vlanConfig.vlan_port[1].admit_control = 0;
 			rtl8306e.vlanConfig.vlan_port[2].admit_control = 0;
@@ -796,6 +938,12 @@ int jsonGetCnuPrepare(st_dbsProfile * profile, st_dbsCnu * cnu)
 		glbJsonVar.cnuEth2Vid = profile->col_eth2vid;
 		glbJsonVar.cnuEth3Vid = profile->col_eth3vid;
 		glbJsonVar.cnuEth4Vid = profile->col_eth4vid;
+		glbJsonVar.cnuCpuVid = profile->col_uplinkvid;
+		glbJsonVar.cnuEth1VMode = profile->col_eth1VMode;
+		glbJsonVar.cnuEth2VMode = profile->col_eth2VMode;
+		glbJsonVar.cnuEth3VMode = profile->col_eth3VMode;
+		glbJsonVar.cnuEth4VMode = profile->col_eth4VMode;
+		glbJsonVar.cnuCpuVMode = profile->col_uplinkVMode;
 	}
 	else
 	{
@@ -803,6 +951,12 @@ int jsonGetCnuPrepare(st_dbsProfile * profile, st_dbsCnu * cnu)
 		glbJsonVar.cnuEth2Vid = 1;
 		glbJsonVar.cnuEth3Vid = 1;
 		glbJsonVar.cnuEth4Vid = 1;
+		glbJsonVar.cnuCpuVid = 1;
+		glbJsonVar.cnuEth1VMode = 0;
+		glbJsonVar.cnuEth2VMode = 0;
+		glbJsonVar.cnuEth3VMode = 0;
+		glbJsonVar.cnuEth4VMode = 0;
+		glbJsonVar.cnuCpuVMode = 0;
 	}
 
 	/* over write rate limit settings*/
@@ -862,6 +1016,7 @@ int jsonGetCnuProfile(FILE * fs)
 	st_rtl8306eSettings rtl8306e;
 	st_dbsCnu cnu;
 	json_object *my_object;
+	int tmp;
 
 	/* for debug */
 	//printf("\n-->call jsonGetCnuProfile()\n");
@@ -935,6 +1090,44 @@ int jsonGetCnuProfile(FILE * fs)
 		myProfile.col_eth2vid = rtl8306e.vlanConfig.vlan_port[1].pvid;
 		myProfile.col_eth3vid = rtl8306e.vlanConfig.vlan_port[2].pvid;
 		myProfile.col_eth4vid = rtl8306e.vlanConfig.vlan_port[3].pvid;
+		myProfile.col_uplinkvid = rtl8306e.vlanConfig.vlan_port[4].pvid;
+		for(i=0;i<=4;i++)
+		{
+			switch(rtl8306e.vlanConfig.vlan_port[i].egress_mode)
+			{
+				case 1:
+				{
+					tmp = 1;
+					break;
+				}
+				case 2:
+				{
+					tmp = 2;
+					break;
+				}
+				case 3:
+				{
+					tmp = 0;
+					break;
+				}
+				default:
+				{
+					tmp = 0;
+					break;
+				}
+			}
+			if(i==0)
+				myProfile.col_eth1VMode = tmp;
+			if(i==1)
+				myProfile.col_eth2VMode = tmp;
+			if(i==2)
+				myProfile.col_eth3VMode = tmp;
+			if(i==3)
+				myProfile.col_eth4VMode = tmp;
+			if(i==4)
+				myProfile.col_uplinkVMode = tmp;
+		}
+		
 		myProfile.col_rxLimitSts = rtl8306e.bandwidthConfig.g_rx_bandwidth_control_enable;
 		if (rtl8306e.bandwidthConfig.rxPort[4].bandwidth_value >= 1600)
 		{
