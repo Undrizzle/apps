@@ -3836,7 +3836,7 @@ int MME_Atheros_MsgGetPibSpec
 			{
 				pDevInfo->DevType = WEC701_W4;
 			}
-			else if( strcmp(HFID_USER, "S744_8306RA") == 0)
+			else if( strcmp(HFID_USER, "S744_8306RA") == 0 || strcmp(HFID_USER, "WEC701W C4") == 0)
 			{
 				pDevInfo->DevType = WEC701W_C4;
 			}
