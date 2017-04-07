@@ -27,7 +27,8 @@ uname -v = #15-Ubuntu SMP Thu Apr 16 23:32:01 UTC 2015
 /usr/bin/oslevel       = unknown
 /bin/universe          = unknown
 
-PATH: /opt/trendchip/mips-linux-uclibc/usr/bin
+PATH: /opt/trendchip/mips-linux-uclibc-4.3.6-v2/usr/bin
+PATH: /home/burning/releasebsp/tools/fakeroot/scripts
 PATH: /usr/local/sbin
 PATH: /usr/local/bin
 PATH: /usr/sbin
@@ -653,7 +654,7 @@ configure:19483: $? = 0
 configure:19483: result: yes
 configure:19483: checking for fullfsync
 configure:19483: arm-linux-gcc -o conftest -g -O2   conftest.c  >&5
-/tmp/ccPOYuXL.o: In function `main':
+/tmp/ccKFKiOV.o: In function `main':
 /home/burning/wr1004sjl/apps/sqlite/sqlite-3.7.10/conftest.c:59: undefined reference to `fullfsync'
 collect2: ld returned 1 exit status
 configure:19483: $? = 1
@@ -820,7 +821,7 @@ configure: failed program was:
 configure:19576: result: no
 configure:19602: checking for library containing tgetent
 configure:19633: arm-linux-gcc -o conftest -g -O2   conftest.c  >&5
-/tmp/cc5AwwU7.o: In function `main':
+/tmp/cc9CzCVd.o: In function `main':
 /home/burning/wr1004sjl/apps/sqlite/sqlite-3.7.10/conftest.c:40: undefined reference to `tgetent'
 collect2: ld returned 1 exit status
 configure:19633: $? = 1
@@ -873,7 +874,7 @@ configure:19633: $? = 0
 configure:19650: result: -lcurses
 configure:19658: checking for library containing readline
 configure:19689: arm-linux-gcc -o conftest -g -O2   conftest.c -lcurses  >&5
-/tmp/ccUlqc3a.o: In function `main':
+/tmp/ccjQY8rj.o: In function `main':
 /home/burning/wr1004sjl/apps/sqlite/sqlite-3.7.10/conftest.c:40: undefined reference to `readline'
 collect2: ld returned 1 exit status
 configure:19689: $? = 1
@@ -930,7 +931,7 @@ configure:19718: $? = 0
 configure:19718: result: yes
 configure:19746: checking for library containing pthread_create
 configure:19777: arm-linux-gcc -o conftest -g -O2   conftest.c  >&5
-/tmp/ccgt43gr.o: In function `main':
+/tmp/ccVBl3az.o: In function `main':
 /home/burning/wr1004sjl/apps/sqlite/sqlite-3.7.10/conftest.c:41: undefined reference to `pthread_create'
 collect2: ld returned 1 exit status
 configure:19777: $? = 1
@@ -984,7 +985,7 @@ configure:19777: $? = 0
 configure:19794: result: -lpthread
 configure:19817: checking for library containing dlopen
 configure:19848: arm-linux-gcc -o conftest -g -O2   conftest.c -lpthread  >&5
-/tmp/cc6TkYcB.o: In function `main':
+/tmp/cchr4lmJ.o: In function `main':
 /home/burning/wr1004sjl/apps/sqlite/sqlite-3.7.10/conftest.c:41: undefined reference to `dlopen'
 collect2: ld returned 1 exit status
 configure:19848: $? = 1
