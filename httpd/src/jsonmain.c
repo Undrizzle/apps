@@ -1945,6 +1945,56 @@ json_ack:
 	return CMM_SUCCESS;
 }
 
+int jsonDelCnu(fs)
+{
+	int ret = CMM_SUCCESS;
+	char strlog[128] = {0};
+	stCnuNode iNode;
+	st_dbsCnu cnu;
+	json_object *my_object;
+	int clt_index = 0;
+	int cnu_index = 0;
+
+	ret = boardapi_mac2Uppercase(glbJsonVar.macAddr);
+	if (CMM_SUCCESS != ret )
+	{
+		printf("ERROR: jsonConvertMac2Uppercase\n");
+		goto json_ack;
+	}
+
+	ret = http2dbs_getCnuIndexByMacaddress(glbJsonVar.macAddr, &iNode);
+	if (CMM_SUCCESS != ret)
+	{
+		printf("ERROR: selectCnuIndex(%s)\n", glbJsonVar.macAddr);
+		goto json_ack;
+	}
+	else if (0 == iNode.cnu)
+	{
+		printf("ERROR: selectCnuIndex\n");
+		ret = CMM_FAILED;
+		goto json_ack;
+	}
+
+	ret = http2cmm_deleteCnu(iNode.cnu);
+	if (CMM_SUCCESS != ret)
+	{
+		printf("ERROR: http2cmm_deleteCNu\n");
+		goto json_ack;
+	}
+
+json_ack:
+	my_object = json_object_new_object();
+	json_object_object_add(my_object, "status", json_object_new_int(ret?1:0));
+	jsonSendAck(fs, CMM_SUCCESS, json_object_to_json_string(my_object));
+	json_object_put(my_object);
+
+	clt_index = (iNode.cnu -1)/MAX_CNUS_PER_CLT + 1;
+	cnu_index = (iNode.cnu -1)%MAX_CNUS_PER_CLT + 1;
+	sprintf(strlog, "json delete cnu/%d/%d", clt_index, cnu_index);
+	http2dbs_writeOptlog(ret, strlog);
+	return CMM_SUCCESS;
+}
+
 /******************************************************************************************
 curl -X "POST"  -H "Application/json" http://192.168.1.150/getcnu.json -d "{'mac':'30:71:B2:00:02:1E'}"
 *******************************************************************************************/
@@ -2006,6 +2056,10 @@ int do_json(char *path, FILE *fs, int jstrLen)
 	{
 		return jsonSetCnuWifiSsid(fs);
 	}
+	else if ( strcmp( path, "/delCNU.json" ) == 0 )
+	{
+		return jsonDelCnu(fs);
+	}	
 	else
 	{
 		jsonSendAck(fs, -1, NULL );
